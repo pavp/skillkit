@@ -3,6 +3,8 @@ name: example-skill
 description: Demonstrates the canonical SkillKit format. Use as a reference when authoring new skills.
 trigger: /example
 license: Apache-2.0
+disable-model-invocation: false
+user-invocable: true
 metadata:
   author: skillkit-project
   version: "1.0"
