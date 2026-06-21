@@ -43,7 +43,16 @@ The field registry MUST be the single source of truth that adapters consult to d
 - GIVEN a canonical SKILL.md contains a field `unknown-field` not present in the registry
 - WHEN any adapter processes the skill
 - THEN `unknown-field` MUST NOT appear in the adapter output
-- AND the build pipeline MUST emit a warning identifying the stripped field
+
+> NOTE (implementation): the adapter strips unlisted fields silently. The
+> originally-specified "emit a warning identifying the stripped field" is
+> subsumed by an earlier gate: the canonical schema uses
+> `additionalProperties: false`, and a startup assertion guarantees every
+> schema property has a registry entry. An unknown field therefore FAILS
+> validation (with the field named, per the frontmatter-validation spec) before
+> it can ever reach `stripFields`. The strip path is effectively unreachable for
+> unknown fields, so a separate warning there would be dead code. If
+> `additionalProperties` is ever relaxed, restore the warning requirement here.
 
 ### Requirement: Extension Points
 
