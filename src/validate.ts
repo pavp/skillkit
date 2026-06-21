@@ -56,7 +56,11 @@ export function validate(frontmatter: Record<string, unknown>): void {
   if (!valid) {
     const errors = validateFn.errors ?? [];
     const failures: ValidationFailure[] = errors.map((e: ErrorObject) => ({
-      field: e.instancePath.replace(/^\//, '') || e.params?.missingProperty as string || '(root)',
+      field:
+        e.instancePath.replace(/^\//, '') ||
+        (e.params?.missingProperty as string | undefined) ||
+        (e.params?.additionalProperty as string | undefined) ||
+        '(root)',
       message: e.message ?? 'unknown error',
     }));
     throw new ValidationError(failures);
