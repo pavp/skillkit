@@ -1,6 +1,7 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import type { Adapter } from './adapter.js';
+import { assertValidSkillName } from './adapter.js';
 
 // ---------------------------------------------------------------------------
 // Claude Code adapter
@@ -12,6 +13,7 @@ export const claudeAdapter: Adapter = {
   agent: 'claude',
 
   resolveInstallPath(name: string): string {
+    assertValidSkillName(name);
     return join(homedir(), '.claude', 'skills', name, 'SKILL.md');
   },
 } as const;

@@ -19,6 +19,31 @@ export interface Adapter {
 }
 
 // ---------------------------------------------------------------------------
+// assertValidSkillName()
+// ---------------------------------------------------------------------------
+// Defense-in-depth: a skill name flows from a source directory name into
+// resolveInstallPath. A name containing a path separator, `..`, or a leading
+// dot could escape or distort the install path. The install-step safety guard
+// is the last line of defense; this rejects bad names at the adapter boundary,
+// which OWNS the name→path mapping, with a clear error.
+
+export function assertValidSkillName(name: string): void {
+  if (
+    name.length === 0 ||
+    name === '.' ||
+    name === '..' ||
+    name.startsWith('.') ||
+    /[/\\]/.test(name) ||
+    name.includes('..')
+  ) {
+    throw new Error(
+      `Invalid skill name "${name}": must not be empty, start with a dot, ` +
+      `contain a path separator, or contain "..".`,
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // stripFields()
 // ---------------------------------------------------------------------------
 // Shared field-filtering engine used by all adapters.

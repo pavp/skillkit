@@ -29,6 +29,10 @@ const { values: flags } = parseArgs({
 const dryRun = flags['dry-run'] as boolean;
 const targetFlag = flags['target'] as string | undefined;
 
+// One token per build invocation. Namespaces backups so installs within the
+// same run (including the same skill across two adapters) never collide.
+const runId = `${Date.now()}-${process.pid}`;
+
 // ---------------------------------------------------------------------------
 // Adapter selection
 // ---------------------------------------------------------------------------
@@ -142,16 +146,29 @@ for (const { name, sourcePath } of skills) {
     continue; // no adapter runs for a failed skill
   }
 
-  // For each selected adapter: strip → render → install
+  // For each selected adapter: strip → render → install.
+  // If one adapter fails for this skill, abort the remaining adapters for the
+  // SAME skill — rollback is per-installSkill call, so continuing would leave
+  // the skill half-installed across roots with no cross-adapter rollback.
   for (const adapter of adapters) {
-    const destPath = adapter.resolveInstallPath(name);
+    let destPath: string;
     try {
-      const rendered = renderSkill(parsed.frontmatter, parsed.body, adapter);
-      installSkill(rendered, destPath, dryRun);
+      destPath = adapter.resolveInstallPath(name);
     } catch (err) {
       const msg = String(err);
       console.error(`  INSTALL ERROR [${adapter.agent}]: ${msg}`);
       failures.push({ name, adapter: adapter.agent, error: msg });
+      break; // bad name affects all adapters for this skill
+    }
+    try {
+      const rendered = renderSkill(parsed.frontmatter, parsed.body, adapter);
+      installSkill(rendered, destPath, dryRun, undefined, runId);
+    } catch (err) {
+      const msg = String(err);
+      console.error(`  INSTALL ERROR [${adapter.agent}]: ${msg}`);
+      failures.push({ name, adapter: adapter.agent, error: msg });
+      console.error(`  Aborting remaining adapters for [${name}] to avoid a half-installed state.`);
+      break; // stop other adapters for this skill
     }
   }
 }
