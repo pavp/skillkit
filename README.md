@@ -9,11 +9,28 @@ frontmatter (`name`, `description`) and a markdown body of runtime instructions.
 
 ## Skills
 
+Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
+
+### meta
+
 | Skill | What it does |
 |-------|--------------|
-| [`skill-creator`](skills/skill-creator/SKILL.md) | Create new LLM-first skills with valid frontmatter and the right structure. |
-| [`skill-improver`](skills/skill-improver/SKILL.md) | Audit and refactor existing skills against the style guide. |
-| [`react-component`](skills/react-component/SKILL.md) | Structure React components — container/presentational split, hooks rules, naming, typed props. |
+| [`skill-creator`](skills/meta/skill-creator/SKILL.md) | Create new LLM-first skills with valid frontmatter and the right structure. |
+| [`skill-improver`](skills/meta/skill-improver/SKILL.md) | Audit and refactor existing skills against the style guide. |
+
+### react
+
+| Skill | What it does |
+|-------|--------------|
+| [`react-component`](skills/react/react-component/SKILL.md) | Structure React components — container/presentational split, hooks rules, naming, typed props. |
+| [`react-patterns`](skills/react/react-patterns/SKILL.md) | Compose components — compound components and slots (markup-sharing patterns). |
+| [`react-hooks`](skills/react/react-hooks/SKILL.md) | Reuse stateful logic — custom hooks and (rarely) render props. |
+
+### typescript
+
+| Skill | What it does |
+|-------|--------------|
+| [`ts-function-signatures`](skills/typescript/ts-function-signatures/SKILL.md) | Design function/hook/component signatures — positional vs options object, defaults, overloads vs unions. |
 
 ## Install
 
