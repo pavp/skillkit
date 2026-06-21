@@ -4,7 +4,8 @@
   "type": "module",
   "main": "dist/build.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node dist/build.js",
+    "build:dry": "tsc && node dist/build.js --dry-run",
     "start": "node dist/build.js"
   },
   "dependencies": {
