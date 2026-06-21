@@ -1,6 +1,6 @@
 ---
 name: ts-function-signatures
-description: "Trigger: function signature, options object, named parameters, positional vs object params, default parameters, function overloads, union params. Design TypeScript function/hook/component signatures."
+description: "Trigger: function signature, options object, default parameters, function overloads, union params. Design TypeScript function/hook/component signatures."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
@@ -17,7 +17,7 @@ Use when designing or refactoring the SIGNATURE of a TypeScript function, hook, 
 - Prefer positional params for 1–2 required args; switch to an options object at 3+ params, or when several are optional/boolean and call sites become unreadable.
 - An optional object property MUST be marked optional AND typed, even when it has a destructuring default (`{ x = 1 }: { x?: number }`).
 - If EVERY property of an options object is optional, give the whole object a default (`= {}`) so the function is callable with no args. Omitting it forces a required argument and destructuring `undefined` throws.
-- Prefer union-typed params over function overloads. Use overloads ONLY when the RETURN type changes based on the argument type (TS Handbook). Overloads can let the body contradict the signatures — tread carefully.
+- Prefer union-typed params over function overloads. Use overloads ONLY when the RETURN type changes based on the argument type (TS Handbook).
 - Do not overload to express "same return, different inputs" — that is a union.
 
 ## Decision Gates

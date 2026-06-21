@@ -36,7 +36,7 @@ Use when reusing stateful LOGIC across components — custom hooks and (rarely) 
 3. Define the hook's return shape first: `{ value, action }` — stable across renders.
 4. Co-locate the hook with its consumers or in a `hooks/` module; export the `useX` name.
 
-## Minimal Example (custom hook, TypeScript)
+## Examples
 
 ```tsx
 import { useCallback, useState } from "react";

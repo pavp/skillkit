@@ -30,7 +30,9 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 
 | Skill | What it does |
 |-------|--------------|
+| [`ts-types`](skills/typescript/ts-types/SKILL.md) | Model types — union vs const-object, `satisfies`, flat interfaces, `unknown` + guards/assertions, utility types. |
 | [`ts-function-signatures`](skills/typescript/ts-function-signatures/SKILL.md) | Design function/hook/component signatures — positional vs options object, defaults, overloads vs unions. |
+| [`ts-module-organization`](skills/typescript/ts-module-organization/SKILL.md) | Organize modules — `import type` / `verbatimModuleSyntax`, barrel files, path aliases, circular deps. |
 
 ## Install
 

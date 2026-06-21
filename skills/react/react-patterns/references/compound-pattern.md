@@ -26,9 +26,9 @@ allowed is the tell that you picked the wrong pattern.
 ## Do you even need context?
 
 Context is for parts that are **arbitrarily nested**. For 1–2 fixed levels,
-pass state via direct props or `cloneElement` — context adds re-renders and
-boilerplate you may not need. Use context when prop-drilling through the parts
-becomes unmanageable.
+pass state via direct props (`cloneElement` only if unavoidable — React 19
+discourages it) — context adds re-renders and boilerplate you may not need.
+Use context when prop-drilling through the parts becomes unmanageable.
 
 ## Where the type safety lives: the context value
 
