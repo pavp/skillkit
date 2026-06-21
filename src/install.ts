@@ -45,11 +45,13 @@ function longestExistingPrefix(absPath: string): string {
   return current;
 }
 
-function assertNoSymlinkEscape(destPath: string): void {
-  const prefix = longestExistingPrefix(destPath);
+// Reject if any existing segment of the path is a symlink. Used for BOTH the
+// install destination and the backup destination — any symlinked segment lets
+// mkdir/copy/write/rename follow the link and escape the intended tree.
+function assertNoSymlinkSegment(targetPath: string): void {
+  const prefix = longestExistingPrefix(targetPath);
   if (!existsSync(prefix)) return; // nothing exists yet — nothing to follow
 
-  // Reject if any existing segment up to the prefix is a symlink.
   let segment = prefix;
   while (segment !== dirname(segment)) {
     if (existsSync(segment) && lstatSync(segment).isSymbolicLink()) {
@@ -59,6 +61,13 @@ function assertNoSymlinkEscape(destPath: string): void {
     }
     segment = dirname(segment);
   }
+}
+
+function assertNoSymlinkEscape(destPath: string): void {
+  assertNoSymlinkSegment(destPath);
+
+  const prefix = longestExistingPrefix(destPath);
+  if (!existsSync(prefix)) return;
 
   // Re-check that the real (symlink-resolved) prefix is still under a known root.
   const realPrefix = realpathSync(prefix);
@@ -204,6 +213,10 @@ export function installSkill(
       const skillName = basename(dirname(destPath)); // e.g. "example-skill"
       const agent = basename(dirname(dirname(dirname(destPath)))); // ".claude" | "opencode"
       const backupPath = join(backupRootDir, runId, agent, skillName, 'SKILL.md');
+      // Backup root lives outside INSTALL_ROOTS by design, so the root-containment
+      // guard does not apply — but a symlinked backup root would still let the
+      // copy escape. Reject any symlinked segment of the backup path.
+      assertNoSymlinkSegment(backupPath);
       ensureDir(dirname(backupPath));
       copyFileSync(destPath, backupPath);
       backedUp.push({ original: destPath, backup: backupPath });
