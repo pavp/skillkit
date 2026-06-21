@@ -34,14 +34,24 @@ The build pipeline MUST execute stages in this fixed order: (1) schema validatio
 
 ### Requirement: Pre-Build State Preservation on Failure
 
-If the build fails at any point after the install step has begun writing, all written targets MUST be restored to their pre-build state. The post-failure system state MUST be identical to the pre-build system state.
+Rollback is scoped per target (per `installSkill` call), NOT across targets. If a single target's install fails partway through writing, that target MUST be restored to its pre-write state (the per-call backup + atomic rename + abort/restore guarantees this). Targets are independent install roots (`~/.claude/skills`, `~/.config/opencode/skills`); a successfully written target is valid and usable on its own, so it is NOT rolled back when a *later* target fails.
 
-#### Scenario: Install failure triggers full rollback
+Rationale for per-target (not cross-target) atomicity: the agents are independent consumers. A completed Claude Code install is correct and consistent within its own root regardless of whether the OpenCode install later fails. Reverting an already-successful, internally-consistent install adds risk (mutating something that works) without protecting any invariant — no root is left corrupt or partially written by the per-target guarantee. Cross-root atomicity was considered and explicitly rejected as over-strict.
 
-- GIVEN the Claude Code install succeeds but the OpenCode install fails
+#### Scenario: A target's own install failure is rolled back for that target
+
+- GIVEN an install to a single target fails partway through writing
 - WHEN the pipeline handles the failure
-- THEN the Claude Code install MUST be rolled back
+- THEN that target MUST be restored to its pre-write state (backup restored / newly-created files removed)
 - AND the error MUST be reported with the rollback status
+
+#### Scenario: Later target failure does not roll back an earlier successful target
+
+- GIVEN the Claude Code install succeeds but the OpenCode install then fails
+- WHEN the pipeline handles the failure
+- THEN the pipeline MUST abort the remaining targets for that skill (no further installs)
+- AND the already-successful Claude Code install MUST remain in place (NOT rolled back)
+- AND the build MUST exit non-zero, reporting which target failed
 
 ### Requirement: Multi-Skill Build
 
