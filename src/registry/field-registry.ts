@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 
@@ -36,10 +36,24 @@ export type KnownField = keyof FieldRegistry;
 // entry. Throws with the offending field name if any schema property is missing.
 // This prevents schema/registry drift without a test runner.
 
+// Walk up from this module's directory until `schemas/skill.schema.json` is
+// found. Robust across build layouts (dist/, dist-test/src/) and invocation
+// dirs — does not assume a fixed number of `../` segments.
+function findSchemaPath(): string {
+  const start = dirname(fileURLToPath(import.meta.url));
+  let dir = start;
+  while (dir !== dirname(dir)) {
+    const candidate = join(dir, 'schemas', 'skill.schema.json');
+    if (existsSync(candidate)) return candidate;
+    dir = dirname(dir);
+  }
+  throw new Error(
+    `field-registry: could not locate schemas/skill.schema.json walking up from ${start}`
+  );
+}
+
 function assertRegistryCoversSchema(): void {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  const schemaPath = join(__dirname, '../../schemas/skill.schema.json');
+  const schemaPath = findSchemaPath();
 
   let schema: { properties?: Record<string, unknown> };
   try {
