@@ -30,19 +30,21 @@ Do not create a skill when the pattern is trivial, one-off, or better served by 
 
 | Need | Action |
 |------|--------|
-| Long explanation or background prose | Compress to imperative rules; keep only what the LLM needs at runtime |
-| Code templates, schemas, examples | Inline the minimal version in `SKILL.md` (multi-file `assets/` not yet installed by the pipeline) |
+| Long explanation or background prose | Move to `references/`; keep only the rule in `SKILL.md` |
+| Long code examples, schemas, templates | Put in `references/` or `assets/`; `SKILL.md` keeps rules + a one-line pointer (progressive disclosure) |
 | Multiple meaningful paths | Add a compact decision table |
 
 ## Execution Steps
 
 1. Check whether `docs/skill-style-guide.md` exists; if it does, apply it. Otherwise, apply the inline fallback rules below.
 2. Confirm the skill does not already exist and the pattern is reusable.
-3. Create or update `skills/{skill-name}/SKILL.md`. The build pipeline installs the single `SKILL.md` per skill (multi-file packaging of `assets/`/`references/` is not yet supported), so keep everything the skill needs at runtime inside `SKILL.md`:
+3. Create or update the skill directory. `SKILL.md` holds the rules an agent always needs; long examples/schemas/templates go in `references/` or `assets/` and the installer (skills.sh) carries the whole directory:
 
 ```
 skills/{skill-name}/
-└── SKILL.md              # Required - the only file the pipeline installs
+├── SKILL.md              # Required - rules + pointers
+├── references/           # Optional - worked examples, docs (loaded on demand)
+└── assets/               # Optional - templates, schemas, fixtures
 ```
 4. Use this frontmatter shape:
 
@@ -64,7 +66,7 @@ metadata:
 - `description` SHOULD be <=160 chars and MUST be <=250 chars.
 - Frontmatter MUST include `name`, `description`, `license`, `metadata.author`, and `metadata.version`.
 - Use imperative instructions, not tutorials or background prose.
-- Keep everything the skill needs at runtime inside `SKILL.md`; the pipeline installs only that file.
+- Keep `SKILL.md` to rules + pointers; move long examples/docs to `references/` or `assets/` (the installer carries the whole skill directory).
 
 Good:
 

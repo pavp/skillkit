@@ -16,7 +16,7 @@ Use this skill when asked to audit, refactor, normalize, or improve existing `SK
 - Treat `docs/skill-style-guide.md` as the normative style contract when it exists; otherwise enforce the inline core structure (see Execution Steps).
 - Treat `SKILL.md` as the source of truth; preserve author intent, critical rules, activation semantics, and output requirements.
 - Default to audit-only. Modify files only when the user explicitly asks to apply improvements.
-- Never delete meaningful content silently; compress long explanation, examples, or schemas into concise inline form rather than dropping them (the pipeline installs only `SKILL.md`).
+- Never delete meaningful content silently; move long explanation, examples, or schemas to `references/` rather than dropping them (the installer carries the whole skill directory).
 - Do not invent triggers, policies, or domain rules. Mark ambiguous cases for human review.
 
 ## Decision Gates
@@ -25,7 +25,7 @@ Use this skill when asked to audit, refactor, normalize, or improve existing `SK
 | --- | --- |
 | Missing or invalid frontmatter | Fix `name`, quoted one-line `description`, `license`, and `metadata` |
 | Skill reads like tutorial docs | Convert to runtime instructions; compress background inline |
-| Body exceeds budget | Preserve rules, compress examples/background inline (no external files installed) |
+| Body exceeds budget | Preserve rules; move examples/background to `references/` (progressive disclosure) |
 | Branching logic hidden in prose | Convert to a compact decision table |
 | Rules conflict or intent is unclear | Report the issue; do not rewrite that rule automatically |
 
