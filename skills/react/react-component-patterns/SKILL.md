@@ -13,7 +13,7 @@ Use when designing the API of a REUSABLE React component — how its parts compo
 
 Boundaries: for building/refactoring a single basic component use `react-component`; for reusable stateful LOGIC (custom hooks) use `react-hooks`.
 
-Currently documented in depth: compound components + slots (below, with a full reference). The other patterns appear in the Decision Gates marked _reference coming_ — the gate routes you to the right pattern now; the detailed reference lands in a follow-up.
+Documented in depth (with full references): compound components + slots, and control props. The remaining patterns appear in the Decision Gates marked _reference coming_ — the gate routes you to the right pattern now; the detailed reference lands in a follow-up.
 
 ## Hard Rules
 
@@ -34,22 +34,23 @@ Currently documented in depth: compound components + slots (below, with a full r
 | Caller injects arbitrary markup into fixed regions | Slots via `children` / `ReactNode` props |
 | Two fixed regions (header + body) | Named slots: `ReactNode` props |
 | Avoid prop drilling for shared state across parts | Compound (context), not lifting every prop |
-| Consumer must read/override the component's state | Control props (`value` + `onChange`, controlled/uncontrolled) — _reference coming_ |
+| Consumer must read/override the component's state | Control props (`value` + `onChange`, controlled/uncontrolled) → `references/control-props.md` |
 | Seed internal state from props + expose a reset | State initializer (`initialValues` + `reset`) — _reference coming_ |
 | Consumer extends styling per instance | Extensible styles (`className` + `style` passthrough) — _reference coming_ |
 
 ## Execution Steps
 
-1. State what varies: shared state across parts, or injected markup.
+1. State what varies: shared state across parts, who owns that state (the component or the consumer), or injected markup.
 2. Match it to ONE pattern via the gates; avoid stacking patterns.
 3. Compound: create a context in the parent, consume it in each child, expose children as `Parent.Child`.
 4. Slots: type injected regions as `ReactNode` props or `children`; keep the public API minimal.
 
-## Examples
+## Pattern references
 
-Type the CONTEXT value; expose it through a null-checking custom hook (the type guard); attach parts as a namespace (`Tabs.Tab`). When to use it, whether you need context, the type-safety trap to avoid, full TypeScript implementation, and the generic `createTabs<T>()` variant:
+Each documented pattern has a full reference with TypeScript and gotchas:
 
-→ `references/compound-pattern.md`
+- **Compound components + slots** — context value typing, null-checking guard hook, namespace (`Tabs.Tab`), the type-safety trap, the `memo`/`forwardRef` namespace gotcha, the generic `createTabs<T>()` variant: → `references/compound-pattern.md`
+- **Control props (controlled/uncontrolled)** — the `value`/`defaultValue`/`onChange` contract, recomputing `isControlled` per render, the derive-state-from-props anti-pattern: → `references/control-props.md`
 
 ## Output Contract
 
