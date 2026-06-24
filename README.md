@@ -23,7 +23,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | Skill | What it does |
 |-------|--------------|
 | [`react-component`](skills/react/react-component/SKILL.md) | Structure React components — container/presentational split, hooks rules, naming, typed props. |
-| [`react-patterns`](skills/react/react-patterns/SKILL.md) | Compose components — compound components and slots (markup-sharing patterns). |
+| [`react-component-patterns`](skills/react/react-component-patterns/SKILL.md) | Design reusable component APIs — compound components and slots (control props, state initializer, extensible styles coming). |
 | [`react-hooks`](skills/react/react-hooks/SKILL.md) | Reuse stateful logic — custom hooks and (rarely) render props. |
 
 ### typescript

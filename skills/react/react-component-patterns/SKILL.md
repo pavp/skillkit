@@ -1,6 +1,6 @@
 ---
-name: react-patterns
-description: "Trigger: compound components, slots, component composition, reusable component API, prop drilling. Compose React components with markup-sharing patterns."
+name: react-component-patterns
+description: "Trigger: compound components, slots, control props, controlled/uncontrolled, state initializer, extensible styles, reusable component API. Design patterns for reusable React components (not building a basic one → react-component)."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
@@ -9,7 +9,11 @@ metadata:
 
 ## Activation Contract
 
-Use when designing how React component PARTS compose and share markup/state — compound components and slots. For reusable stateful LOGIC use `react-hooks`. For basic single-component structure use `react-component`.
+Use when designing the API of a REUSABLE React component — how its parts compose, how its state is controlled, how it's initialized, how it's styled from outside. This is the umbrella for component-design patterns: compound components, slots, control props (controlled/uncontrolled), state initializer, extensible styles.
+
+Boundaries: for building/refactoring a single basic component use `react-component`; for reusable stateful LOGIC (custom hooks) use `react-hooks`.
+
+Currently documented in depth: compound components + slots (below, with a full reference). The other patterns appear in the Decision Gates marked _reference coming_ — the gate routes you to the right pattern now; the detailed reference lands in a follow-up.
 
 ## Hard Rules
 
@@ -30,6 +34,9 @@ Use when designing how React component PARTS compose and share markup/state — 
 | Caller injects arbitrary markup into fixed regions | Slots via `children` / `ReactNode` props |
 | Two fixed regions (header + body) | Named slots: `ReactNode` props |
 | Avoid prop drilling for shared state across parts | Compound (context), not lifting every prop |
+| Consumer must read/override the component's state | Control props (`value` + `onChange`, controlled/uncontrolled) — _reference coming_ |
+| Seed internal state from props + expose a reset | State initializer (`initialValues` + `reset`) — _reference coming_ |
+| Consumer extends styling per instance | Extensible styles (`className` + `style` passthrough) — _reference coming_ |
 
 ## Execution Steps
 
