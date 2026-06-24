@@ -14,7 +14,7 @@ Use when designing how React component PARTS compose and share markup/state — 
 ## Hard Rules
 
 - Compound components are for LAYOUT (Tabs, Card, Toolbar), not data. A data list is `props` + `.map()`, not compound.
-- Use context for compound state ONLY when children are arbitrarily nested. For 1–2 fixed levels, pass state via direct props (`cloneElement` only if unavoidable — React 19 discourages it).
+- Use context ONLY when parts SHARE state AND are arbitrarily nested; never by default (see Decision Gates for the share-state / nesting / fixed-level branches).
 - When you do use context, never type `children` to police what is allowed (`ReactElement<XProps>[]`) — TS checks this unreliably and it breaks on `.map()`, conditionals, and fragments. Put type safety in the context value instead; a stray child is harmless.
 - Expose context through a custom hook that null-checks and throws; children read state through it, never via `useContext` directly.
 - Prefer `children`/slots over configuration props when the caller only needs to inject markup.
@@ -23,8 +23,9 @@ Use when designing how React component PARTS compose and share markup/state — 
 
 | Need | Pattern |
 |------|---------|
-| Layout parts, arbitrarily nested, sharing state | Compound components + typed context |
-| Layout parts, 1–2 fixed levels | Compound via direct props, no context |
+| Parts grouped but NOT sharing state | Namespaced composition via props — no context |
+| Parts share state, arbitrarily nested | Compound components + typed context |
+| Parts share state, 1–2 fixed levels | Compound via direct props, no context |
 | A list driven by DATA | `props` + `.map()` — NOT compound |
 | Caller injects arbitrary markup into fixed regions | Slots via `children` / `ReactNode` props |
 | Two fixed regions (header + body) | Named slots: `ReactNode` props |
