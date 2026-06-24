@@ -44,11 +44,11 @@ import { useCallback, useState } from "react";
 type UseToggle = { on: boolean; toggle: () => void };
 
 // Type params and return explicitly — the hook's public contract.
-export function useToggle(initial: boolean = false): UseToggle {
+export const useToggle = (initial: boolean = false): UseToggle => {
   const [on, setOn] = useState<boolean>(initial);
   const toggle = useCallback(() => setOn((v) => !v), []);
   return { on, toggle };           // logic only — no JSX
-}
+};
 ```
 
 ## Output Contract
