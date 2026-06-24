@@ -13,7 +13,7 @@ Use when designing the API of a REUSABLE React component — how its parts compo
 
 Boundaries: for building/refactoring a single basic component use `react-component`; for reusable stateful LOGIC (custom hooks) use `react-hooks`.
 
-Documented in depth (with full references): compound components + slots, and control props. The remaining patterns appear in the Decision Gates marked _reference coming_ — the gate routes you to the right pattern now; the detailed reference lands in a follow-up.
+Documented in depth (with full references): compound components + slots, control props, and state initializer. Extensible styles appears in the Decision Gates marked _reference coming_ — the gate routes you there now; the detailed reference lands in a follow-up.
 
 ## Hard Rules
 
@@ -35,7 +35,7 @@ Documented in depth (with full references): compound components + slots, and con
 | Two fixed regions (header + body) | Named slots: `ReactNode` props |
 | Avoid prop drilling for shared state across parts | Compound (context), not lifting every prop |
 | Consumer must read/override the component's state | Control props (`value` + `onChange`, controlled/uncontrolled) → `references/control-props.md` |
-| Seed internal state from props + expose a reset | State initializer (`initialValues` + `reset`) — _reference coming_ |
+| Seed internal state from props + expose a reset | State initializer (`initialValue` + `reset`) → `references/state-initializer.md` |
 | Consumer extends styling per instance | Extensible styles (`className` + `style` passthrough) — _reference coming_ |
 
 ## Execution Steps
@@ -51,6 +51,7 @@ Each documented pattern has a full reference with TypeScript and gotchas:
 
 - **Compound components + slots** — context value typing, null-checking guard hook, namespace (`Tabs.Tab`), the type-safety trap, the `memo`/`forwardRef` namespace gotcha, the generic `createTabs<T>()` variant: → `references/compound-pattern.md`
 - **Control props (controlled/uncontrolled)** — the `value`/`defaultValue`/`onChange` contract, recomputing `isControlled` per render, the derive-state-from-props anti-pattern: → `references/control-props.md`
+- **State initializer** — seeding state from `initialValue`, snapshotting the seed with `useRef` so `reset()` doesn't drift, exposing controls via a typed render prop: → `references/state-initializer.md`
 
 ## Output Contract
 
