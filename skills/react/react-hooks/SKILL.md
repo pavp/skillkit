@@ -9,7 +9,7 @@ metadata:
 
 ## Activation Contract
 
-Use when reusing stateful LOGIC across components — custom hooks and (rarely) render props. For composing markup/parts use `react-patterns`. For basic structure use `react-component`.
+Use when reusing stateful LOGIC across components — custom hooks and (rarely) render props. For composing markup/parts use `react-component-patterns`. For basic structure use `react-component`.
 
 ## Hard Rules
 
@@ -61,5 +61,5 @@ Return:
 ## References
 
 - `ts-function-signatures` skill — for the hook's param shape (positional vs options object, defaults).
-- `react-patterns` skill — for composing component markup/parts.
+- `react-component-patterns` skill — for composing component markup/parts.
 - React docs — Rules of Hooks (author-time reference).

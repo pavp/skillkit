@@ -51,6 +51,6 @@ Return:
 
 ## References
 
-- `react-patterns` skill — for reusable component APIs (compound, render props, slots, custom hooks).
+- `react-component-patterns` skill — for reusable component APIs (compound, slots, control props, state initializer, extensible styles).
 - `ts-function-signatures` skill — for typing the `Props` shape (options object, optional/default props).
 - React docs — Rules of Hooks and component composition (author-time reference).
