@@ -34,6 +34,12 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`ts-function-signatures`](skills/typescript/ts-function-signatures/SKILL.md) | Design function/hook/component signatures — positional vs options object, defaults, overloads vs unions. |
 | [`ts-module-organization`](skills/typescript/ts-module-organization/SKILL.md) | Organize modules — `import type` / `verbatimModuleSyntax`, barrel files, path aliases, circular deps. |
 
+### workflow
+
+| Skill | What it does |
+|-------|--------------|
+| [`review`](skills/workflow/review/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
+
 ## Install
 
 Skills install via [`skills.sh`](https://skills.sh) (`npx skills`), the open
