@@ -39,9 +39,8 @@ Use when creating or refactoring a React component (`.tsx`/`.jsx`) — structure
 
 ```tsx
 type GreetingProps = { name: string };
-export default function Greeting({ name }: GreetingProps) {
-  return <h1>Hello, {name}</h1>;
-}
+const Greeting = ({ name }: GreetingProps) => <h1>Hello, {name}</h1>;
+export default Greeting;
 ```
 
 ## Output Contract

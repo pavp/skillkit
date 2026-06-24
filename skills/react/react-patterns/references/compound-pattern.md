@@ -47,39 +47,39 @@ type TabsContextValue = {
 const TabsContext = createContext<TabsContextValue | null>(null);
 
 // The type guard: throws outside <Tabs>, returns a non-null value.
-function useTabsContext(): TabsContextValue {
+const useTabsContext = (): TabsContextValue => {
   const ctx = useContext(TabsContext);
   if (!ctx) throw new Error("Tabs.* must be used inside <Tabs>");
   return ctx;
-}
+};
 
-function Tabs({ defaultTab, children }: { defaultTab: string; children: ReactNode }) {
+const Tabs = ({ defaultTab, children }: { defaultTab: string; children: ReactNode }) => {
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>
       {children}
     </TabsContext.Provider>
   );
-}
+};
 
-function TabList({ children }: { children: ReactNode }) {
-  return <div role="tablist">{children}</div>;
-}
+const TabList = ({ children }: { children: ReactNode }) => (
+  <div role="tablist">{children}</div>
+);
 
-function Tab({ value, children }: { value: string; children: ReactNode }) {
+const Tab = ({ value, children }: { value: string; children: ReactNode }) => {
   const { activeTab, setActiveTab } = useTabsContext(); // typed, no `!`
   return (
     <button role="tab" aria-selected={activeTab === value} onClick={() => setActiveTab(value)}>
       {children}
     </button>
   );
-}
+};
 
-function Panel({ value, children }: { value: string; children: ReactNode }) {
+const Panel = ({ value, children }: { value: string; children: ReactNode }) => {
   const { activeTab } = useTabsContext();
   if (activeTab !== value) return null;
   return <div role="tabpanel">{children}</div>;
-}
+};
 
 // Expose the parts as a namespace.
 Tabs.List = TabList;
