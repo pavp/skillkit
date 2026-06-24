@@ -17,11 +17,12 @@ Each pattern has a full reference under `references/` (see Pattern references): 
 
 ## Hard Rules
 
-- Compound components are for LAYOUT (Tabs, Card, Toolbar), not data. A data list is `props` + `.map()`, not compound.
-- Use context ONLY when parts SHARE state AND are arbitrarily nested; never by default (see Decision Gates for the share-state / nesting / fixed-level branches).
-- When you do use context, never type `children` to police what is allowed (`ReactElement<XProps>[]`) — TS checks this unreliably and it breaks on `.map()`, conditionals, and fragments. Put type safety in the context value instead; a stray child is harmless.
-- Expose context through a custom hook that null-checks and throws; children read state through it, never via `useContext` directly.
-- Prefer `children`/slots over configuration props when the caller only needs to inject markup.
+These apply across every pattern in this family; each pattern's own rules and anti-patterns live in its reference.
+
+- Pick exactly ONE pattern per problem (match via Decision Gates); never stack patterns to cover the same need.
+- Reach for the simplest pattern that fits — props/slots before context, uncontrolled before controlled, a seed before lifting state. Add machinery only when a concrete need forces it.
+- Read the chosen pattern's reference before implementing — each documents a real anti-pattern that the naive version walks into.
+- Type the component's public contract explicitly (context value, control props, render-prop args, style props); don't lean on inference for the API consumers depend on.
 
 ## Decision Gates
 
@@ -40,19 +41,19 @@ Each pattern has a full reference under `references/` (see Pattern references): 
 
 ## Execution Steps
 
-1. State what varies: shared state across parts, who owns that state (the component or the consumer), or injected markup.
-2. Match it to ONE pattern via the gates; avoid stacking patterns.
-3. Compound: create a context in the parent, consume it in each child, expose children as `Parent.Child`.
-4. Slots: type injected regions as `ReactNode` props or `children`; keep the public API minimal.
+1. State what varies: shared state across parts, who owns the live state (component or consumer), the initial/reset seed, injected markup, or per-instance styling.
+2. Match it to ONE pattern via the Decision Gates.
+3. Open that pattern's reference (see Pattern references) and follow its implementation and TypeScript contract — including the anti-pattern it warns against.
+4. Type the public API explicitly; keep it minimal — expose only what the consumer needs.
 
 ## Pattern references
 
-Each documented pattern has a full reference with TypeScript and gotchas:
+Each pattern's full TypeScript implementation, gotchas, and anti-pattern live in its reference:
 
-- **Compound components + slots** — context value typing, null-checking guard hook, namespace (`Tabs.Tab`), the type-safety trap, the `memo`/`forwardRef` namespace gotcha, the generic `createTabs<T>()` variant: → `references/compound-pattern.md`
-- **Control props (controlled/uncontrolled)** — the `value`/`defaultValue`/`onChange` contract, recomputing `isControlled` per render, the derive-state-from-props anti-pattern: → `references/control-props.md`
-- **State initializer** — seeding state from `initialValue`, snapshotting the seed with `useRef` so `reset()` doesn't drift, exposing controls via a typed render prop: → `references/state-initializer.md`
-- **Extensible styles** — accepting `className` + `style`, merging (not replacing) with `clsx`, the unguarded-concat `"undefined"` bug, `CSSProperties` and `ComponentPropsWithoutRef` typing: → `references/extensible-styles.md`
+- **Compound components + slots** — parts sharing state via guarded context; markup injection via slots: → `references/compound-pattern.md`
+- **Control props** — controlled/uncontrolled via `value`/`defaultValue`/`onChange`: → `references/control-props.md`
+- **State initializer** — seed state + stable `reset()`: → `references/state-initializer.md`
+- **Extensible styles** — `className`/`style` passthrough and merge: → `references/extensible-styles.md`
 
 ## Output Contract
 
