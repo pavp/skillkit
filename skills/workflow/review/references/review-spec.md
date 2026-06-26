@@ -16,20 +16,4 @@ Do not invent requirements the intent text does not state. If the intent is sile
 
 ## Output contract
 
-Report findings only, each in this exact shape, separated by `---`. For Spec, `evidence` is the quoted intent line the diff violates:
-
-```
-**FINDING <n>**
-severity: <emoji> BLOCKER | CRITICAL | WARNING | SUGGESTION
-file: <path> line <n>
-kind: missing | scope-creep | wrong
-
-evidence:
-<the quoted intent line, in a fenced code block>
-
-Why it matters: <impact + fix direction>
-```
-
-Severity emoji (use exactly): 🔴 BLOCKER · 🟠 CRITICAL · 🟡 WARNING · 🔵 SUGGESTION.
-
-If the diff faithfully matches the intent, say exactly: `No findings.`
+Emit findings in the exact shape from `references/finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Spec` as the lens name. Two Spec specifics (per that file's "Spec only" note): the parenthetical carries a `kind` tag — `(`Spec` — `<path>` · _missing | scope-creep | wrong_)` — and `Evidence` is the quoted intent line, not code. `Why it matters` (the gap: intent vs. diff) and `Fix` are both required and separate. If the diff faithfully matches the intent, say exactly: `No findings.`

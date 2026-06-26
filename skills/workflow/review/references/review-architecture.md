@@ -25,19 +25,4 @@ If the doc states a rule the code already violates broadly, that mismatch is its
 
 ## Output contract
 
-Report findings only, each in this exact shape, separated by `---`:
-
-```
-**FINDING <n>**
-severity: <emoji> BLOCKER | CRITICAL | WARNING | SUGGESTION
-file: <path> line <n>
-
-evidence:
-<the offending code or quoted line, in a fenced code block>
-
-Why it matters: <impact + fix direction>
-```
-
-Severity emoji (use exactly): 🔴 BLOCKER · 🟠 CRITICAL · 🟡 WARNING · 🔵 SUGGESTION.
-
-If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `references/finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Architecture` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`

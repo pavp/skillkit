@@ -15,6 +15,6 @@ Prompt each lens with exactly these steps:
 
 1. Read your rules and output contract: `<rules file>`.
 2. The diff under review is `git diff <point>...HEAD`; commits: `git log <point>..HEAD --oneline`. (Spec only: the requested intent is this text: `<normalized intent>`.)
-3. Apply ONLY your lens rules. Emit findings in the EXACT shape from your output contract — `FINDING <n>`, `severity:` with its emoji, `file:`, fenced `evidence:`, `Why it matters:`, separated by `---`. Stay in your lane; defects another lens owns are not yours. Your returned text IS the report — no preamble, no closing summary.
+3. Apply ONLY your lens rules. Emit findings in the EXACT shape defined in `references/finding-shape.md` (your rules file points to it) — bold title, `(Lens — file:line)`, blockquoted `Why it matters` + evidence, `→ Fix`; compact one-line for 🔵. Stay in your lane; defects another lens owns are not yours. Your returned text IS the report — no preamble, no closing summary.
 
 Run lenses in isolation (parallel sub-agents if the runtime supports them; otherwise sequential with reset context). Use the Label as the sub-agent's short `description` for traceability when lenses run concurrently.
