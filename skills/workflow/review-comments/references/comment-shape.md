@@ -53,3 +53,39 @@ Is there a reason they need to land together, or can we separate them?
 ## Consolidation rule
 
 Multiple findings on the same locus → one comment carrying the highest-value point. Multiple trivial nits across the diff → fold into a single short note or drop. The author's attention is the scarce resource; spend it on what matters.
+
+## Output phases
+
+The output has two phases. They render the same comment sections; only the trailing matter differs.
+
+**Presentation** (shown to the user for review):
+
+```
+### src/auth/session.ts:42
+
+<comment text, the three-beat shape>
+
+### src/utils/parse.ts:88
+
+<comment text>
+
+---
+
+Confirm, adjust, or skip?
+```
+
+The `---` rule before the gate prompt is mandatory. The gate addresses the user, not the codebase; without the separator a reader (human or agent) can misread it as part of the last comment and post it. Keep it on its own line, after the rule, never attached to a comment.
+
+**Hand-off** (after the user confirms — what actually gets posted):
+
+```
+### src/auth/session.ts:42
+
+<comment text>
+
+### src/utils/parse.ts:88
+
+<comment text>
+```
+
+No gate prompt, no `---`, no lead-in or sign-off. Each section is paste-ready at its anchor. Whoever posts (user, runtime, another tool) takes these verbatim.

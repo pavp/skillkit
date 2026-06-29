@@ -48,7 +48,7 @@ Load when the user wants comments written from review findings, in any modality.
 
 ## Output Contract
 
-Two phases. **Presentation** (step 4): each locus is a `###` heading with the draft comment beneath as a plain paragraph; close with a one-line gate prompt (confirm, adjust, skip). Heading is the locus: `### file:line` only for a real navigable anchor, else a plain text reference (`### <symbol/section/note>`) — never a `:line` the reader cannot follow. **Hand-off** (step 5, post-confirmation): same sections, NO gate prompt, no meta-commentary, ready to copy verbatim for the runtime or user to post. Never severity tags.
+Each locus is a `###` heading (a `file:line` only for a real navigable anchor, else a plain text reference) with the draft comment beneath. Two phases, detailed in `comment-shape.md`: **Presentation** (step 4) ends with a `---` then a one-line gate prompt (confirm, adjust, skip); **Hand-off** (step 5, post-confirmation) returns the comment sections only — no gate, no `---`, no meta-commentary — ready to copy verbatim. Never severity tags.
 
 ## References
 
