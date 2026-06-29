@@ -17,4 +17,4 @@ Scope: security, privilege boundaries, data exposure, dependency risks, merge-bl
 
 ## Output contract
 
-Emit findings in the exact shape from `references/finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Risk` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Risk` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`

@@ -25,4 +25,4 @@ If the doc states a rule the code already violates broadly, that mismatch is its
 
 ## Output contract
 
-Emit findings in the exact shape from `references/finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Architecture` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Architecture` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`
