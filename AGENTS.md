@@ -13,7 +13,7 @@ skills/
   meta/        skill-creator, skill-improver
   react/       react-component, react-hooks, react-component-patterns
   typescript/  ts-types, ts-function-signatures, ts-module-organization
-  workflow/    review
+  workflow/    review-6-lens
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)
 README.md
@@ -39,7 +39,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 - **Author**: `metadata.author: pedro-villarreal(pavp)` across skills.
 - **Categories** group by domain (`react`, `typescript`) or process (`workflow`). Add a new category folder when a skill fits neither.
 - Skills are **runtime-agnostic**: do not hardcode a specific agent type (e.g. `general-purpose`) or a vendor's nomenclature. Describe the capability a skill needs, not the API that provides it.
-- Keep the lens/finding naming internal to a skill consistent (see `workflow/review` for the L1–L6 lens pattern).
+- Keep the lens/finding naming internal to a skill consistent (see `workflow/review-6-lens` for the L1–L6 lens pattern).
 
 ## Non-negotiables
 
