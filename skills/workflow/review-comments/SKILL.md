@@ -1,6 +1,6 @@
 ---
 name: review-comments
-description: "Trigger: turn review findings into comments for a PR/issue, copy-pasted code, or terminal review. Drafts human, concept-first comments that close with a question, consolidates them, gates on confirmation, and delivers drafts without posting."
+description: "Trigger: write/draft review comments; comment on a PR/issue; turn findings into comments. Human, concept-first comments that close with a question, consolidated, gated on confirmation, delivered as drafts without posting."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
