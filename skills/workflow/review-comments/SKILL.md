@@ -52,4 +52,4 @@ Each locus is a `###` heading (a `file:line` only for a real navigable anchor, e
 
 ## References
 
-- `comment-shape.md` — the three-beat comment shape with worked examples and anti-patterns.
+- `comment-shape.md` — the three-beat comment shape with worked examples and anti-patterns, plus the two-phase Presentation/Hand-off render contract.
