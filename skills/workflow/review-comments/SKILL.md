@@ -25,7 +25,7 @@ Load when the user wants comments written from review findings, in any modality.
 - **No severity tags.** Never label a comment with a severity; the content carries the weight.
 - **Consolidate.** One comment per locus, highest-value point only. No pile-ons.
 - **No AI tells.** No hedging, no em-dashes inside comments, no robotic checklists, no praise warm-up. See `comment-shape.md` anti-patterns.
-- **Language.** Draft in the thread's language, content included; translate findings from another language. Ambiguous or mixed → default English and note it in the gate.
+- **Language.** Draft in the thread's language (translate findings from another); ambiguous or mixed → default English, note it in the gate.
 - **Gate, then hand off.** Share drafts and get unambiguous confirmation before treating them as final. A vague reply ("ok", "sure") is not confirmation; ask once to confirm.
 - **Never post.** The runtime, user, or another tool posts. Do NOT hardcode `gh`/any vendor API or invoke a posting tool yourself.
 
@@ -48,7 +48,7 @@ Load when the user wants comments written from review findings, in any modality.
 
 ## Output Contract
 
-Two phases. **Presentation** (step 4): return each locus as a markdown section — `### file:line` or `### <reference>` — the draft comment as a plain paragraph beneath; then close with a one-line gate prompt: confirm, adjust, or skip. **Hand-off** (step 5, after confirmation): return the same sections with NO gate prompt and no meta-commentary, ready to copy verbatim for the runtime or user to post. Never severity tags.
+Two phases. **Presentation** (step 4): each locus is a `###` heading with the draft comment beneath as a plain paragraph; close with a one-line gate prompt (confirm, adjust, skip). Heading is the locus: `### file:line` only for a real navigable anchor, else a plain text reference (`### <symbol/section/note>`) — never a `:line` the reader cannot follow. **Hand-off** (step 5, post-confirmation): same sections, NO gate prompt, no meta-commentary, ready to copy verbatim for the runtime or user to post. Never severity tags.
 
 ## References
 
