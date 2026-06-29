@@ -38,7 +38,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 
 | Skill | What it does |
 |-------|--------------|
-| [`review`](skills/workflow/review/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
+| [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
 
 ## Install
 

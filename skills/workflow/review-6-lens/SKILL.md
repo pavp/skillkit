@@ -1,5 +1,5 @@
 ---
-name: review
+name: review-6-lens
 description: "Trigger: review a branch, PR, commits, tag, merge, or WIP diff; \"review since X\"; \"6-lens review\". Reviews a diff across 6 isolated lenses (Risk, Readability, Reliability, Resilience, Architecture, Spec), reported by severity."
 license: Apache-2.0
 metadata:
