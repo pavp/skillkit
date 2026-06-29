@@ -40,6 +40,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 |-------|--------------|
 | [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
 | [`review-comments`](skills/workflow/review-comments/SKILL.md) | Draft and consolidate review comments — concept-first, with a closing question — and gate on confirmation. Delivers drafts ready to post; never posts. |
+| [`clean-trash`](skills/workflow/clean-trash/SKILL.md) | Detect dev artifacts left in a branch — debug logging, breakpoints, dead code, git-ignored build/cache output — group by type and risk, gate on confirmation, and clean only what is confirmed. Never deletes untracked files or kills processes. |
 
 ## Install
 
