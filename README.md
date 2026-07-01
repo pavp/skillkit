@@ -40,6 +40,8 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 |-------|--------------|
 | [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
 | [`review-comments`](skills/workflow/review-comments/SKILL.md) | Draft and consolidate review comments — concept-first, with a closing question — and gate on confirmation. Delivers drafts ready to post; never posts. |
+| [`leave-it-cleaner`](skills/workflow/leave-it-cleaner/SKILL.md) | Boy Scout Rule, any language — after the asked task, make a cohesive, proportional, behavior-preserving cleanup of the zone you touched, and say what you did. |
+| [`clean-comments`](skills/workflow/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / trailing / out-of-domain via the surprise test and reason-token gate. Judges; never deletes. |
 
 ## Install
 
