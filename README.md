@@ -45,6 +45,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`clean-names`](skills/workflow/clean-names/SKILL.md) | Judgment authority on names, any language — classifies an identifier against Clean Code rules N1–N7 (descriptive, abstraction, standard, unambiguous, scope-length, no encoding, side-effect) and suggests a fix; defers TS type/signature/module concerns to the `ts-*` skills. Judges; never renames. |
 | [`clean-functions`](skills/workflow/clean-functions/SKILL.md) | Judgment authority on functions, any language — classifies against F2–F5 (output-arg mutation, flag arg, dead code, single-responsibility) and suggests a split boundary; arg-count (F1) defers to `ts-function-signatures` in TS, names/types defer to `clean-names` / `ts-*`. Judges; never edits. |
 | [`clean-structure`](skills/workflow/clean-structure/SKILL.md) | Judgment authority on the shape of a code body, any language — classifies against S1–S5 (duplication, magic value, obscured intent, repeated type switch, train wreck) and suggests a fix direction; names/types/comments/single-purpose defer to `clean-names` / `ts-*` / `clean-comments` / `clean-functions`. Judges; never edits. |
+| [`slice-diff`](skills/workflow/slice-diff/SKILL.md) | Slice an oversized git diff into a chain of reviewable PRs — pure git (no SDD, no config), >400 lines as the hard gate, domain/layer as a soft cut signal, cut by commit boundary first. Shows the plan, gates on confirmation, then executes. |
 
 ## Install
 
