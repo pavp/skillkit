@@ -13,7 +13,7 @@ Boy Scout Rule, any language: leave code a little cleaner than you found it.
 
 ## Activation Contract
 
-Load right AFTER completing an edit to existing code, when a quick proportional cleanup of the zone you just touched is in scope — or on "while you're at it" / "any quick wins" / "leave it cleaner". Do NOT fire merely because code is being written: not for greenfield authoring, and not during a task (finish it first). The rules below are language-agnostic; in TypeScript, defer to the `ts-*` skills (References) for type, signature, and module/import changes.
+Load right AFTER completing an edit to existing code, when a quick proportional cleanup of the zone you just touched is in scope — or on "while you're at it" / "any quick wins" / "leave it cleaner". Do NOT fire merely because code is being written: not for greenfield authoring, and not during a task (finish it first). Rules are language-agnostic; in TypeScript defer type/signature/module changes to the `ts-*` skills.
 
 ## Hard Rules
 
@@ -21,22 +21,24 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 - **One cohesive set, zone-bounded.** Apply every safe win in the touched zone — several categories at once is fine (rename + name a magic number + drop a redundant comment). The touched zone IS the proportionality bound: never other functions, never other files, never a rewrite the task didn't require.
 - **Scaffolding is out of scope.** Never touch `console.*`, `debugger`, or `// TODO`/`// FIXME` — do not judge "active vs trash", just leave them. Never remove a symbol still referenced anywhere you can see.
 - **Task-is-cleanup guard.** If the task WAS itself a cleanup/refactor, the task IS the win — add nothing on top.
-- **Auto-apply only what can't affect callers.** A change is auto-applicable only if it is behavior-preserving AND cannot affect anything outside the touched zone. Renaming a symbol referenced outside the zone, or changing a signature, params, return type, or a side effect — is NOT auto-applied; skip it (or propose, don't apply). The Decision Gates mark which rows are auto vs propose.
+- **Auto-apply only what can't affect callers.** A change is auto-applicable only if it is behavior-preserving AND cannot affect anything outside the touched zone. A rename is auto only when the symbol is NOT exported / not part of the public surface AND is referenced only within the zone — an exported symbol is never auto-renamed even if its only visible use is in-zone (callers may live in files you never opened). Changing a signature, params, return type, or a side effect is likewise never auto-applied; skip it or propose. The Decision Gates mark which rows are auto vs propose.
 - **Behavior-preserving.** Must not change what the code does. Unsure it is safe → skip.
 
 ## Decision Gates
 
-**Touched zone** = the function(s)/block(s) containing lines you modified. Removals use whole-file reference scope by design (an import or symbol counts as removable only if unused in the whole file), which is stricter than the zone.
+**Touched zone** = the function(s)/block(s) containing lines you modified. Removals use whole-file reference scope (removable only if unused in the whole file) — stricter than the zone.
+
+Full per-row conditions + companion contract in `references/gates-detail.md`.
 
 | Opportunity | Action | Tier |
 |-------------|--------|------|
-| Poor variable/function name | Rename to reveal intent | Auto if the symbol is referenced only within the touched zone; else propose |
-| Comment | Classify via `clean-comments` (References); delete only a `noise` verdict, never `load-bearing`/`trailing`/`commented-out`/`out-of-domain` | Auto if `noise` |
+| Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
+| Comment | Classify via `clean-comments`; delete only a `noise` verdict | Auto if `noise` |
 | Magic number | Extract to a named `const` | Auto |
-| Dead local var (unused in the whole file) | Remove it | Auto |
-| Unused import | Remove ONLY if plain named/default import, unused in the whole file, not a side-effect (`import 'x'`) or re-export; else skip | Auto |
-| Deeply nested block / function doing two things | Extract one small, well-named function — only if no new params and no side effects; else skip | Propose |
-| TypeScript: types, signatures, or module/imports | Follow the matching `ts-*` skill (References); do not invent rules | Per that skill |
+| Dead local var (unused in whole file) | Remove it | Auto |
+| Unused import | Remove only a plain named/default import unused in the whole file (not side-effect/re-export) | Auto |
+| Deeply nested block / function doing two things | Extract one small named function — only if no new params/side effects | Propose |
+| TypeScript: types, signatures, module/imports | Follow the matching `ts-*` skill; don't invent rules | Per that skill |
 | No safe win in the zone | Do nothing; ship the task alone | — |
 
 ## Execution Steps
@@ -57,8 +59,4 @@ See `references/example.md` for a worked cohesive, behavior-preserving cleanup a
 ## References
 
 - `references/example.md` — a worked cohesive cleanup + a contrasting out-of-scope refactor (ships with this skill).
-
-**Companion skills — referenced by name, each a separate install. If one is absent, never guess: degrade or skip.**
-
-- `clean-comments` — classifies a comment (noise / load-bearing / commented-out / trailing / out-of-domain); delete only a `noise` verdict. Absent → delete only a comment that plainly restates code, never a trailing one.
-- `ts-types`, `ts-function-signatures`, `ts-module-organization` — TS style authority for types, signatures, modules. Defer when installed; absent → skip that cleanup.
+- `references/gates-detail.md` — full per-row gate conditions + the companion-skill contract (`clean-comments`, `clean-names`, `ts-*`), each a separate install with an "absent → degrade/skip" rule.
