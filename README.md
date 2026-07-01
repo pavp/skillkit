@@ -44,6 +44,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`clean-comments`](skills/workflow/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / trailing / out-of-domain via the surprise test and reason-token gate. Judges; never deletes. |
 | [`clean-names`](skills/workflow/clean-names/SKILL.md) | Judgment authority on names, any language — classifies an identifier against Clean Code rules N1–N7 (descriptive, abstraction, standard, unambiguous, scope-length, no encoding, side-effect) and suggests a fix; defers TS type/signature/module concerns to the `ts-*` skills. Judges; never renames. |
 | [`clean-functions`](skills/workflow/clean-functions/SKILL.md) | Judgment authority on functions, any language — classifies against F2–F5 (output-arg mutation, flag arg, dead code, single-responsibility) and suggests a split boundary; arg-count (F1) defers to `ts-function-signatures` in TS, names/types defer to `clean-names` / `ts-*`. Judges; never edits. |
+| [`clean-structure`](skills/workflow/clean-structure/SKILL.md) | Judgment authority on the shape of a code body, any language — classifies against S1–S5 (duplication, magic value, obscured intent, repeated type switch, train wreck) and suggests a fix direction; names/types/comments/single-purpose defer to `clean-names` / `ts-*` / `clean-comments` / `clean-functions`. Judges; never edits. |
 
 ## Install
 
