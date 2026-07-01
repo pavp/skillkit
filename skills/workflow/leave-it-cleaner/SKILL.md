@@ -31,7 +31,7 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 | Opportunity | Action | Tier |
 |-------------|--------|------|
 | Poor variable/function name | Rename to reveal intent | Auto if the symbol is referenced only within the touched zone; else propose |
-| Redundant comment restating code | Delete it | Auto |
+| Comment | Classify via `clean-comments` (References); delete only a `noise` verdict, never `load-bearing`/`trailing`/`commented-out`/`out-of-domain` | Auto if `noise` |
 | Magic number | Extract to a named `const` | Auto |
 | Dead local var (unused in the whole file) | Remove it | Auto |
 | Unused import | Remove ONLY if plain named/default import, unused in the whole file, not a side-effect (`import 'x'`) or re-export; else skip | Auto |
@@ -57,6 +57,7 @@ See `references/example.md` for a worked cohesive, behavior-preserving cleanup a
 ## References
 
 - `references/example.md` — a worked cohesive cleanup + a contrasting out-of-scope refactor.
+- `../clean-comments/SKILL.md` — authority for classifying a comment (noise / load-bearing / commented-out / trailing / out-of-domain); delete only a `noise` verdict.
 
 TypeScript style authority (defer to these when the cleanup is in TS; not required for other languages):
 
