@@ -39,7 +39,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | Skill | What it does |
 |-------|--------------|
 | [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
-| [`review-comments`](skills/workflow/review-comments/SKILL.md) | Draft and consolidate review comments — concept-first, with a closing question — and gate on confirmation. Delivers drafts ready to post; never posts. |
+| [`review-comments`](skills/workflow/review-comments/SKILL.md) | Write review comments and reply to reviewer feedback — organic teammate voice, the mechanism behind every claim, a closing question only when a real decision belongs to the other person. Consolidates, gates on confirmation; never posts. |
 | [`leave-it-cleaner`](skills/workflow/leave-it-cleaner/SKILL.md) | Boy Scout Rule, any language — after the asked task, make a cohesive, proportional, behavior-preserving cleanup of the zone you touched, and say what you did. |
 | [`clean-comments`](skills/workflow/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / trailing / out-of-domain via the surprise test and reason-token gate. Judges; never deletes. |
 | [`clean-names`](skills/workflow/clean-names/SKILL.md) | Judgment authority on names, any language — classifies an identifier against Clean Code rules N1–N7 (descriptive, abstraction, standard, unambiguous, scope-length, no encoding, side-effect) and suggests a fix; defers TS type/signature/module concerns to the `ts-*` skills. Judges; never renames. |
