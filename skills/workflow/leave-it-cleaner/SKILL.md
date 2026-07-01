@@ -56,11 +56,9 @@ See `references/example.md` for a worked cohesive, behavior-preserving cleanup a
 
 ## References
 
-- `references/example.md` — a worked cohesive cleanup + a contrasting out-of-scope refactor.
-- `../clean-comments/SKILL.md` — authority for classifying a comment (noise / load-bearing / commented-out / trailing / out-of-domain); delete only a `noise` verdict.
+- `references/example.md` — a worked cohesive cleanup + a contrasting out-of-scope refactor (ships with this skill).
 
-TypeScript style authority (defer to these when the cleanup is in TS; not required for other languages):
+**Companion skills — referenced by name, each a separate install. If one is absent, never guess: degrade or skip.**
 
-- `../../typescript/ts-types/SKILL.md` — authority for types, interfaces, unions.
-- `../../typescript/ts-function-signatures/SKILL.md` — authority for signatures, params, overloads.
-- `../../typescript/ts-module-organization/SKILL.md` — authority for imports and module structure.
+- `clean-comments` — classifies a comment (noise / load-bearing / commented-out / trailing / out-of-domain); delete only a `noise` verdict. Absent → delete only a comment that plainly restates code, never a trailing one.
+- `ts-types`, `ts-function-signatures`, `ts-module-organization` — TS style authority for types, signatures, modules. Defer when installed; absent → skip that cleanup.
