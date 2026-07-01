@@ -13,7 +13,7 @@ skills/
   meta/        skill-creator, skill-improver
   react/       react-component, react-hooks, react-component-patterns
   typescript/  ts-types, ts-function-signatures, ts-module-organization
-  workflow/    review-6-lens, review-comments, leave-it-cleaner, clean-comments
+  workflow/    review-6-lens, review-comments, leave-it-cleaner, clean-comments, clean-names
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)
 README.md
@@ -40,6 +40,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 - **Categories** group by domain (`react`, `typescript`) or process (`workflow`). Add a new category folder when a skill fits neither.
 - Skills are **runtime-agnostic**: do not hardcode a specific agent type (e.g. `general-purpose`) or a vendor's nomenclature. Describe the capability a skill needs, not the API that provides it.
 - Keep the lens/finding naming internal to a skill consistent (see `workflow/review-6-lens` for the L1–L6 lens pattern).
+- **Comments in authored code**: default is NONE. Write a comment ONLY for a WHY the code cannot show; never restate WHAT the code does. When unsure, apply the `workflow/clean-comments` surprise test — if deleting it loses nothing, don't write it. This governs code you author here (skill examples, references); `clean-comments` remains the authority for judging existing comments.
 
 ## Non-negotiables
 
