@@ -13,7 +13,7 @@ The judgment authority on whether a comment is noise or carries an irrecoverable
 
 ## Activation Contract
 
-Load to judge one or more comments: consulted by a cleanup actor (e.g. `leave-it-cleaner`), or invoked directly ("is this comment useful?", "why is this commented out?"). Not a scanner and not an editor — output is a classification, never an edit.
+Load when an EXISTING comment needs a verdict: a cleanup actor (e.g. `leave-it-cleaner`) hands one over for classification, or a human asks directly — "is this comment useful?", "why is this commented out?", "is this noise?", reviewing comments in a diff or file. Not for writing new comments (that is authoring, not judging) and not for scanning a codebase (the caller supplies the comments).
 
 ## Hard Rules
 
