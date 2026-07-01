@@ -65,6 +65,16 @@ npx skills add pavp/skillkit --all
 
 Use `npx skills list` to see what's installed and `npx skills update` to refresh.
 
+### Recommended bundle: cleanup
+
+`leave-it-cleaner` works standalone, but it consults the `clean-*` judgment
+skills when they are installed — each judge is also independently useful on its
+own. To install the full cleanup family:
+
+```bash
+npx skills add pavp/skillkit -s leave-it-cleaner -s clean-comments -s clean-names -s clean-functions -s clean-structure -a claude-code
+```
+
 ## Authoring
 
 `docs/skill-style-guide.md` is the normative style guide for skills in this repo.
