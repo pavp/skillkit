@@ -19,7 +19,7 @@ Load when an EXISTING name needs a verdict: a cleanup actor (e.g. `leave-it-clea
 
 - **Judge, never act.** Emit a verdict per name. Never rename, rewrite, or move. Verbs are classify/keep/flag, never rename.
 - **Flag only on a concrete trigger; else `clean`.** A name is a violation only when it trips an objective test: a known encoding prefix (N6), a name-vs-body mismatch (N7), a single-letter/abbreviation outside a tiny scope (N1/N5), a leaked data-structure/impl term (N2), or a reinvented standard term (N3). No trigger fires, or scope/usage is unavailable → `clean`. Rename bar = add bar: a wrong rename churns call sites, so uncertainty resolves to keep.
-- **Judge the NAME only.** Flag the name, never the type/shape, the signature, or the module structure behind it. In TypeScript those belong to `ts-types` / `ts-function-signatures` / `ts-module-organization`; defer to them. See the boundary table in `references/naming-criteria.md`.
+- **Judge the NAME only.** Flag the name, never the type/shape, the signature, or the module structure behind it — those are out of scope. In TypeScript hand them to `ts-types` / `ts-function-signatures` / `ts-module-organization`; in any other language leave them to that language's tooling. See the boundary table in `references/naming-criteria.md`.
 - **Suggest, don't impose.** Offer a candidate name; the actor and author decide. A standard domain/pattern term (N3) always beats an invented one.
 
 ## Decision Gates

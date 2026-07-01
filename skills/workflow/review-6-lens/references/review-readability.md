@@ -7,8 +7,8 @@ Scope: naming, complexity, intention, maintainability, duplication, dead code, r
 ## Review rules
 
 - Flag magic numbers that should be named constants or business-rule objects.
-- Flag long parameter lists that should be parameter objects.
-- Flag duplicated logic across components/hooks/modules.
+- Flag a parameter list long enough that call sites are hard to read or easy to mis-order; name the smell, not a language-specific fix.
+- Flag duplicated logic across functions/modules.
 - Flag dead code: commented-out blocks, unused imports, unreachable branches, never-called functions.
 - Flag naming that hides intent or needs comment-heavy explanation.
 - Flag a diff whose intent/impact is too vague to review safely; require concrete intent.

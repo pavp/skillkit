@@ -20,7 +20,7 @@ Load when an EXISTING function (or React component) needs a verdict: a cleanup a
 - **Judge, never act.** Emit a verdict per function. Never split, delete, rewrite, or move. Verbs are classify/keep/flag, never refactor.
 - **Two-stage resolution.** Stage 1: apply each rule's own trigger (Decision Gates, col 1); a rule fires only if its trigger is met AND its inputs are available. Stage 2: the topmost fired row wins. The uncertainty test is stage 1, before precedence — so a weak F3 never races a strong F5. No rule fires → `clean`.
 - **Uncertainty → `clean`.** Cost to split ≥ cost to leave it: a wrong split churns call sites, so any doubt in stage 1 drops that rule.
-- **Judge the BODY's shape, not the name or the types.** A name-honesty overlap (F2/F3) resolves to `clean-names` N7; parameter types/shape/return belong to `ts-types` / `ts-function-signatures`. Boundary table in `references/function-criteria.md`.
+- **Judge the BODY's shape, not the name or the types.** A name-honesty overlap (F2/F3) resolves to `clean-names` N7; parameter types/shape/return are out of scope — in TypeScript hand them to `ts-types` / `ts-function-signatures`, in any other language name the concern and leave it to that language's tooling. Boundary table in `references/function-criteria.md`.
 - **F1 (arg-count) has no verdict token** — it always emits `defer-signature` (see the gate), never an `F1` code.
 - **Suggest, don't impose.** Offer the fix boundary you see; the actor and author decide.
 
