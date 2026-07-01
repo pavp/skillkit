@@ -35,7 +35,7 @@ Full per-row conditions + companion contract in `references/gates-detail.md`.
 | Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
 | Comment | Classify via `clean-comments`; delete only a `noise` verdict | Auto if `noise` |
 | Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5` verdict, never `clean`/`defer-signature` | Propose |
-| Magic number | Extract to a named `const` | Auto |
+| Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
 | Dead local var (unused in whole file) | Remove it | Auto |
 | Unused import | Remove only a plain named/default import unused in the whole file (not side-effect/re-export) | Auto |
 | Deeply nested block | Extract one small named function — only if no new params/side effects | Propose |
