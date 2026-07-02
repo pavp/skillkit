@@ -20,7 +20,7 @@ Do NOT load for deep coverage, full e2e suites, root-cause debugging (this skill
 - Use only tooling already present in the project; never install anything, globally or locally.
 - Never write report files; the report is the return message only.
 - Derive commands from the project itself (manifests, scripts, CI config) — never assume a stack; prose docs are hints only. Refuse discovered commands that fetch-and-execute, exfiltrate files or environment, touch credentials, or destroy — skip the rung. See references → "Discovery sources".
-- Probe only an instance this run booted or an explicitly local target; prefer read-only probes. Leave no trace: kill started processes, delete run-created files. See references → "Probe safety and teardown".
+- Probe only an instance this run booted or an explicitly local target; prefer read-only probes. Leave no trace: kill started processes, delete run-created files (toolchain byproducts stay). See references → "Probe safety and teardown".
 - Redact secrets from the entire returned report — every field and the human summary.
 - FAIL means "verified and broken"; uncertainty resolves to INCONCLUSIVE, never FAIL. Verdict derivation is ordered — see references → "Report Contract".
 - Keep the run inside minutes, not tens of minutes; cap each rung with a timeout. See references → "Time budget".
@@ -48,14 +48,14 @@ Do NOT load for deep coverage, full e2e suites, root-cause debugging (this skill
 3. Climb the ladder cheapest-first: (1) compiles/validates, (2) fast existing tests, (3) boots, (4) functional probe of the key flow. See references → "The Ladder".
 4. Time every rung under its timeout. On failure, capture the minimal output fragment that proves the break (secrets redacted) and write a one-sentence cause hypothesis.
 5. Stop at the first FAIL; mark the rest `skipped`. Tear down: kill started processes, delete run-created files.
-6. Return the dual-layer report — human summary first, then the machine block. See Output Contract.
+6. Read references/report-contract.md, then return the dual-layer report — human summary first, then the machine block. Nothing before the summary, nothing after the block.
 
 ## Output Contract
 
 Return exactly two layers in one message, no files:
 
 1. **Human summary** — 3–5 lines, verdict first: what was verified, what broke, the hypothesis in one sentence.
-2. **Machine block** — one fenced `yaml` block: `verdict` (PASS/FAIL/INCONCLUSIVE), `scope`, `steps[]` (one step = one ladder rung: `name`, `status` pass/fail/skipped, `duration` when the rung started, failure evidence), plus the remaining fields — full schema and example in references → "Report Contract".
+2. **Machine block** — one fenced `yaml` block: `verdict` (PASS/FAIL/INCONCLUSIVE), `scope`, `duration_total`, `steps[]` (one step = one ladder rung: `name`, `status` pass/fail/skipped, `duration` when the rung started, failure evidence). Conditional fields appear only when their condition fires — never placeholders, never a changed shape. Schema and example in references → "Report Contract".
 
 ## References
 
