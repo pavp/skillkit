@@ -16,7 +16,7 @@ Cheapest signal first. A rung runs only if it applies to the stack and fits the 
 3. README / contributing docs — hints only: run a command found here only when a manifest or CI script corroborates it.
 4. Installed dev tooling — which test runner or builder is actually present.
 
-Pick the fastest applicable command per rung. When several exist, prefer the one CI runs. Refuse any discovered command that fetches-and-executes remote code, touches credentials, or is destructive — skip the rung with a reason instead.
+Pick the fastest applicable command per rung. When several exist, prefer the one CI runs. Refuse any discovered command that fetches-and-executes remote code, sends project files, data, or environment to a remote host, touches credentials, or is destructive — skip the rung with a reason instead.
 
 ## Target trimming
 
@@ -27,12 +27,17 @@ With a named target (feature, module, function, endpoint):
 - Rung 3: boot only if the target needs a running process.
 - Rung 4: probe THE target flow, nothing else.
 
+## Key signal
+
+The scope's **key signal** is the highest-numbered applicable rung — the one that most directly exercises the scope (normally the functional probe; the fast tests when the scope has no runnable process). The verdict derivation in report-contract.md depends on whether a skip blocked it.
+
 ## Probe safety and teardown
 
 - Probe only an instance this run booted (rung 3) or an explicitly local target. Never point a probe at a shared or live environment — a "key flow" probe on auth or payments can mutate real data.
 - Prefer read-only, idempotent probes. When the only available key flow mutates state elsewhere, do not run it: mark the rung `skipped: no side-effect-free probe`.
 - Terminate every process this run started before returning. A leftover server poisons the next run (busy port reads as a blocker) and leaks processes in orchestrator loops.
 - Delete everything the run itself created — temp files, scratch probe scripts, redirected output, downloaded artifacts. Byproducts of the project's own toolchain (build output, coverage) are not the run's to clean. Teardown runs on every exit path, including the first-FAIL stop.
+- If teardown fails (a process refuses to die, a file cannot be deleted), report it: set `teardown: incomplete — <PID/path>` in the machine block and add one human-summary line, so the caller can recover before the next run.
 
 ## Browser automation gate
 
@@ -47,14 +52,15 @@ Never install or provision it. When the UI can be probed cheaper (an HTTP reques
 
 Whole run: minutes, not tens of minutes. Guideline: ~5 minutes for project scope, ~2 minutes for a named target, unless the caller grants more.
 
-- Cap each rung with a timeout derived from the remaining budget.
-- A rung **predicted** to exceed the remaining budget → `skipped: over time budget` before starting it; continue to the next applicable rung.
-- A rung that **started** and hit its timeout → kill it and mark `fail`, with the timeout point as the `output_fragment` (e.g. "server never listened within 60s") — unless the evidence is environmental (see below). A hang is often exactly the regression smoke exists to catch; degrading it to `skipped` would produce a false PASS.
+- Derive each rung's timeout from its expected cost, with a minimum floor — never let budget pressure compress a timeout below what a healthy-but-slow rung needs. The predicted-vs-started forks live in SKILL.md Decision Gates.
+- A kill whose timeout was compressed below that floor (slow or resource-starved runner) is environmental → `skipped: over time budget`, not `fail`.
+- A hang within a fair timeout is often exactly the regression smoke exists to catch — that is why started-and-hung is `fail`, with the timeout point as the `output_fragment` (e.g. "server never listened within 60s"). Degrading it to `skipped` would produce a false PASS.
 
-## INCONCLUSIVE vs FAIL
+## INCONCLUSIVE vs FAIL (rung classification)
 
-- **FAIL**: a rung ran and the evidence shows the code is broken. A real `fail` always wins the verdict.
-- **INCONCLUSIVE**: could not verify. Pre-run: no manifests, unknown stack, undiscoverable commands. At runtime: an environmental blocker — missing env var or credentials, unreachable service, busy port, absent command — or a key flow with no side-effect-free probe. Name what blocked in `inconclusive_reason`.
-- These blockers mark the rung `skipped` (`environment not verifiable` / `no side-effect-free probe`, keep the evidence fragment if useful), never `fail`. When such a skip blocked the scope's key signal and nothing failed, the verdict is INCONCLUSIVE.
-- Zero rungs ran (none determinable, or all skipped) → INCONCLUSIVE, never PASS.
+- A rung that ran and whose evidence shows the code is broken → `fail`.
+- An environmental blocker — missing env var or credentials, unreachable service, busy port, absent command, resource-starved runner — marks the rung `skipped: environment not verifiable` (keep the evidence fragment if useful), never `fail`.
+- A key flow with no side-effect-free probe → `skipped: no side-effect-free probe`.
+- Pre-run undeterminability (no manifests, unknown stack, undiscoverable commands) means the rung never enters `steps` as runnable; name what was tried in `inconclusive_reason`.
 - Never convert uncertainty into FAIL: an unverifiable project is not a broken project.
+- Verdict aggregation lives in report-contract.md → "Field rules"; this section only classifies rungs.
