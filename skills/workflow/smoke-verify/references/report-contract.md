@@ -2,7 +2,7 @@
 
 ## Shape
 
-One returned message, two layers, in this order. Never write it to a file. Redact secrets — credentials, tokens, API keys, connection-string passwords — from every field and from the human summary, not just `output_fragment`.
+One returned message, two layers, in this order. Nothing before the summary, nothing after the block. Never write it to a file. Redact secrets — credentials, tokens, API keys, connection-string passwords — from every field and from the human summary, not just `output_fragment`.
 
 ### Layer 1 — Human summary
 
@@ -35,6 +35,8 @@ escalation:              # optional; only when the escalation gate (SKILL.md Dec
 
 ## Field rules
 
+- Conditional fields (`reason`, `output_fragment`, `hypothesis`, `inconclusive_reason`, `teardown`, `escalation`) are omitted entirely when their condition did not fire — never emit placeholders like `none` or `n/a`, and never change a field's shape (e.g. `escalation` is always the object below, never a string).
+- `duration_total`: always present.
 - `verdict` derivation is total, applied in order: (1) any `fail` step → FAIL; (2) zero rungs ran (all skipped, or none determinable) → INCONCLUSIVE; (3) any skip, whatever its reason, blocked the scope's key signal (ladder.md → "Key signal") → INCONCLUSIVE; (4) otherwise → PASS.
 - `output_fragment`: the smallest excerpt that proves the break — the failing assertion, stack-trace head, or error line. Never full logs. Quote the error text exactly, but redact embedded secrets: credentials, tokens, API keys, connection-string passwords (`postgres://user:***@host`).
 - `hypothesis`: one sentence, best guess at cause, uncertainty marked plainly ("likely", "possibly"). It is a lead for whoever fixes, never a diagnosis.

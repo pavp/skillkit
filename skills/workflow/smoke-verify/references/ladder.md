@@ -36,7 +36,7 @@ The scope's **key signal** is the highest-numbered applicable rung — the one t
 - Probe only an instance this run booted (rung 3) or an explicitly local target. Never point a probe at a shared or live environment — a "key flow" probe on auth or payments can mutate real data.
 - Prefer read-only, idempotent probes. When the only available key flow mutates state elsewhere, do not run it: mark the rung `skipped: no side-effect-free probe`.
 - Terminate every process this run started before returning. A leftover server poisons the next run (busy port reads as a blocker) and leaks processes in orchestrator loops.
-- Delete everything the run itself created — temp files, scratch probe scripts, redirected output, downloaded artifacts. Byproducts of the project's own toolchain (build output, coverage) are not the run's to clean. Teardown runs on every exit path, including the first-FAIL stop.
+- Delete everything the run itself created — temp files, scratch probe scripts, redirected output, downloaded artifacts. Byproducts of the project's own toolchain (build output, caches, coverage) are not the run's to clean, even when this run's commands produced them. Teardown runs on every exit path, including the first-FAIL stop.
 - If teardown fails (a process refuses to die, a file cannot be deleted), report it: set `teardown: incomplete — <PID/path>` in the machine block and add one human-summary line, so the caller can recover before the next run.
 
 ## Browser automation gate
