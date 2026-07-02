@@ -19,11 +19,11 @@ Do NOT load for deep coverage, full e2e suites, root-cause debugging (this skill
 - Never run a full e2e suite — rung 4 is one happy-path probe, nothing more.
 - Use only tooling already present in the project; never install anything, globally or locally.
 - Never write report files; the report is the return message only.
-- Derive commands from the project itself (manifests, scripts, CI config) — adapt to the stack, never assume one. Prose docs are hints only, and never run a discovered command that fetches-and-executes remote code, touches credentials, or is destructive — skip the rung with a reason. See references → "Discovery sources".
-- Probe only an instance this run booted or an explicitly local target, prefer read-only probes, and terminate every process the run started before returning. See references → "Probe safety and teardown".
-- Redact secrets from every `output_fragment` — exact quoting never includes credentials.
-- FAIL means "verified and broken". Environmental blockers and zero-rungs-ran are INCONCLUSIVE, never FAIL. See references → "INCONCLUSIVE vs FAIL".
-- Keep the whole run inside a short time budget (minutes, not tens of minutes); cap each rung with a timeout. See references → "Time budget".
+- Derive commands from the project itself (manifests, scripts, CI config) — never assume a stack. Prose docs are hints only; refuse discovered commands that fetch-and-execute, touch credentials, or destroy — skip the rung instead. See references → "Discovery sources".
+- Probe only an instance this run booted or an explicitly local target; prefer read-only probes; terminate every process the run started before returning. See references → "Probe safety and teardown".
+- Redact secrets from every `output_fragment`.
+- FAIL means "verified and broken"; environmental blockers and zero-rungs-ran are INCONCLUSIVE. See references → "INCONCLUSIVE vs FAIL".
+- Keep the run inside minutes, not tens of minutes; cap each rung with a timeout. See references → "Time budget".
 - `escalation` is a recommendation field only — the caller decides; never invoke re-verification yourself.
 
 ## Decision Gates
@@ -35,15 +35,15 @@ Do NOT load for deep coverage, full e2e suites, root-cause debugging (this skill
 | Rung not applicable to the stack | Mark `skipped` with reason, continue. |
 | Rung predicted to exceed the remaining budget | Mark `skipped: over time budget` before starting it; continue to the next applicable rung. |
 | Rung started and hit its timeout | Kill it; mark `fail` with the timeout point as `output_fragment` — unless the evidence is environmental. |
-| Failure evidence points at the environment, not the code (missing env var, unreachable service, busy port, absent command) | Mark the rung `skipped: environment not verifiable`; if the scope's key signal depended on it, verdict INCONCLUSIVE. |
+| Failure evidence is environmental (missing env var, unreachable service, busy port, absent command) | Mark the rung `skipped: environment not verifiable`; if the scope's key signal depended on it, verdict INCONCLUSIVE. |
 | First FAIL | Stop; mark all remaining rungs `skipped`. |
 | Web UI target and browser automation already installed | Drive the minimal key flow with it; never install it. |
 | No rung determinable | Return INCONCLUSIVE with what was tried. |
-| FAIL or INCONCLUSIVE on a high-stakes scope (auth, payments, security, data integrity), or a rung 3–4 `fail` whose hypothesis carries an uncertainty marker ("likely", "possibly") | Set `escalation` in the report: recommend independent adversarial re-verification when the runtime offers it. |
+| FAIL or INCONCLUSIVE on a high-stakes scope (auth, payments, security, data integrity), or a rung 3–4 `fail` with an uncertainty marker ("likely", "possibly") in its hypothesis | Set `escalation`: recommend independent adversarial re-verification when the runtime offers it. |
 
 ## Execution Steps
 
-1. Run in a fresh, isolated context when the runtime offers one — smoke output is noisy and pollutes the caller's context; degrade to inline otherwise. Resolve scope: whole project, or a named target and the rungs relevant to it.
+1. Prefer a fresh, isolated context when the runtime offers one — smoke output pollutes the caller's context; degrade to inline. Resolve scope: whole project, or a named target and its relevant rungs.
 2. Discover how the project verifies itself: manifests, scripts, CI config, README. Select applicable rungs.
 3. Climb the ladder cheapest-first: (1) compiles/validates, (2) fast existing tests, (3) boots, (4) functional probe of the key flow. See references → "The Ladder".
 4. Time every rung under its timeout. On failure, capture the minimal output fragment that proves the break (secrets redacted) and write a one-sentence cause hypothesis.
