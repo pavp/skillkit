@@ -39,7 +39,7 @@ Do NOT load for deep coverage, full e2e suites, root-cause debugging (this skill
 | First FAIL | Stop; mark all remaining rungs `skipped`. |
 | Web UI target and browser automation already installed | Drive the minimal key flow with it; never install it. |
 | No rung determinable | Return INCONCLUSIVE with what was tried. |
-| FAIL or INCONCLUSIVE on a high-stakes scope (auth, payments, security, data integrity) | Set `escalation`: recommend independent adversarial re-verification when the runtime offers it. |
+| FAIL or INCONCLUSIVE on a high-stakes scope (auth, payments, security, data integrity) | Set `escalation: {recommended: true, reason: <one sentence>}` — independent adversarial re-verification, decided by the caller. |
 
 ## Execution Steps
 
