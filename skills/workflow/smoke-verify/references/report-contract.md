@@ -34,7 +34,7 @@ escalation:              # optional; only when the escalation gate (SKILL.md Dec
 
 ## Field rules
 
-- `verdict` derivation is total: any `fail` step → FAIL; at least one `pass` and no `fail` → PASS; zero rungs ran (all skipped, or none determinable) → INCONCLUSIVE.
+- `verdict` derivation is total, applied in order: (1) any `fail` step → FAIL; (2) zero rungs ran (all skipped, or none determinable) → INCONCLUSIVE; (3) a skip (`environment not verifiable` or `no side-effect-free probe`) blocked the scope's key signal → INCONCLUSIVE; (4) otherwise → PASS.
 - `output_fragment`: the smallest excerpt that proves the break — the failing assertion, stack-trace head, or error line. Never full logs. Quote the error text exactly, but redact embedded secrets: credentials, tokens, API keys, connection-string passwords (`postgres://user:***@host`).
 - `hypothesis`: one sentence, best guess at cause, uncertainty marked plainly ("likely", "possibly"). It is a lead for whoever fixes, never a diagnosis.
 - `reason` on skipped: `not applicable to stack`, `over time budget`, `environment not verifiable`, `no side-effect-free probe`, `stopped after first FAIL`, or similarly concrete.

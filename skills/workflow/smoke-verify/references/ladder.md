@@ -52,8 +52,8 @@ Whole run: minutes, not tens of minutes. Guideline: ~5 minutes for project scope
 
 ## INCONCLUSIVE vs FAIL
 
-- **FAIL**: a rung ran and the evidence shows the code is broken.
-- **INCONCLUSIVE**: could not verify. Pre-run: no manifests, unknown stack, undiscoverable commands. At runtime: an environmental blocker — missing env var or credentials, unreachable local service, busy port, command absent — stopped the scope's key signal. Name what blocked in `inconclusive_reason`.
-- An environmental blocker marks the rung `skipped: environment not verifiable` (keep the evidence fragment if useful); it is never a FAIL.
+- **FAIL**: a rung ran and the evidence shows the code is broken. A real `fail` always wins the verdict.
+- **INCONCLUSIVE**: could not verify. Pre-run: no manifests, unknown stack, undiscoverable commands. At runtime: an environmental blocker — missing env var or credentials, unreachable service, busy port, absent command — or a key flow with no side-effect-free probe. Name what blocked in `inconclusive_reason`.
+- These blockers mark the rung `skipped` (`environment not verifiable` / `no side-effect-free probe`, keep the evidence fragment if useful), never `fail`. When such a skip blocked the scope's key signal and nothing failed, the verdict is INCONCLUSIVE.
 - Zero rungs ran (none determinable, or all skipped) → INCONCLUSIVE, never PASS.
 - Never convert uncertainty into FAIL: an unverifiable project is not a broken project.
