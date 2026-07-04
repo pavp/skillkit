@@ -13,7 +13,7 @@ skills/
   meta/        skill-creator, skill-improver
   react/       react-component, react-hooks, react-component-patterns
   typescript/  ts-types, ts-function-signatures, ts-module-organization
-  workflow/    review-6-lens, review-comments, leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure, slice-diff, browser-automation-safety
+  workflow/    review-6-lens, review-comments, leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure, slice-diff, browser-automation-safety, diagnose-fix
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)
 README.md
