@@ -19,8 +19,9 @@ Every `SKILL.md` MUST use this order unless a section is truly irrelevant:
 ## Frontmatter Rules
 
 - `description` MUST be one physical line, YAML-safe, and quoted.
-- Put trigger words first: `"Trigger: ... . {What the skill does}."`
-- `description` SHOULD be <=160 chars and MUST be <=250 chars.
+- Keep the `Trigger:` prefix as a convention label, then shape the description in this order: **what it does** → a **pushy "use this when …" clause** that fires even when the user does not name the skill → **concrete trigger anchors** (example phrases the user would type + code signals they'd have on screen) → a **disambiguation arrow** to sibling skills (`→ other-skill`). Under-triggering is the common failure; a description that only *describes* will not fire. (This supersedes the older `"Trigger: … . {what}"` template.)
+- Include at least one *non-obvious* anchor: the test is that it fires on the skill's intent even when the user's words never name the concept — not just the textbook keyword. E.g. a "component" skill must anchor on a `provider`/`boundary` (not only visual widgets); a "hooks" skill on "the same logic in more than one place" (not only the word "hook").
+- `description` SHOULD be <=380 chars and MUST be <=400 chars. A full pushy description (what + use-when + anchors + arrow) realistically costs ~370; the platform hard cap is 1024, but the description is always in context for every installed skill — keep it lean, not maximal.
 - Include complete `name`, `description`, `license`, `metadata.author`, and `metadata.version`.
 - Do NOT add a `Keywords` section; discovery uses frontmatter.
 
@@ -76,4 +77,4 @@ Every `SKILL.md` MUST use this order unless a section is truly irrelevant:
 - [ ] Collapse repeated rules into one hard rule.
 - [ ] Replace prose branches with a decision table.
 - [ ] Trim examples to the smallest useful case.
-- [ ] Recheck description length and trigger words.
+- [ ] Recheck description: within 400 chars, pushy "use this when …" clause, concrete anchors incl. one non-obvious case.
