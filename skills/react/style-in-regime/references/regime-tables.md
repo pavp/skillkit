@@ -9,13 +9,14 @@ An inline style (`sx`, `style`, runtime CSS-in-JS object) is NOT a smell when:
 - `justified-dynamic` — the value is computed from state/props per render. A static class cannot express it. Example: `sx={{ width: `${pct}%` }}`.
 - `justified-inline` — an inline one-off a static unit would only bloat: a theme-namespaced token (`sx={{ color: 'primary.main' }}`) OR one property overridden on a single instance (`sx={{ mt: 2 }}`). If a value is BOTH, it is still one verdict: `justified-inline`.
 
-Reusable = the same static styling appears on ≥2 distinct components/files. Below that AND doubt → `clean`. Static AND reusable AND the regime has a canonical unit → `smell`.
+Reusable = the same static styling appears on ≥2 distinct components/files. Below that AND doubt → `clean`. Static AND reusable AND the regime has a canonical unit → `smell`. A repeated theme token stays `justified-inline` no matter how many components read it — the token IS the shared unit; nothing is copied to extract.
 
 ## Worked Output-Contract line
 
 ```
 Card.tsx:42 — CSS/SCSS Modules — smell — static, reused on Card + Tile — move to Card.module.scss
 Badge.tsx:9 — CSS-in-JS — justified-dynamic — width driven by `pct` prop
+Tile.tsx:15 — CSS/SCSS Modules — justified-inline — theme token `primary.main`, reused but not copied
 ```
 
 ## CSS / SCSS Modules

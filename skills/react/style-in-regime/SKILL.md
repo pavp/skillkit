@@ -26,16 +26,16 @@ Load when EXISTING React styling needs a verdict: a cleanup actor hands one over
 
 ## Decision Gates
 
-**Regime Detection** — per the site's OWN file/nearest boundary, top match wins:
+**Regime Detection** — per the site's OWN file/nearest boundary, top match wins (canonical unit per regime in `references/regime-tables.md`):
 
-| Signal at the site's file/boundary | Regime | Canonical unit |
-|---|---|---|
-| co-located `*.module.scss` / `*.module.css` | CSS/SCSS Modules | the `.module.*` file |
-| `tailwind.config.*` in scope | Tailwind | utility classes / `@apply` |
-| `styled-components` / `@emotion` import | CSS-in-JS | `styled.X` / token |
-| plain `.css` + `className`, no module | Plain CSS | the `.css` file |
-| no style-file system at all | inline-only | `defer-regime` |
-| system present but no signal matches (vanilla-extract, panda) | unknown | `unrecognized-regime` (surface gap, don't guess) |
+| Signal at the site's file/boundary | Regime |
+|---|---|
+| co-located `*.module.scss` / `*.module.css` | CSS/SCSS Modules |
+| `tailwind.config.*` in scope | Tailwind |
+| `styled-components` / `@emotion` import | CSS-in-JS |
+| plain `.css` + `className`, no module | Plain CSS |
+| no config/import/style file anywhere in scope | inline-only → `defer-regime` |
+| a `*.config.{ts,js}` (not tailwind) or `.css.ts`/`.css.js`, no signal above matches (vanilla-extract, panda) | unknown → `unrecognized-regime`, surface gap, don't guess |
 
 **Verdict** — per styling site, once its regime is known:
 
@@ -58,5 +58,5 @@ One line per site: `file:line` — regime — verdict — one-clause reason — 
 
 ## References
 
-- `references/regime-tables.md` — per-regime canonical unit + smell shape (CSS/SCSS Modules, Tailwind, CSS-in-JS, Plain CSS), the `justified-inline` cases, bad/good examples, and a worked Output-Contract line.
+- `references/regime-tables.md` — per-regime canonical unit, smell shape, justifications, examples, worked output line.
 - `clean-names` — naming the extracted class; `clean-structure` — duplication/shape of the code body.
