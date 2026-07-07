@@ -17,46 +17,46 @@ Load when EXISTING React styling needs a verdict: a cleanup actor hands one over
 
 ## Hard Rules
 
-- **Judge, never act.** One verdict per styling site. Never move, rewrite, extract, or rename — classify/keep/flag only.
-- **Detect the regime BEFORE judging** (Regime Detection gate). Inline-only project (no style-file system) → every site is `defer-regime`; impose nothing.
-- **Core rule (regime-agnostic):** static, reusable styling belongs in the regime's canonical unit; inline (`sx`, `style`, CSS-in-JS runtime) is justified ONLY for dynamic-per-render values, theme-token one-offs, or a single-instance override. React's own guidance: static → file, dynamic → inline (runtime injection recalculates every render).
-- **Uncertainty → `clean`.** A wrong move churns JSX and class names; doubt that a site is truly static-and-reusable drops the smell.
-- **Judge placement, not design.** Whether a value is a *good* color/spacing is out of scope; naming the extracted class → `clean-names`.
-- **Per-regime smells deferred.** The canonical unit and smell shape per regime live in `references/regime-tables.md`; read it before emitting a regime-specific smell.
+- **Judge, never act.** One verdict per styling site — classify only; never move, rewrite, extract, or rename.
+- **Detect the regime per FILE** (not project-wide: a repo mid-migration mixes regimes). No style-file system → `defer-regime`; a system present but unrecognized → `unrecognized-regime`, never guess.
+- **Core rule (regime-agnostic):** static, reusable styling belongs in the regime's canonical unit; inline (`sx`, `style`, CSS-in-JS runtime) is justified ONLY for dynamic-per-render values or an inline one-off. This is React's own guidance — runtime injection recalculates every render.
+- **Uncertainty → `clean`.** A wrong move churns JSX and class names.
+- **Judge placement, not design or shape.** Value quality is out of scope; naming the extracted class → `clean-names`; body duplication/shape → `clean-structure`. This skill owns only WHERE a style lives.
+- **Per-regime smells deferred** to `references/regime-tables.md`; read it before emitting a regime-specific smell.
 
 ## Decision Gates
 
-**Regime Detection** — resolve once, top match wins:
+**Regime Detection** — per the site's OWN file/nearest boundary, top match wins:
 
-| Signal in project | Regime | Canonical unit |
+| Signal at the site's file/boundary | Regime | Canonical unit |
 |---|---|---|
-| `*.module.scss` / `*.module.css` present | CSS/SCSS Modules | the `.module.*` file |
-| `tailwind.config.*` present | Tailwind | utility classes / `@apply` |
-| `styled-components` / `@emotion` imports | CSS-in-JS | `styled.X` / token |
+| co-located `*.module.scss` / `*.module.css` | CSS/SCSS Modules | the `.module.*` file |
+| `tailwind.config.*` in scope | Tailwind | utility classes / `@apply` |
+| `styled-components` / `@emotion` import | CSS-in-JS | `styled.X` / token |
 | plain `.css` + `className`, no module | Plain CSS | the `.css` file |
-| none of the above (inline-only) | — | `defer-regime` |
+| no style-file system at all | inline-only | `defer-regime` |
+| system present but no signal matches (vanilla-extract, panda) | unknown | `unrecognized-regime` (surface gap, don't guess) |
 
-**Verdict** — per styling site, once the regime is known:
+**Verdict** — per styling site, once its regime is known:
 
 | Styling site (the citable trigger) | Verdict |
 |---|---|
 | Value depends on state/prop, computed per render | `justified-dynamic` |
-| One-off read of a theme token, not repeated | `justified-theme` |
-| Overrides one prop on a single instance | `justified-override` |
-| Static + reusable, and the regime HAS a canonical unit | `smell` (move to canonical unit) |
-| Regime is inline-only (no style-file system) | `defer-regime` |
-| None fires | `clean` |
+| A theme-namespaced token, OR one prop overridden on a single instance | `justified-inline` |
+| Static + reusable (≥2 distinct components/files), regime HAS a canonical unit | `smell` (move to canonical unit) |
+| None fires, or doubt whether truly static-and-reusable | `clean` |
 
 ## Execution Steps
 
-1. Run Regime Detection; name the regime + canonical unit. Inline-only → all sites `defer-regime`, stop.
-2. Per styling site, test the Verdict gate top-down; first fired row wins, else `clean`.
-3. For a `smell`, cite the target unit from `references/regime-tables.md`; suggest the boundary, do not write it.
+1. Per styling site, run Regime Detection against its OWN file. `defer-regime` / `unrecognized-regime` → emit that, next site.
+2. Test the Verdict gate top-down; first fired row wins, else `clean`.
+3. For a `smell`, cite the target unit from `references/regime-tables.md`; suggest the boundary, do not write it. If that reference cannot be read, downgrade to `clean` (uncertainty → clean) — never cite a unit you cannot back.
 
 ## Output Contract
 
-Per styling site: `file:line` + detected regime + verdict (`justified-*`, `smell`, `defer-regime`, or `clean`) + a one-clause reason +, for a `smell`, the canonical unit to move to (omit for `clean`). A classification the caller consumes — no edits. For a human asking directly, phrase it plainly.
+One line per site: `file:line` — regime — verdict — one-clause reason — (for `smell`) the canonical unit to move to. A classification the caller consumes; no edits. Worked example in `references/regime-tables.md`.
 
 ## References
 
-- `references/regime-tables.md` — per-regime canonical unit and smell shape (CSS/SCSS Modules, Tailwind, CSS-in-JS, Plain CSS), with the dynamic/theme/override justifications and bad/good examples per regime.
+- `references/regime-tables.md` — per-regime canonical unit + smell shape (CSS/SCSS Modules, Tailwind, CSS-in-JS, Plain CSS), the `justified-inline` cases, bad/good examples, and a worked Output-Contract line.
+- `clean-names` — naming the extracted class; `clean-structure` — duplication/shape of the code body.

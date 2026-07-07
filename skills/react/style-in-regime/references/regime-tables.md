@@ -1,16 +1,22 @@
 # Per-Regime Tables
 
-The core rule (static → canonical unit, inline → dynamic/theme/override only) is regime-agnostic. This file gives the canonical unit and the smell shape for each detected regime, plus the shared justifications.
+The core rule (static → canonical unit, inline → dynamic or inline-one-off only) is regime-agnostic. This file gives the canonical unit and the smell shape for each detected regime, the shared justifications, and one worked Output-Contract line.
 
 ## Shared justifications (apply in every regime)
 
 An inline style (`sx`, `style`, runtime CSS-in-JS object) is NOT a smell when:
 
 - `justified-dynamic` — the value is computed from state/props per render. A static class cannot express it. Example: `sx={{ width: `${pct}%` }}`.
-- `justified-theme` — a one-off read of a theme token, not repeated across instances. Example: `sx={{ color: 'primary.main' }}` on a single node.
-- `justified-override` — overriding one property on one instance where authoring a whole style unit is overweight. Example: `sx={{ mt: 2 }}` on a single reused component.
+- `justified-inline` — an inline one-off a static unit would only bloat: a theme-namespaced token (`sx={{ color: 'primary.main' }}`) OR one property overridden on a single instance (`sx={{ mt: 2 }}`). If a value is BOTH, it is still one verdict: `justified-inline`.
 
-If none applies AND the styling is static and reusable, it is a `smell` — move it to the regime's canonical unit below.
+Reusable = the same static styling appears on ≥2 distinct components/files. Below that AND doubt → `clean`. Static AND reusable AND the regime has a canonical unit → `smell`.
+
+## Worked Output-Contract line
+
+```
+Card.tsx:42 — CSS/SCSS Modules — smell — static, reused on Card + Tile — move to Card.module.scss
+Badge.tsx:9 — CSS-in-JS — justified-dynamic — width driven by `pct` prop
+```
 
 ## CSS / SCSS Modules
 
