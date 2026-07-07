@@ -11,7 +11,7 @@ Each skill is a directory containing a `SKILL.md` (YAML frontmatter + markdown b
 ```
 skills/
   meta/        skill-creator, skill-improver
-  react/       react-component, react-hooks, react-component-patterns
+  react/       react-component, react-hooks, react-component-patterns, style-in-regime
   typescript/  ts-types, ts-function-signatures, ts-module-organization
   workflow/    review-6-lens, review-comments, leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure, slice-diff, browser-automation-safety, diagnose-fix
 docs/
