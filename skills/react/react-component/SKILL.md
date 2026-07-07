@@ -53,4 +53,5 @@ Return:
 
 - `react-component-patterns` skill — for reusable component APIs (compound, slots, control props, state initializer, extensible styles).
 - `ts-function-signatures` skill — for typing the `Props` shape (options object, optional/default props).
+- `style-in-regime` skill — for a verdict on whether a style belongs inline or in the project's canonical style unit.
 - React docs — Rules of Hooks and component composition (author-time reference).
