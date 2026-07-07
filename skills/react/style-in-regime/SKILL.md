@@ -19,7 +19,7 @@ Load when EXISTING React styling needs a verdict: a cleanup actor hands one over
 
 - **Judge, never act.** One verdict per styling site — classify only; never move, rewrite, extract, or rename.
 - **Detect the regime per FILE** (not project-wide: a repo mid-migration mixes regimes). No style-file system → `defer-regime`; a system present but unrecognized → `unrecognized-regime`, never guess.
-- **Core rule (regime-agnostic):** static, reusable styling belongs in the regime's canonical unit; inline (`sx`, `style`, CSS-in-JS runtime) is justified ONLY for dynamic-per-render values or an inline one-off. This is React's own guidance — runtime injection recalculates every render.
+- **Core rule (regime-agnostic):** static, reusable styling belongs in the regime's canonical unit; inline is justified ONLY for dynamic-per-render values or an inline one-off. React's own guidance — runtime injection recalculates every render.
 - **Uncertainty → `clean`.** A wrong move churns JSX and class names.
 - **Judge placement, not design or shape.** Value quality is out of scope; naming the extracted class → `clean-names`; body duplication/shape → `clean-structure`. This skill owns only WHERE a style lives.
 - **Per-regime smells deferred** to `references/regime-tables.md`; read it before emitting a regime-specific smell.
@@ -43,14 +43,15 @@ Load when EXISTING React styling needs a verdict: a cleanup actor hands one over
 |---|---|
 | Value depends on state/prop, computed per render | `justified-dynamic` |
 | A theme-namespaced token, OR one prop overridden on a single instance | `justified-inline` |
-| Static + reusable (≥2 distinct components/files), regime HAS a canonical unit | `smell` (move to canonical unit) |
-| None fires, or doubt whether truly static-and-reusable | `clean` |
+| Static + reusable (≥2 distinct components/files), regime HAS a canonical unit | `smell` |
+| A regime bypass smell (e.g. Tailwind arbitrary value over a token) — ignores the ≥2 threshold | `smell` |
+| None fires, or doubt it is truly static-and-reusable | `clean` |
 
 ## Execution Steps
 
 1. Per styling site, run Regime Detection against its OWN file. `defer-regime` / `unrecognized-regime` → emit that, next site.
 2. Test the Verdict gate top-down; first fired row wins, else `clean`.
-3. For a `smell`, cite the target unit from `references/regime-tables.md`; suggest the boundary, do not write it. If that reference cannot be read, downgrade to `clean` (uncertainty → clean) — never cite a unit you cannot back.
+3. For a `smell`, cite the target unit from `references/regime-tables.md`; suggest the boundary, don't write it. If that reference is unreadable, downgrade to `clean` — never cite a unit you cannot back.
 
 ## Output Contract
 

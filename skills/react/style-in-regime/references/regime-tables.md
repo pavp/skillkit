@@ -9,7 +9,7 @@ An inline style (`sx`, `style`, runtime CSS-in-JS object) is NOT a smell when:
 - `justified-dynamic` — the value is computed from state/props per render. A static class cannot express it. Example: `sx={{ width: `${pct}%` }}`.
 - `justified-inline` — an inline one-off a static unit would only bloat: a theme-namespaced token (`sx={{ color: 'primary.main' }}`) OR one property overridden on a single instance (`sx={{ mt: 2 }}`). If a value is BOTH, it is still one verdict: `justified-inline`.
 
-Reusable = the same static styling appears on ≥2 distinct components/files. Below that AND doubt → `clean`. Static AND reusable AND the regime has a canonical unit → `smell`. A repeated theme token stays `justified-inline` no matter how many components read it — the token IS the shared unit; nothing is copied to extract.
+Reusable = the same static styling appears on ≥2 distinct components/files. Below that AND doubt → `clean`. Static AND reusable AND the regime has a canonical unit → `smell`. This ≥2 threshold governs DUPLICATION smells (extract a repeated style into the canonical unit); it does NOT govern regime-specific BYPASS smells like Tailwind arbitrary-value-over-token, which are `smell` even on a single use (see Tailwind below). A repeated theme token stays `justified-inline` no matter how many components read it — the token IS the shared unit; nothing is copied to extract.
 
 ## Worked Output-Contract line
 
@@ -35,7 +35,7 @@ Tile.tsx:15 — CSS/SCSS Modules — justified-inline — theme token `primary.m
 ## Tailwind
 
 - Canonical unit: utility classes in `className`; repeated clusters extracted via `@apply` in a CSS layer.
-- Smell (Tailwind-specific): arbitrary values `w-[347px]`, `text-[#3a3a3a]` where a theme token exists (`w-72`, `text-slate-700`); and inline `style`/`sx` for what a utility already covers. Arbitrary values are the Tailwind equivalent of magic numbers — they bypass the design tokens.
+- Smell (Tailwind-specific): arbitrary values `w-[347px]`, `text-[#3a3a3a]` where a theme token exists (`w-72`, `text-slate-700`); and inline `style`/`sx` for what a utility already covers. Arbitrary values are the Tailwind equivalent of magic numbers — they bypass the design tokens. This is a BYPASS smell, not a duplication smell: it is `smell` even on a single use — the ≥2-reuse threshold does NOT apply. Only genuinely one-off, tokenless values (no matching token exists) stay `clean`.
 
 ```tsx
 // smell — arbitrary values bypass tokens
