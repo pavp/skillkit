@@ -76,3 +76,4 @@ const Row = styled.div`display:flex; gap:8px; padding:16px;`
 - Whether a value is a *good* design choice (color, spacing scale) is out of scope — that is a design-system concern, not placement.
 - Naming of the extracted class/component is out of scope here; hand naming to `clean-names`.
 - If the project has NO style-file system (inline-only), there is no canonical unit to move to → `defer-regime`, impose nothing.
+- If a style-file system IS present but matches none of the regimes above (vanilla-extract, panda, a custom setup) → `unrecognized-regime`: name the unrecognized system, emit no smell, and surface that this skill has no table for it. Do NOT fall back to another regime's canonical unit.
