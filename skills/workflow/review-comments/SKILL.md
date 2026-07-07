@@ -1,6 +1,6 @@
 ---
 name: review-comments
-description: "Trigger: write/draft review comments; comment on a PR/issue; reply to reviewer feedback; turn findings into comments. Organic teammate-voice comments and replies, consolidated, gated on confirmation; never posts."
+description: "Trigger: reply to a reviewer, answer PR/issue feedback, what do I say to this comment, draft review comments, turn findings into comments. Organic teammate-voice comments/replies, consolidated, gated on confirmation; never posts."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
@@ -20,9 +20,9 @@ Load when the user wants comments written from review findings, or replies draft
 ## Hard Rules
 
 - **Consume only.** Do NOT review or generate findings; act only on findings or received comments supplied. If a supplied comment lacks its mechanism, ask rather than invent it.
-- **Content over template.** Mandatory content, free form: any claim carries its mechanism (what breaks and why, or why you disagree); length and structure follow the point's weight. No fixed skeleton. See `references/comment-shape.md`.
+- **Content over template.** Mandatory content, free form: any claim carries its mechanism (what breaks and why, or why you disagree). No fixed skeleton, no default length; keep it the shortest that carries the point. See `references/comment-shape.md`.
 - **Question only for a nameable decision.** Close with a question ONLY when you can name a decision that belongs to the other person (the trigger cases live in `references/comment-shape.md`). Cannot name it → no question.
-- **Reply truthfulness.** In replies, claim a fix only when the change exists; reference it as it exists (commit, or working-tree `file:line` when uncommitted). Claimed but unreferenced → verify or ask; never invent a reference.
+- **Reply truthfulness.** In replies, claim a fix only when the change exists. Never invent a reference; when the exact reference is unclear, verify or ask. Which reference for which fix-state: `references/comment-shape.md`.
 - **No severity tags.** Never label a comment with a severity; the content carries the weight.
 - **Consolidate.** One authored comment per locus, highest-value point only; no pile-ons. Reply threads never merge — one reply per thread, even at the same locus.
 - **No AI tells.** No hedging, em-dashes inside comments, robotic checklists, praise warm-up, or repeated skeletons across drafts. See `references/comment-shape.md` anti-patterns.
