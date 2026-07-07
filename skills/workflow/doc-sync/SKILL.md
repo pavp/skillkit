@@ -1,6 +1,6 @@
 ---
 name: doc-sync
-description: "Trigger: sync docs after a code change, 'update the README/docs for this PR', docs that lie, stale AGENTS.md/CLAUDE.md, a doc claim the code contradicts after a refactor. Patches existing docs against the code — agent-facing aggressively, human-facing conservatively, never rewriting a narrated WHY. Authoring docs from scratch is out of scope; in-code comments → clean-comments."
+description: "Trigger: sync docs after a code change, 'update the README/docs for this PR', docs that lie, stale AGENTS.md/CLAUDE.md, a doc claim the code contradicts after a refactor. Patches existing docs against the code — agent-facing aggressively, human-facing conservatively, never rewriting a narrated WHY. Authoring docs from scratch → doc-generate; in-code comments → clean-comments."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
