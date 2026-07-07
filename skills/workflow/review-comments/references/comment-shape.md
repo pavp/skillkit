@@ -8,7 +8,7 @@ A drafted comment or reply is judged by what it carries, not by a skeleton:
 - **A concrete next step**, when there is one to propose — teammate voice, not an order.
 - **A closing question**, only on the question trigger below.
 
-Form is free. Length, order, and phrasing follow the point's weight: a self-evident fix is one line; a disputed design point may take four. The classic arrangement (observation → proposal → question) is one natural shape for a finding with an open decision — a default, never a mold. If re-reading your drafts shows the same skeleton in each, you templated; vary them the way one human writing several messages would.
+Form is free, and short by default. Start at one line and add another only when the point earns it: a self-evident fix is one line, a plain claim with its mechanism is often two, and only a disputed design point runs to four. Most comments land in one or two. The classic arrangement (observation → proposal → question) is one natural shape for a finding with an open decision — reach for it when the decision is real, not by reflex. If re-reading your drafts shows the same skeleton, or the same length, in each, you templated; vary them the way one human writing several messages would.
 
 ## The question trigger
 
@@ -26,13 +26,30 @@ Input: the reviewer's comment plus the actual state of what was done about it. P
 
 | Case | Reply carries |
 |------|---------------|
-| Resolved | Brief acknowledgment of the point, then the change (commit, lines). One or two lines. No re-litigating, no over-thanking. |
+| Resolved | Brief acknowledgment of the point, then the change, referenced per Fix-state handling below. One or two lines. No re-litigating, no over-thanking. |
 | Agreed, pending | What you will do and where. |
 | Disagree | The mechanism of why, matching the reviewer's kind of evidence (benchmarks against benchmarks, spec quotes against spec quotes). Question only if the call is genuinely theirs. |
 | They asked a question | The answer, directly. |
 | Mixed / partial | Split by point; apply each point's case within the one reply. Still unclassifiable → ask the user. |
 
-Fix-state handling (mechanics of the Reply truthfulness Hard Rule): claimed but unreferenced → look the change up (log, diff) or ask; real but uncommitted → reference the working-tree change (`file:line`), never a placeholder hash; unknown → ask before drafting; a supplied anchor that disagrees with the working tree → anchor to the verified real line and note the correction.
+### Fix-state handling
+
+The single mechanics of the Reply truthfulness Hard Rule; the reply cases and the SKILL body both defer here. It is one procedure, not a menu: **locate the change first, then pick the reference by where it lives.** Drift and shifted lines are handled by the locate step, not by a separate rule.
+
+**Step 1 — locate the change.** Read the current working-tree file where the fix should be (a supplied anchor is a hint, not proof; if edits shifted it or it moved to another file, grep the tree for the changed symbol or behavior). Confirm you are looking at the actual fix, not just the file.
+
+**Step 2 — pick the reference from what step 1 found:**
+
+| Step 1 found | Cite |
+|--------------|------|
+| The change, live at a working-tree line | That `file:line`. |
+| Not at a live line, but history confirms it (`git log -p`/blame) | The commit hash — a real reference, never a placeholder. |
+| Verified absent: checked the tree and history, the fix is not there | Do not cite. Ask, or say the fix is not in place. |
+| Cannot verify: no tree access, or no history to check (no `.git`, git unavailable) | Do not cite what you could not confirm. Ask, or mark the anchor unverified; never an unchecked `file:line`. |
+
+Special cases: a claim with no reference → run step 1 to find it, or ask. A supplied anchor that disagrees with what step 1 found → cite what you verified, note the correction.
+
+Never invent a reference. A `file:line` is cited only after reading that exact line and seeing the change there. Reading the file is the test, not `git status`: a file can show unchanged overall while the specific anchor line moved.
 
 ## Worked examples
 
@@ -42,8 +59,10 @@ The point of these four is the range, with and without a question, not any one s
 
 ```
 Good catch, `user` can arrive null there since the session refactor.
-Fixed in abc123 with a guard at the top of the handler.
+Guarded at the top of the handler now (handler.ts:12).
 ```
+
+Step 1 was run before citing: reading `handler.ts:12` showed `if (!user) return;`, the guard being claimed. The `file:line` follows that read, never precedes it.
 
 ### Objective one-liner (authored)
 
@@ -76,6 +95,7 @@ Does the caller already guarantee it's never null, or should we cover it here?
 - Over-thanking in replies ("Thank you so much for this excellent catch!") — acknowledge once, plainly.
 - One comment per trivial preference — pile-on. Consolidate to the point that matters.
 - Em-dashes inside the comment text — use commas, periods, or parentheses.
+- Padding a one-line point to match the length of the worked examples — they show the range, not the typical length.
 
 ## Consolidation rule
 
@@ -128,3 +148,5 @@ Heading selection: a real navigable anchor renders as `file:line`; when the sect
 ```
 
 No gate prompt, no `---`, no lead-in or sign-off. Each section is paste-ready at its anchor or thread. Whoever posts (user, runtime, another tool) takes these verbatim.
+
+Presentation and hand-off are not guaranteed adjacent in time: commits can land between them and shift a `file:line`. Before hand-off, re-run Fix-state handling on every `file:line` anchor, both authored-finding anchors and reply fix references — step 1 (locate) re-detects any drift, step 2 picks the reference, including the no-tree-access row when a different environment or tool posts later.
