@@ -1,6 +1,6 @@
 ---
 name: react-component-patterns
-description: "Trigger: compound components, slots, control props, controlled/uncontrolled, state initializer, extensible styles, reusable component API. Design patterns for reusable React components (not building a basic one → react-component)."
+description: "Trigger: designing the public API of a REUSABLE React component, UI or headless. Use this whenever parts share state (<Tabs> with <Tab>, or a context provider with no markup), a parent controls the value (value+onChange, controlled/uncontrolled), a caller injects markup via slots, or state seeds from props with a reset — even if no pattern is named. Building one plain component → react-component."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)

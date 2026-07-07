@@ -16,7 +16,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | Skill | What it does |
 |-------|--------------|
 | [`skill-creator`](skills/meta/skill-creator/SKILL.md) | Create new LLM-first skills with valid frontmatter and the right structure. |
-| [`skill-improver`](skills/meta/skill-improver/SKILL.md) | Audit and refactor existing skills against the style guide. |
+| [`skill-improver`](skills/meta/skill-improver/SKILL.md) | Audit and refactor existing skills against the style guide; measure trigger accuracy with a virgin-subagent eval. |
 
 ### react
 
