@@ -4,7 +4,7 @@ description: "Trigger: review a branch, PR, commits, tag, merge, or WIP diff; \"
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliability, Resilience, Architecture, Spec), then aggregate by severity without merging.
@@ -35,7 +35,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 ## Execution Steps
 
-1. Build the diff once. Ref: `git diff <point>...HEAD` (3-dot = vs merge-base) + `git log <point>..HEAD --oneline`. Uncommitted: `git diff HEAD`.
+1. Build the diff once. Ref: `git diff <point>...HEAD` (3-dot = vs merge-base) + `git log <point>..HEAD --oneline`. Uncommitted: `git diff HEAD`. Also capture `git diff <point>...HEAD --shortstat` — pass its changed-line count into each lens's prompt as `<N>` (step 2 of `references/dispatch.md`), which gates that lens's sweep depth.
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
 3. Resolve the spec (Decision Gates); normalize to text.
 4. Dispatch the 6 lenses as isolated reviews per `references/dispatch.md`. Skip Spec if no spec.
