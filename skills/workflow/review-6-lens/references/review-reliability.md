@@ -12,6 +12,7 @@ Scope: behavior-first tests, coverage value, edge cases, determinism, contracts,
 - Block when CI can pass with `test.only`; require `forbidOnly` or equivalent in CI configs.
 - Flag misallocated coverage: too much E2E where cheaper deterministic unit/integration tests should cover behavior.
 - Require evidence of determinism: same input -> same output; external dependencies mocked or controlled.
+- Flag shared state mutated across concurrent or interleaved execution (async tasks, callbacks, workers, requests) where ordering is assumed but not guaranteed — races, check-then-act gaps, unsynchronized counters. Cite the shared variable and the two paths that can interleave, not a generic "might race".
 - Flag weak selectors in UI tests; prefer semantic/user-visible queries.
 - Do not flag intentional reliance on built-in async waiting over custom polling.
 - Require evidence that new APIs/components have example usage or a documented contract.
