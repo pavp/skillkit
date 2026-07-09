@@ -6,7 +6,7 @@ Scope: security, privilege boundaries, data exposure, dependency risks, merge-bl
 
 ## Review rules
 
-- Flag when secrets, tokens, API keys, JWT secrets, or DB URLs are hardcoded in code or committed examples.
+- Flag when secrets, tokens, API keys, JWT secrets, or DB URLs are hardcoded in code or committed examples, or written to logs/error output where they can leak.
 - Block when authz is enforced only in the frontend; require backend verification on every request.
 - Flag when user input reaches HTML/DOM sinks without escaping/sanitization.
 - Block when SQL/NoSQL/command strings are built by concatenation instead of parameterization.

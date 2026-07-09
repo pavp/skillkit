@@ -4,7 +4,7 @@ description: "Trigger: review a branch, PR, commits, tag, merge, or WIP diff; \"
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliability, Resilience, Architecture, Spec), then aggregate by severity without merging.
