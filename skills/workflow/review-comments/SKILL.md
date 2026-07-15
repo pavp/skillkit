@@ -1,10 +1,10 @@
 ---
 name: review-comments
-description: "Trigger: reply to a reviewer, answer PR/issue feedback, what do I say to this comment, draft review comments, turn findings into comments. Organic teammate-voice comments/replies, consolidated, gated on confirmation; never posts."
+description: "Trigger: handle/address the comments on your PR, reply to a reviewer, answer PR/issue feedback, what do I say to this comment, draft review comments, turn findings into comments. Use this the moment reviewer comments need a written response, even after you fix the code they flagged. Organic teammate-voice comments, consolidated, gated; never posts. Reviewing the code diff itself → review-6-lens."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.0.0
+  version: 3.1.0
 ---
 
 ## Activation Contract
