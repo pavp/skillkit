@@ -1,10 +1,10 @@
 ---
 name: ts-module-organization
-description: "Trigger: import type, export type, barrel file, index.ts re-export, path alias, circular dependency, verbatimModuleSyntax. Organize TypeScript modules and imports."
+description: "Trigger: WHERE types/values live and how they cross module boundaries. Use whenever arranging imports/exports — import type vs import, export type, barrel/index.ts re-export, path alias, circular dependency, verbatimModuleSyntax — even if only the symptom shows. E.g. 'import type vs normal', 'export from barrel', 'where do shared types go'. Designing a type's shape → ts-types."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
