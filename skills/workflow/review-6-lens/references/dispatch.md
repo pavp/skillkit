@@ -14,9 +14,15 @@ How to build each lens's prompt. All 6 lenses share one skeleton; only the rules
 Prompt each lens with exactly these steps:
 
 1. Read your rules and output contract: `<rules file>`.
-2. The diff under review is `git diff <point>...HEAD` (`<N>` changed lines; changed regions: `<changed-hunks>`); commits: `git log <point>..HEAD --oneline`. (Spec only: the requested intent is this text: `<normalized intent>`.)
+2. The diff under review is `<diff-cmd>` (`<N>` changed lines; changed regions: `<changed-hunks>`); commits: `git log <point>..HEAD --oneline`. (Spec only: the requested intent is this text: `<normalized intent>`.) `<changed-hunks>` is capped: a file with more than ~20 distinct ranges is collapsed to a whole-file `path: ALL` marker — treat any line in that file as inside a changed region (fail toward `introduced`), never expand the list per prompt.
 3. Apply ONLY your lens rules. Emit findings in the EXACT shape defined in `references/finding-shape.md` (your rules file points to it) — bold title, `(Lens — file:line · introduced|pre-existing)`, blockquoted `Why it matters` + evidence, `→ Fix`; compact one-line for 🔵. Stay in your lane; defects another lens owns are not yours. Your returned text IS the report — no preamble, no closing summary.
-4. **Classify causality** (all lenses except Spec, which is exempt): tag each finding `introduced` if the `file:line` it cites falls inside a **changed region** you were given in `<changed-hunks>` (a line the diff added or deleted), else `pre-existing`. A finding with no single line (whole-file / architectural) is `introduced` only if the specific import/call-site/coupling line it cites is inside a changed region — never merely because the diff touched that file. This is a membership check against the regions given, not a judgment call; do not re-decide it per pass.
+4. **Classify causality** (all lenses except Spec, which is exempt). `introduced` is the **safe default**: a finding is `pre-existing` ONLY on positive evidence it sits outside every changed region. Tag each finding:
+   - `introduced` — the `file:line` it cites is inside a **changed region** (`<changed-hunks>`: a HEAD line the diff added, or the HEAD line immediately adjacent to a pure deletion). Deletions have no HEAD line of their own — anchor them to that adjacent line, given in the region set.
+   - `behavior-activated` — the defect's **trigger** is inside a changed region (a caller you added, a guard you removed) but the **victim** line it cites is outside. Counts as blocking, same as `introduced` (the diff made the defect reachable). Tag it as such so the aggregator keeps it in the severity sections.
+   - `pre-existing` — the cited line, and any trigger for it, are outside every changed region. Only this tag is non-blocking.
+   - **No citable line** (whole-file / absence defect, e.g. "no test covers the added branch"): tag `introduced`, anchored to the added region it concerns. Never default a line-less finding to `pre-existing`.
+   - **Degraded input**: if `<changed-hunks>` is `ALL-CHANGED`, empty, or malformed while the diff is non-empty, tag every finding `introduced` (fail toward blocking) — never `pre-existing`.
+   This is a membership check against the regions given, not a judgment call; do not re-decide it per pass.
 
 ## Sweep depth (per lens, proportional)
 

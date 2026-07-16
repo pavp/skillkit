@@ -16,7 +16,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 - Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated sub-agents (one per lens); else sequential with reset context. Never let one lens bias another.
 - The aggregate orders by severity but never lets one lens alter another's: no finding dropped, reworded, softened, or absorbed because a different lens saw the same code. Each keeps its lens label and verbatim text. Two lenses, one issue → two findings.
 - The verdict is **derived, not editorial**: references existing findings by number, in the severities the lenses actually emitted (never invent a 🔴 if the worst is 🟠). It guides the merge call; it may not silence, downgrade, or overrule a lens.
-- **Causality**: each code-lens finding is `introduced` (cited `file:line` inside a changed region of the diff) or `pre-existing` (outside). A `pre-existing` finding never blocks — it keeps its severity, lens, and verbatim text but is partitioned to the follow-up section, out of the severity headings. This partition is the **only** exception to the no-move rule (it is causality-based, not importance-based); severity is never downgraded. Spec is exempt — it judges intent, not code (see `references/review-spec.md`).
+- **Causality**: each code-lens finding is classified by changed-region membership (`references/dispatch.md` step 4); `introduced` is the safe default, `pre-existing` needs positive evidence it sits outside the diff. Only `pre-existing` is non-blocking — it moves to the follow-up section (the sole exception to no-move; severity never downgraded). Spec is exempt.
 - Every finding needs `severity` + lens + file + evidence + concrete `Fix`. No evidence → not a finding. `Why it matters` is the mechanism (how it breaks); `Fix` is the action (what to do) — separate fields, never folded.
 - A lens with nothing to report says exactly `No findings.`
 
@@ -36,7 +36,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 ## Execution Steps
 
-1. Build the diff once. Ref: `git diff <point>...HEAD` (3-dot = vs merge-base) + `git log <point>..HEAD --oneline`. Uncommitted: `git diff HEAD`. Also capture `git diff <point>...HEAD --shortstat` — pass its changed-line count into each lens's prompt as `<N>` (step 2 of `references/dispatch.md`), which gates that lens's sweep depth. Also derive the **changed regions**: from `git diff <point>...HEAD --unified=0`, build the per-file set of line numbers the diff added or deleted, compact form `path: L12-15,L40,L88-90`. Pass this as `<changed-hunks>` into each lens's prompt; it gates causality classification.
+1. Fix `<diff-cmd>` **once** — `git diff <point>...HEAD` (3-dot = vs merge-base) for a committed range, `git diff HEAD` uncommitted — and reuse it for every derivation so regions always match the reviewed diff. From it: the diff + `git log <point>..HEAD --oneline`; `<N>` (changed-line count, `<diff-cmd> --shortstat`, gates sweep depth); and `<changed-hunks>` (per-file changed regions, `<diff-cmd> --unified=0`, gates causality). Build `<changed-hunks>` per `references/dispatch.md` — compact form, per-file size cap, and the empty-while-diff-non-empty fail-safe all specified there.
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
 3. Resolve the spec (Decision Gates); normalize to text.
 4. Dispatch the 6 lenses as isolated reviews per `references/dispatch.md`. Skip Spec if no spec.

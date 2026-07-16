@@ -8,7 +8,7 @@ How the orchestrator assembles the final report after the 6 lenses return. Findi
 
 ## 2. Findings by severity
 
-One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. These sections hold **only `introduced` findings** (plus all Spec findings, which are causality-exempt) — `pre-existing` findings go to §3. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / no-dedupe / no-rerank rules live in `finding-shape.md`.
+One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. These sections hold every **blocking** finding — `introduced` and `behavior-activated`, plus all Spec findings (causality-exempt); only `pre-existing` findings go to §3. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / no-dedupe / no-rerank rules live in `finding-shape.md`.
 
 ## 3. Pre-existing (follow-up, optional)
 
@@ -24,7 +24,7 @@ One line listing which lenses returned `No findings.` (and `Spec: no spec availa
 
 ## 6. Verdict (optional)
 
-A `## Verdict` closing line: a plain-language merge call referencing findings by number (e.g. "Don't merge until #1 and #3 are resolved"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. It counts **only `introduced` findings** (plus Spec): a report whose sole 🔴/🟠 are `pre-existing` has no blocking verdict — say so ("nothing this diff introduced blocks; N pre-existing item(s) noted for follow-up"). Omit if nothing blocks.
+A `## Verdict` closing line: a plain-language merge call referencing findings by number (e.g. "Don't merge until #1 and #3 are resolved"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. It counts every **blocking** finding — `introduced` and `behavior-activated`, plus Spec: a report whose sole 🔴/🟠 are `pre-existing` has no blocking verdict — say so ("nothing this diff introduced blocks; N pre-existing item(s) noted for follow-up"). Omit if nothing blocks.
 
 ## 7. Summary line
 
