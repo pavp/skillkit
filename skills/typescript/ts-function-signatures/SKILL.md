@@ -1,10 +1,10 @@
 ---
 name: ts-function-signatures
-description: "Trigger: designing how a function/hook/component is CALLED. Use whenever shaping a signature — too many positional args, options object, default params, overloads, or a union/generic on a param or return — even if 'signature' isn't said. E.g. 'this fn takes 6 params', 'options object vs positional'. Modeling a type, union, or reusable generic in ITSELF, not on one signature → ts-types."
+description: "Trigger: designing how a function/hook/component is CALLED. Use whenever shaping a signature — too many positional args, options object, default params, overloads, or a union/generic on a param or return — even if 'signature' isn't said. E.g. 'this fn takes 6 params', 'options vs positional'. Modeling a type, union, or reusable generic in ITSELF, not on a signature → ts-types."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract

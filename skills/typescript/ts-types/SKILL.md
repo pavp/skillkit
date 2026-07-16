@@ -1,10 +1,10 @@
 ---
 name: ts-types
-description: "Trigger: modeling the shape of a type itself. Use whenever choosing how to represent data — interface vs type alias, union of literals, enum replacement, const object, unknown vs any, type guard — even if unnamed. E.g. 'interface or type?', 'model these states', 'type API data safely'. A union/type on a function's params/return → ts-function-signatures; where it lives → ts-module-organization."
+description: "Trigger: modeling the shape of a type itself. Use whenever choosing how to represent data — interface vs type alias, literal union, replacing an enum, const object, unknown vs any, type guard — even if unnamed. E.g. 'interface or type?', 'model these states', 'no enum'. Union/type on a function's params/return → ts-function-signatures; where it lives → ts-module-organization."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
