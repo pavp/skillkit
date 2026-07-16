@@ -8,26 +8,30 @@ How the orchestrator assembles the final report after the 6 lenses return. Findi
 
 ## 2. Findings by severity
 
-One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / no-dedupe / no-rerank rules live in `finding-shape.md`.
+One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. These sections hold **only `introduced` findings** (plus all Spec findings, which are causality-exempt) — `pre-existing` findings go to §3. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / no-dedupe / no-rerank rules live in `finding-shape.md`.
 
-## 3. Verified OK (optional)
+## 3. Pre-existing (follow-up, optional)
+
+A `## 📝 Pre-existing (follow-up)` section for findings tagged `pre-existing` — defects the diff did not introduce (evidence outside every changed region). Lead line: "Not introduced by this diff — reported, does not block." List them verbatim in the `finding-shape.md` shape, each keeping its **real severity emoji inline** on the title, grouped by severity then lens precedence. Continue the report's running number. Omit the whole section if no finding is `pre-existing`. These never contribute to a blocking Verdict.
+
+## 4. Verified OK (optional)
 
 A `## ✅ Verified OK` section: bullets of what a lens **actively checked and cleared** — not mere silence. Each bullet names the lens and what it confirmed (e.g. "Risk: no injection, prototype pollution, ReDoS, or secrets"; "Spec: 8 keys exist in en/es/fr, 1:1 migration, no lost defaultMessage"). Omit the section if no lens reports positive verification; never pad it.
 
-## 4. Clean lenses note
+## 5. Clean lenses note
 
 One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity.
 
-## 5. Verdict (optional)
+## 6. Verdict (optional)
 
-A `## Verdict` closing line: a plain-language merge call referencing findings by number (e.g. "Don't merge until #1 and #3 are resolved"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. Omit if nothing blocks.
+A `## Verdict` closing line: a plain-language merge call referencing findings by number (e.g. "Don't merge until #1 and #3 are resolved"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. It counts **only `introduced` findings** (plus Spec): a report whose sole 🔴/🟠 are `pre-existing` has no blocking verdict — say so ("nothing this diff introduced blocks; N pre-existing item(s) noted for follow-up"). Omit if nothing blocks.
 
-## 6. Summary line
+## 7. Summary line
 
-Count per lens + worst severity within each, no cross-lens ranking:
+Count per lens + worst severity within each, no cross-lens ranking. Append a per-lens `pre-existing` count in parentheses when a lens has any (worst severity still reflects all that lens's findings):
 
 ```
-Risk 3 (🔴) | Read 4 (🟡) | Reliab 3 (🔴) | Resil 3 (🔴) | Arch 1 (🟠) | Spec 2 (🟠)
+Risk 3 (🔴, 1 pre-existing) | Read 4 (🟡) | Reliab 3 (🔴) | Resil 3 (🔴) | Arch 1 (🟠, 1 pre-existing) | Spec 2 (🟠)
 ```
 
 ## All clean

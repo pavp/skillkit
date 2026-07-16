@@ -14,8 +14,9 @@ How to build each lens's prompt. All 6 lenses share one skeleton; only the rules
 Prompt each lens with exactly these steps:
 
 1. Read your rules and output contract: `<rules file>`.
-2. The diff under review is `git diff <point>...HEAD` (`<N>` changed lines); commits: `git log <point>..HEAD --oneline`. (Spec only: the requested intent is this text: `<normalized intent>`.)
-3. Apply ONLY your lens rules. Emit findings in the EXACT shape defined in `references/finding-shape.md` (your rules file points to it) — bold title, `(Lens — file:line)`, blockquoted `Why it matters` + evidence, `→ Fix`; compact one-line for 🔵. Stay in your lane; defects another lens owns are not yours. Your returned text IS the report — no preamble, no closing summary.
+2. The diff under review is `git diff <point>...HEAD` (`<N>` changed lines; changed regions: `<changed-hunks>`); commits: `git log <point>..HEAD --oneline`. (Spec only: the requested intent is this text: `<normalized intent>`.)
+3. Apply ONLY your lens rules. Emit findings in the EXACT shape defined in `references/finding-shape.md` (your rules file points to it) — bold title, `(Lens — file:line · introduced|pre-existing)`, blockquoted `Why it matters` + evidence, `→ Fix`; compact one-line for 🔵. Stay in your lane; defects another lens owns are not yours. Your returned text IS the report — no preamble, no closing summary.
+4. **Classify causality** (all lenses except Spec, which is exempt): tag each finding `introduced` if the `file:line` it cites falls inside a **changed region** you were given in `<changed-hunks>` (a line the diff added or deleted), else `pre-existing`. A finding with no single line (whole-file / architectural) is `introduced` only if the specific import/call-site/coupling line it cites is inside a changed region — never merely because the diff touched that file. This is a membership check against the regions given, not a judgment call; do not re-decide it per pass.
 
 ## Sweep depth (per lens, proportional)
 

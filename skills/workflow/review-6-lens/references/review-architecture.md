@@ -25,4 +25,4 @@ If the doc states a rule the code already violates broadly, that mismatch is its
 
 ## Output contract
 
-Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Architecture` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Architecture` as the lens name. `Why it matters` and `Fix` are both required and separate. Tag each finding `introduced`/`pre-existing` by whether its cited `file:line` falls inside a changed region you were given (`dispatch.md` step 4). A structural finding with no single line is `introduced` only if the specific import, call-site, or coupling line it cites is inside a changed region — never merely because the diff touched that file, else pre-existing debt reads as introduced. If clean, say exactly: `No findings.`
