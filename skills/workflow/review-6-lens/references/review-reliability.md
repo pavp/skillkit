@@ -19,4 +19,4 @@ Scope: behavior-first tests, coverage value, edge cases, determinism, contracts,
 
 ## Output contract
 
-Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Reliability` as the lens name. `Why it matters` and `Fix` are both required and separate. If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Reliability` as the lens name. `Why it matters` and `Fix` are both required and separate. Tag each finding `introduced`/`pre-existing` by whether its cited `file:line` falls inside a changed region you were given (`dispatch.md` step 4). If clean, say exactly: `No findings.`
