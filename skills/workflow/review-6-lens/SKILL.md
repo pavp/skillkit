@@ -16,7 +16,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 - Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated sub-agents (one per lens); else sequential with reset context. Never let one lens bias another.
 - The aggregate orders by severity but never lets one lens alter another's: no finding dropped, reworded, softened, or absorbed because a different lens saw the same code. Each keeps its lens label and verbatim text. Two lenses, one issue → two findings.
 - The verdict is **derived, not editorial**: references existing findings by number, in the severities the lenses actually emitted (never invent a 🔴 if the worst is 🟠). It guides the merge call; it may not silence, downgrade, or overrule a lens.
-- **Causality**: each code-lens finding is classified by changed-region membership (`references/dispatch.md` step 4); `introduced` is the safe default, `pre-existing` needs positive evidence it sits outside the diff. Only `pre-existing` is non-blocking — it moves to the follow-up section (the sole exception to no-move; severity never downgraded). Spec is exempt.
+- **Causality**: each code-lens finding is classified by changed-region membership (`references/dispatch.md` step 4). `introduced` is the safe default; `behavior-activated` (the diff makes a pre-existing defect reachable) also blocks; `pre-existing` needs positive evidence it sits outside the diff and is the only non-blocking tag — it moves to the follow-up section (the sole exception to no-move; severity never downgraded). Spec is exempt.
 - Every finding needs `severity` + lens + file + evidence + concrete `Fix`. No evidence → not a finding. `Why it matters` is the mechanism (how it breaks); `Fix` is the action (what to do) — separate fields, never folded.
 - A lens with nothing to report says exactly `No findings.`
 
@@ -36,7 +36,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 ## Execution Steps
 
-1. Fix `<diff-cmd>` **once** — `git diff <point>...HEAD` (3-dot = vs merge-base) for a committed range, `git diff HEAD` uncommitted — and reuse it for every derivation so regions always match the reviewed diff. From it: the diff + `git log <point>..HEAD --oneline`; `<N>` (changed-line count, `<diff-cmd> --shortstat`, gates sweep depth); and `<changed-hunks>` (per-file changed regions, `<diff-cmd> --unified=0`, gates causality). Build `<changed-hunks>` per `references/dispatch.md` — compact form, per-file size cap, and the empty-while-diff-non-empty fail-safe all specified there.
+1. Fix `<diff-cmd>` **once** — `git diff <point>...HEAD` (3-dot = vs merge-base) for a committed range, `git diff HEAD` uncommitted — and reuse it for every derivation so regions always match the reviewed diff. From it: the diff + `git log <point>..HEAD --oneline`; `<N>` (changed-line count, `<diff-cmd> --shortstat`, gates sweep depth); and `<changed-hunks>` (per-file changed regions, `<diff-cmd> --unified=0`, gates causality). Build `<changed-hunks>` per `references/dispatch.md` — compact form, per-file size cap, and the degraded-input fail-safe all specified there.
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
 3. Resolve the spec (Decision Gates); normalize to text.
 4. Dispatch the 6 lenses as isolated reviews per `references/dispatch.md`. Skip Spec if no spec.
@@ -44,7 +44,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 ## Output Contract
 
-Aggregate by **severity**, not lens (each finding keeps its lens tag). Build the report per `references/output-contract.md`, in order: (1) human lead, (2) `introduced` findings under `##` severity headings 🔴→🟠→🟡→🔵 numbered continuously, (3) optional `## 📝 Pre-existing (follow-up)` for `pre-existing` findings (reported, non-blocking), (4) optional `## ✅ Verified OK`, (5) clean-lenses line, (6) optional `## Verdict` (derived, not editorial; counts only `introduced`), (7) summary line `Risk n (emoji) | …`. Findings use the `finding-shape.md` shape.
+Aggregate by **severity**, not lens (each finding keeps its lens tag). Build the report per `references/output-contract.md`, in order: (1) human lead, (2) blocking findings (`introduced` + `behavior-activated`) under `##` severity headings 🔴→🟠→🟡→🔵 numbered continuously, (3) optional `## 📝 Pre-existing (follow-up)` for `pre-existing` findings (reported, non-blocking), (4) optional `## ✅ Verified OK`, (5) clean-lenses line, (6) optional `## Verdict` (derived, not editorial; counts blocking findings only), (7) summary line `Risk n (emoji) | …`. Findings use the `finding-shape.md` shape.
 
 ## References
 

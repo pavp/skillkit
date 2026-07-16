@@ -21,7 +21,7 @@ Prompt each lens with exactly these steps:
    - `behavior-activated` — the defect's **trigger** is inside a changed region (a caller you added, a guard you removed) but the **victim** line it cites is outside. Counts as blocking, same as `introduced` (the diff made the defect reachable). Tag it as such so the aggregator keeps it in the severity sections.
    - `pre-existing` — the cited line, and any trigger for it, are outside every changed region. Only this tag is non-blocking.
    - **No citable line** (whole-file / absence defect, e.g. "no test covers the added branch"): tag `introduced`, anchored to the added region it concerns. Never default a line-less finding to `pre-existing`.
-   - **Degraded input**: if `<changed-hunks>` is `ALL-CHANGED`, empty, or malformed while the diff is non-empty, tag every finding `introduced` (fail toward blocking) — never `pre-existing`.
+   - **Degraded input**: if `<changed-hunks>` is empty or malformed while the diff is non-empty (`<N>` > 0), tag every finding `introduced` (fail toward blocking) — never `pre-existing`. (A `path: ALL` marker is not degraded — it is the intended whole-file signal; treat every line in that file as changed.)
    This is a membership check against the regions given, not a judgment call; do not re-decide it per pass.
 
 ## Sweep depth (per lens, proportional)
