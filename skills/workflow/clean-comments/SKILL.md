@@ -1,10 +1,10 @@
 ---
 name: clean-comments
-description: "Trigger: judging if a comment is noise or load-bearing; \"is this comment useful\", \"why is this commented\", reviewing comments. Classifies each (noise / load-bearing / commented-out / trailing / out-of-domain); a judgment authority."
+description: "Trigger: judging comments. Classifies each as noise / load-bearing / commented-out / trailing / out-of-domain — a judgment authority, never edits. Use whenever a comment's worth is in doubt: 'is this comment useful', 'why is this commented out', a comment restating the code, a stale TODO. Docs outside the code → doc-sync."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Clean Comments

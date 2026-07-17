@@ -1,10 +1,10 @@
 ---
 name: slice-diff
-description: "Trigger: split a PR, oversized diff, review slices, PR too big, chain PRs, reviewer load. Slice an oversized git diff into a chain of reviewable PRs, then execute on confirmation."
+description: "Trigger: a diff too big to review. Slices an oversized git diff into a chain of reviewable PRs, then executes on confirmation. Use whenever one change should ship as several: 'split this PR', 'chain these PRs', a reviewer complains about size, a 1500-line branch about to become one PR. Reviewing the diff's content → review-6-lens."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
