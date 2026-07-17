@@ -1,10 +1,10 @@
 ---
 name: clean-functions
-description: "Trigger: judging if a function does one thing; \"split this function\", \"too many props\", flag params, mutated-arg side effects, dead helpers, \"is this still used\". Classifies against F2–F5, defers arg-count, else clean; never edits."
+description: "Trigger: judging a function. Classifies against F2–F5 (one thing, side effects, dead code), defers arg-count, else clean — never edits. Use whenever a function's health is questioned: 'split this function', 'too many props', flag params, mutated-arg side effects, a helper nobody calls, 'is this still used'. Body-shape verdicts (duplication, magic numbers) → clean-structure."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Clean Functions

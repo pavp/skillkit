@@ -1,10 +1,10 @@
 ---
 name: skill-creator
-description: "Trigger: new skills, agent instructions, documenting AI usage patterns. Create LLM-first skills with valid frontmatter."
+description: "Trigger: authoring a NEW skill. Scaffolds LLM-first skills — frontmatter, activation contract, hard rules, decision gates, output contract. Use whenever packaging repeatable agent instructions into a reusable skill: 'create a skill for X', 'turn this workflow into a skill', an AI usage pattern the team keeps re-explaining. Auditing an existing skill → skill-improver."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
@@ -51,7 +51,7 @@ skills/{skill-name}/
 ```markdown
 ---
 name: {skill-name}
-description: "Trigger: {essential trigger words users or agents will say}. {What this skill does}."
+description: "Trigger: {core intent}. {What this skill does}. Use whenever {pushy use-when clause}: {concrete anchor phrases, incl. one non-obvious}. {Confusable case} → {sibling-skill}."
 license: Apache-2.0
 metadata:
   author: "{your-github-username}"
@@ -62,8 +62,8 @@ metadata:
 
 ## Inline Fallback Rules
 
-- `description` MUST be one physical line, quoted, YAML-safe, and include essential trigger words first.
-- `description` SHOULD be <=160 chars and MUST be <=250 chars.
+- `description` MUST be one physical line, quoted, YAML-safe, shaped as: `Trigger:` label → what it does → a pushy "use whenever …" clause → concrete anchors (incl. one non-obvious) → `→ sibling` disambiguation arrow when a confusable sibling exists.
+- `description` SHOULD be <=380 chars and MUST be <=400 chars.
 - Frontmatter MUST include `name`, `description`, `license`, `metadata.author`, and `metadata.version`.
 - Use imperative instructions, not tutorials or background prose.
 - Keep `SKILL.md` to rules + pointers; move long examples/docs to `references/` or `assets/` (the installer carries the whole skill directory).
@@ -71,7 +71,7 @@ metadata:
 Good:
 
 ```yaml
-description: "Trigger: Jira task, ticket, issue, task creation. Create Jira tasks in the team format."
+description: "Trigger: creating a Jira task. Creates tasks in the team format. Use whenever work needs tracking: 'file a ticket', 'add this to the sprint', a bug report that should become an issue. Writing the PR itself → branch-pr."
 ```
 
 Bad:

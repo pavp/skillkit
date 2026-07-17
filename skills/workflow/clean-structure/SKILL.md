@@ -1,10 +1,10 @@
 ---
 name: clean-structure
-description: "Trigger: judging the shape of a code body; duplicated logic, magic numbers, obscured intent, repeated type switches, train-wreck access chains, \"is this DRY\", \"one dot\". Classifies against S1–S5, else clean; never edits."
+description: "Trigger: judging the shape of a code body. Classifies against S1–S5, else clean — never edits. Use whenever a body smells: duplicated logic, magic numbers, obscured intent, repeated type switches, train-wreck chains (a.b().c().d()), 'is this DRY', 'one dot per line'. Whether the FUNCTION does one thing → clean-functions."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Clean Structure

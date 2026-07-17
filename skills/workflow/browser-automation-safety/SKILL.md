@@ -1,10 +1,10 @@
 ---
 name: browser-automation-safety
-description: "Trigger: about to use browser automation: Playwright, Puppeteer, browser MCP, launch chromium, navigate a page, screenshot, drive a UI. Imposes resource limits so a run never exhausts memory or leaks browsers. Rules authority, not an actor."
+description: "Trigger: about to automate a browser. Imposes resource limits so a run never exhausts memory or leaks browser processes — a rules authority, not an actor. Use BEFORE any run with Playwright, Puppeteer, or a browser MCP: launching chromium, navigating pages, screenshots, driving a UI, scraping — even a 'quick check' that opens a real browser."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
