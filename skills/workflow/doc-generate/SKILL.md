@@ -1,10 +1,10 @@
 ---
 name: doc-generate
-description: "Trigger: 'generate a wiki for this repo', 'write the AGENTS.md/CLAUDE.md', document a project for an AGENT to read, bootstrap /docs for LLM context where none exists. Analyzes the code and writes dense, action-first docs for an LLM reader — every claim anchored to code, never inventing a WHY the code can't prove. New agent-facing docs only; updating existing → doc-sync."
+description: "Trigger: authoring agent-facing docs where none exist. Analyzes code, writes action-first docs for an LLM reader — every claim anchored to code, never inventing a WHY it can't prove. Use whenever agents lack written repo context: 'write the AGENTS.md/CLAUDE.md', 'generate a wiki', bootstrap /docs, 'agents keep misunderstanding this repo'. Updating existing docs → doc-sync."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract

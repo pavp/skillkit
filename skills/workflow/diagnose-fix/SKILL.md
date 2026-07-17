@@ -1,10 +1,10 @@
 ---
 name: diagnose-fix
-description: "Trigger: fix a bug/issue, resolve a defect, debug a failure, 'why does X break', fix from a report/traceback/ticket. Reproduce → root-cause → fix → regression-test, gated; source-agnostic."
+description: "Trigger: fixing a defect. Gated flow: reproduce → root-cause → fix → regression-test; source-agnostic. Use whenever behavior is wrong and must be corrected — 'fix this bug', 'why does X break', failing tests, a traceback/error-report link, a ticket, or output that contradicts reality ('the totals don't match the DB') — even if nobody says 'bug'. Reviewing a diff → review-6-lens."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
