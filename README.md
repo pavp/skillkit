@@ -25,6 +25,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`react-component`](skills/react/react-component/SKILL.md) | Structure React components — container/presentational split, hooks rules, naming, typed props. |
 | [`react-component-patterns`](skills/react/react-component-patterns/SKILL.md) | Design reusable component APIs — compound components, slots, control props, state initializer, and extensible styles. |
 | [`react-hooks`](skills/react/react-hooks/SKILL.md) | Reuse stateful logic — custom hooks and (rarely) render props. |
+| [`react-memoization`](skills/react/react-memoization/SKILL.md) | Decide whether useMemo/useCallback/memo belongs — regime-aware (React Compiler on/off), pure-perf vs semantic identity. |
 | [`style-in-regime`](skills/react/style-in-regime/SKILL.md) | Detect the project's styling regime and judge whether each inline style (MUI `sx`, `style`, CSS-in-JS, Tailwind arbitrary values) belongs there or in the regime's canonical style unit. |
 
 ### typescript
