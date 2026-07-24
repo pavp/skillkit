@@ -40,7 +40,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 
 | Skill | What it does |
 |-------|--------------|
-| [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. |
+| [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. Every blocking finding is then challenged by an independent refuter; a finding only stops blocking on a cited counter-example, and nothing is ever dropped. |
 | [`review-comments`](skills/workflow/review-comments/SKILL.md) | Handle reviewer comments on your PR and reply to feedback — fires the moment comments need a written response, even after you fix the flagged code. Organic teammate voice, the mechanism behind every claim, a closing question only when a real decision belongs to the other person. Consolidates, gates on confirmation; never posts. |
 | [`leave-it-cleaner`](skills/workflow/leave-it-cleaner/SKILL.md) | Boy Scout Rule, any language — after the asked task, make a cohesive, proportional, behavior-preserving cleanup of the zone you touched, and say what you did. |
 | [`clean-comments`](skills/workflow/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / trailing / out-of-domain via the surprise test and reason-token gate. Judges; never deletes. |
