@@ -39,31 +39,35 @@ Prompt each refuter with exactly these steps:
 4. Look for positive evidence the finding is wrong: the guard already exists elsewhere on the path, the input is validated upstream, the case is unreachable, the API contract forbids it, a test already covers it. For a `behavior-activated` finding, "the cited line is unchanged" is **not** a refutation — that tag already accounts for it; you must disprove that the trigger makes the defect reachable.
 5. **Refute only with a citation.** A refutation names a `file:line` and quotes the code that disproves the finding. "Seems unlikely", "probably handled", or an absent counter-example is **not** a refutation.
 6. **Never reproduce a secret value.** If your evidence would quote a credential (API key, token, password, connection string), cite the location and quote the surrounding code with the literal replaced by `‹redacted›`. Your evidence is published in the report — reproducing it verbatim makes the review a second exfiltration channel.
-7. If you cannot disprove it, return exactly `Not refuted.` Uncertainty is not refutation — when in doubt, the finding stands.
+7. If you cannot disprove it, the verdict is `Not refuted.` Uncertainty is not refutation — when in doubt, the finding stands.
 
 ## Output
 
-Emit the `> **Refuted by:**` block defined in `finding-shape.md` (Refuted-by field) — the orchestrator appends it verbatim, so emit that exact shape:
+Reason freely first — which candidate refutations you tested and why each held or failed is useful, and testing an argument you then reject is the work, not noise. Then **end** with the verdict as the last thing you emit. The verdict is what the orchestrator parses; everything above it is deliberation it ignores.
+
+Verdict when refuted — the `> **Refuted by:**` block defined in `finding-shape.md`, which the orchestrator appends verbatim:
 
 ```
 > **Refuted by:** `<file>:<line>` — <the code or fact that disproves the finding, quoted>
 > <one sentence: what the finding assumed that is not true>
 ```
 
-or exactly:
+Verdict otherwise — this line alone:
 
 ```
 Not refuted.
 ```
 
-**Malformed** means the result lacks a `file:line` citation or a quoted counter-example — not that its formatting is imperfect. A refuter that fails, times out, returns nothing, or returns something malformed counts as `Not refuted.` **for that finding only**; never block the report on the batch, and never omit a finding whose refuter did not return.
+Emit exactly ONE verdict, last. A result whose last line is neither shape is malformed.
+
+**Malformed** means the verdict is missing, or a refutation lacks a `file:line` citation or a quoted counter-example — never that the prose above it is imperfect. A refuter that fails, times out, returns nothing, or returns something malformed counts as `Not refuted.` **for that finding only**; never block the report on the batch, and never omit a finding whose refuter did not return.
 
 ## Authority — what a refuter may never do
 
 A refuter's only **effect** is that the orchestrator moves the finding to `output-contract.md` §3.5 (`🤔 Refuted`) with its evidence attached. The refuter itself returns only the Output shape above and never edits the report. It may not:
 
 - change a finding's severity, wording, lens, or `file:line`;
-- re-decide causality (`dispatch.md` step 4 owns that tag; the orchestrator never re-decides it either);
+- re-decide causality (`dispatch.md`'s causality contract owns that tag; the orchestrator never re-decides it either);
 - refute a finding it was not given, or comment on another finding;
 - drop a finding — nothing is ever removed from the report.
 
