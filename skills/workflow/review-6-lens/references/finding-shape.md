@@ -25,7 +25,7 @@ Findings separated by a blank line, then `---`, then a blank line.
 Rules:
 
 - The **bold title leads** — it answers "what is wrong", which is what a human scans for. The lens name, `file:line`, and causality tag go in parentheses on the next line; they are supporting metadata, not the headline.
-- **Causality tag** (`introduced` / `behavior-activated` / `pre-existing`) is set by the emitting lens via changed-region membership (see `dispatch.md` step 4). Only `pre-existing` is non-blocking; `introduced` and `behavior-activated` both block and stay in the severity sections. Spec findings carry NO causality tag — Spec is exempt. Whether a finding blocks depends on this tag, not on its severity alone.
+- **Causality tag** (`introduced` / `behavior-activated` / `pre-existing`) is set by the emitting lens via changed-region membership (see `dispatch.md`'s causality contract). Only `pre-existing` is non-blocking; `introduced` and `behavior-activated` both block and stay in the severity sections. Spec findings carry NO causality tag — Spec is exempt. Whether a finding blocks depends on this tag, not on its severity alone.
 - **No severity emoji on the finding** — the `##` severity heading above it already states the severity; repeating it per finding is noise.
 - A blank line separates every block; never run `Why it matters`, evidence, and `Fix` together as one paragraph.
 - `Why it matters` and `Fix` are both required and stay separate: `Why it matters` is the mechanism (the *how* it breaks); `Fix` is the action (the *what to do*). Neither folds into the other.

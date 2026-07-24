@@ -18,4 +18,4 @@ Scope: naming, complexity, intention, maintainability, duplication, dead code, r
 
 ## Output contract
 
-Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Readability` as the lens name. `Why it matters` and `Fix` are both required and separate. Tag each finding `introduced`/`behavior-activated`/`pre-existing` per `dispatch.md` step 4 — `introduced` is the safe default; `pre-existing` needs positive evidence it sits outside every changed region. If clean, say exactly: `No findings.`
+Emit findings in the exact shape from `finding-shape.md` — rich blockquote for 🔴🟠🟡, compact one-line for 🔵. Use `Readability` as the lens name. `Why it matters` and `Fix` are both required and separate. Tag each finding `introduced`/`behavior-activated`/`pre-existing` per `dispatch.md`'s causality contract — `introduced` is the safe default; `pre-existing` needs positive evidence it sits outside every changed region. If clean, say exactly: `No findings.`
