@@ -4,7 +4,7 @@ description: "Trigger: cleaning the zone you already touched. Applies the Boy Sc
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Leave It Cleaner
@@ -33,7 +33,7 @@ Full per-row conditions + companion contract in `references/gates-detail.md`.
 | Opportunity | Action | Tier |
 |-------------|--------|------|
 | Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
-| Comment | Classify via `clean-comments`; delete only a `noise` verdict | Auto if `noise` |
+| Comment | Classify via `clean-comments`, declaring provenance per comment (`fresh` = you wrote it this session, `established` = already there); apply the remedy it returns, `delete-comment-span` never taking the line | Auto on a deletion remedy |
 | Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5` verdict, never `clean`/`defer-signature` | Propose |
 | Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
 | Dead local var (unused in whole file) | Remove it | Auto |
