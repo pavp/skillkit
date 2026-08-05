@@ -10,13 +10,28 @@ A finding is reportable when it was walked and re-walked. The narration is the e
 | Expected | What the requirement said, cited — or that nothing said anything |
 | Observed | What the app did, in the same sentence flow |
 | Artifact | Accessibility-tree snapshot preferred; viewport screenshot when pixels matter; never `fullPage` |
-| Reproducibility | Walked N times, failed N times. Anything less than always → intermittent, never confirmed |
+| Reproducibility | Walked 3 times: 3/3 → confirmed; 1–2/3 → intermittent, reported with the ratio; 0/3 → not a finding |
 
 Never report a suspicion. If a journey could not be walked (missing access, destructive, unreachable), it belongs in "not walked" — never in findings, never implied as a pass.
 
+## What a probe may touch
+
+Every probe below is subject to the mutate-only-what-this-run-created rule. Before running one, ask which record it writes:
+
+| Probe target | Allowed |
+|---|---|
+| A record this run created | Yes — delete it, duplicate it, corrupt it freely |
+| A record that already existed | Read-only. Report the mutating variant under "not walked" |
+| Bulk or multi-record action | Never, whatever the plan says |
+| An account whose credentials you were not given | Never |
+
+Log every write: what was created, modified, deleted, or abandoned half-applied. That log is the "State left behind" section, and it is required even on a clean PASS.
+
+On an authorization probe, stop the instant access succeeds. The finding is that the boundary gave way — reported by shape, never by the data it exposed. Reading further, or chaining to a second boundary, turns a found vulnerability into a real exposure caused by the QA run.
+
 ## Attack surfaces
 
-Push past the plan here first. These are where undefined behavior surfaces fastest.
+Push past the plan here first. These are where undefined behavior surfaces fastest. Capped at 5 probes per journey; surfaces left unprobed go to "not walked".
 
 | Surface | Probe |
 |---|---|
@@ -27,7 +42,7 @@ Push past the plan here first. These are where undefined behavior surfaces faste
 | Any filter or search | No results. Then a query that matches everything. Then change the query mid-load |
 | Any upload | Zero bytes. Over the limit. Wrong type with a right extension |
 | Any role gate | The unauthorized role: is the control hidden, disabled, or does it error on use — and does the API refuse it too |
-| Any multi-step flow | Leave midway, come back. See the state-transition table below |
+| Any multi-step flow | Leave midway, come back. See "Interruption and re-entry" below |
 | Any money or quota | The boundary exactly, then one past it |
 
 ## Interruption and re-entry

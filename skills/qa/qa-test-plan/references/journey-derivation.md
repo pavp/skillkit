@@ -27,7 +27,7 @@ A run stopped early should have bought the most information — that is the whol
 
 ## Boundary checklist
 
-Per input, derive the variant walks that matter:
+Per input, derive the variant cases that matter:
 
 | Input kind | Boundaries |
 |---|---|
