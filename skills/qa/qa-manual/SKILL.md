@@ -37,8 +37,8 @@ Capability (step 1) — ordered; first match wins:
 | Condition | Action |
 |---|---|
 | App not responding | Start it ONLY via a declared project script whose full command chain you inspected. If it migrates, resets, or seeds → **BLOCKED**, ask first. Report what running it did. |
-| App reachable + browser MCP or project-installed Playwright/Puppeteer/Selenium | Proceed under `browser-automation-safety`. |
-| App reachable, no browser driver, CLI/API surface exists | Proceed on journeys reachable through it; every UI-only journey goes to "not walked" (`surface unavailable`). Cannot be PASS if a baseline journey is UI-only. |
+| App reachable + a browser driver found anywhere in step 1's search | Proceed under `browser-automation-safety`. |
+| App reachable, no browser driver after searching ALL THREE locations, CLI/API surface exists | Proceed on journeys reachable through it; every UI-only journey goes to "not walked" (`surface unavailable`). Cannot be PASS if a baseline journey is UI-only. |
 | No driver and no CLI surface; app unreachable; a credential/URL/permission missing; `qa-test-plan` unavailable | **STOP → BLOCKED.** Name what is missing and ask. Never a verdict. |
 | App or browser dies after walking began | Stop walking. Verdict is PARTIAL; remaining journeys are "not walked" with the loss as reason. Never re-run a start script to recover without reporting it. |
 
@@ -54,7 +54,7 @@ Performance is observed, never benchmarked: a stated budget exceeded is a VIOLAT
 
 ## Execution Steps
 
-1. **Detect capability** and apply the gate; on BLOCKED go straight to the Output Contract.
+1. **Detect capability.** Search all three places a driver can live before concluding there is none: (a) the app's own project — its dependencies and scripts; (b) your own environment — an available browser skill or MCP server, which needs no install; (c) the system — an already-cached browser a driver can drive. Never infer "no browser" from the app's project alone; that is the common way a run silently degrades to API-only and files real UI evidence as "not walked". State where you looked and what you found. Then apply the gate; on BLOCKED go straight to the Output Contract.
 2. **Get the plan** — use or invoke `qa-test-plan`. Carry its requirement-source authority and isolation status forward verbatim, never re-derived; the run's authority is the weaker of the plan's and this run's. Ask for missing access before walking, not midway.
 3. **Walk the baseline first** — the plan's rank-1 journey when no requirement states an intended one. If it cannot complete, stop broad exploration and report: on a broken baseline every downstream finding is noise.
 4. **Walk in order,** highest blast radius first, narrating each journey as taken and capturing evidence per `browser-automation-safety`.
@@ -67,7 +67,7 @@ Performance is observed, never benchmarked: a stated budget exceeded is a VIOLAT
 
 **BLOCKED** → return only what was missing, what would resolve it, and the plan left unwalked. Never a verdict. Otherwise return, in order:
 
-- **Capability + requirement authority + isolation** — what drove the app, what a start script did, what surface went unverified, and the isolation declaration. Degraded or absent authority means no finding can be called a failure; say so here.
+- **Capability + requirement authority + isolation** — what drove the app, where you searched for a driver and what you found, what a start script did, what surface went unverified, and the isolation declaration. Degraded or absent authority means no finding can be called a failure; say so here.
 - **Verdict** — PASS / FAIL / PASS WITH GAPS (requirement journeys held, undefined behavior found) / PARTIAL (the run stopped early, or any planned baseline journey went unwalked — never PASS) / EXPLORATORY ONLY (no stated requirement or degraded authority: nothing here can be called a pass or a failure). Confirming a reported bug: CONFIRMED or NOT REPRODUCED — the latter means not with these steps, not that it does not exist.
 - **Coverage** — journeys walked / total planned, beside the verdict.
 - **Findings index** — one line each, grouped by authority (violations → gaps → exploratory): `<n>. <LABEL> — <journey> — <what broke>`.
