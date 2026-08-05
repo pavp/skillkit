@@ -23,6 +23,7 @@ Best run in a context that never saw the implementation. A caller that can start
 - **Declare isolation, defaulting to degraded.** Report the run as isolated ONLY if this context never authored or edited the implementation, never read an implementation file, and received no code or diff excerpt in its instructions. If any is true or unclear — including implementation detail arriving mid-run via a stack trace, an error page with source paths, or start-script output — declare NOT isolated and treat the verdict as degraded, exactly like a degraded requirement source.
 - **A plan comes first.** Use a `qa-test-plan` output, or invoke it. Never derive the PLANNED journeys here; the unplanned divergence of step 5 is the sole exception, and every finding from it is EXPLORATORY.
 - **Before the first browser call, load `browser-automation-safety`** and obey it for the rest of the run. A CLI/API-only run makes no such call and skips it.
+- **Start every run from clean browser state.** Use a fresh, throwaway profile — never a shared or persistent one, whatever a browser tool defaults to. A leftover cookie or storage entry means you walk in already authenticated, and a journey that passes as an unauthorized user may only be passing because a previous session leaked in. Stored auth from the project's own config (step 1) is the one deliberate exception: use it, and say you did. Same rule as context isolation, one layer down.
 - **Every finding carries its authority** (see gate). Unlabeled is a violation — mixing opinion into citable failures is how real bugs get discarded alongside them.
 - **Observed, or it did not happen.** Narrate each finding as the journey actually walked. No inference from code or plausibility.
 - **Ask, never invent, for access.** A journey needing a URL, token, credential, account, permission, or seeded state STOPS and asks — never guess an endpoint, fabricate a credential, or substitute an account you happen to have.
@@ -54,7 +55,12 @@ Performance is observed, never benchmarked: a stated budget exceeded is a VIOLAT
 
 ## Execution Steps
 
-1. **Detect capability.** Search all three places a driver can live before concluding there is none: (a) the app's own project — its dependencies and scripts; (b) your own environment — an available browser skill or MCP server, which needs no install; (c) the system — an already-cached browser a driver can drive. Never infer "no browser" from the app's project alone; that is the common way a run silently degrades to API-only and files real UI evidence as "not walked". State where you looked and what you found. Then apply the gate; on BLOCKED go straight to the Output Contract.
+1. **Detect capability**, taking the first driver this order finds — most app-specific wins, never most convenient. Never infer "no browser" from one location; that is the common way a run silently degrades to API-only and files real UI evidence as "not walked". State where you looked, what you took, and anything you had to skip.
+   1. **The app's project** — its own driver plus config (base URL, devices, timeouts, stored auth). This is how the team tests this app, so it outranks a generic browser. Using a generic browser while the project ships config is degraded coverage: declare it.
+   2. **Your own environment** — an available browser skill or MCP server. Needs no install; the right default when the project ships none.
+   3. **A cached system browser** — only as a rescue when 1 or 2 exist but their binary is missing. Never as a shortcut past 1.
+   
+   Then apply the gate; on BLOCKED go straight to the Output Contract.
 2. **Get the plan** — use or invoke `qa-test-plan`. Carry its requirement-source authority and isolation status forward verbatim, never re-derived; the run's authority is the weaker of the plan's and this run's. Ask for missing access before walking, not midway.
 3. **Walk the baseline first** — the plan's rank-1 journey when no requirement states an intended one. If it cannot complete, stop broad exploration and report: on a broken baseline every downstream finding is noise.
 4. **Walk in order,** highest blast radius first, narrating each journey as taken and capturing evidence per `browser-automation-safety`.
@@ -67,7 +73,7 @@ Performance is observed, never benchmarked: a stated budget exceeded is a VIOLAT
 
 **BLOCKED** → return only what was missing, what would resolve it, and the plan left unwalked. Never a verdict. Otherwise return, in order:
 
-- **Capability + requirement authority + isolation** — what drove the app, where you searched for a driver and what you found, what a start script did, what surface went unverified, and the isolation declaration. Degraded or absent authority means no finding can be called a failure; say so here.
+- **Capability + requirement authority + isolation** — what drove the app, where you searched for a driver and what you took, whether the browser started from clean state (and any stored auth used), what a start script did, what surface went unverified, and the context-isolation declaration. Degraded or absent authority means no finding can be called a failure; say so here.
 - **Verdict** — PASS / FAIL / PASS WITH GAPS (requirement journeys held, undefined behavior found) / PARTIAL (the run stopped early, or any planned baseline journey went unwalked — never PASS) / EXPLORATORY ONLY (no stated requirement or degraded authority: nothing here can be called a pass or a failure). Confirming a reported bug: CONFIRMED or NOT REPRODUCED — the latter means not with these steps, not that it does not exist.
 - **Coverage** — journeys walked / total planned, beside the verdict.
 - **Findings index** — one line each, grouped by authority (violations → gaps → exploratory): `<n>. <LABEL> — <journey> — <what broke>`.
