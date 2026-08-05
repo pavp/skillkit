@@ -54,6 +54,13 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`doc-sync`](skills/workflow/doc-sync/SKILL.md) | Reconcile existing docs with code that changed under them — patches a doc claim (command, signature, path, count) the code provably contradicts, under an Iron Law (no edit without a hard contradiction). Two gates: audience (agent-facing docs aggressively, human-facing conservatively) and scope (diff vs. doc-set audit). Never overwrites a narrated WHY — that's `Needs-decision`. An actor; local edits only, never pushes. |
 | [`doc-generate`](skills/workflow/doc-generate/SKILL.md) | Generate LLM-first docs from scratch where none exist — a context wiki or agent instructions (`AGENTS.md`/`CLAUDE.md`) — by analyzing the code. Every claim is anchored to where it was observed; under an Iron Law it never asserts a WHY the code can't prove (fabricated rationale is flagged `inferred — verify`, not stated). Dense and action-first for an agent reader. Updating existing docs → `doc-sync`; human-facing prose is out of scope. An actor; local writes only, never pushes. |
 
+### qa
+
+| Skill | What it does |
+|-------|--------------|
+| [`qa-test-plan`](skills/qa/qa-test-plan/SKILL.md) | Turn a requirement into the journeys worth walking — blast-radius ranked, written as continuous narrative prose rather than decoupled steps, each labeled REQUIREMENT / REQUIREMENT GAP / EXPLORATORY. Never reads the implementation, so it catches what the code omitted; the requirement's own gaps are the headline finding. Plans; never executes. |
+| [`qa-manual`](skills/qa/qa-manual/SKILL.md) | Walk a running app by hand and report whether it holds — verifies against the requirement, pushes past it for edge cases, observes user-visible slowness. Every finding carries its authority so opinions never get filed as citable failures. Blocks and asks for missing access instead of inventing it; never reads the implementation. Reports; never fixes (→ `diagnose-fix`). |
+
 ## Install
 
 Skills install via [`skills.sh`](https://skills.sh) (`npx skills`), the open
