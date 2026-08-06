@@ -29,7 +29,7 @@ A skill may ship supporting files alongside `SKILL.md`:
 `docs/skill-style-guide.md` is the normative contract. The essentials:
 
 - **Frontmatter** (required): `name`, one-line quoted `description` (≤400 chars; pushy shape — what it does → a "use this when …" clause → concrete anchors → `→ sibling` disambiguation; under-triggering is the failure to beat), `license`, `metadata.author`, `metadata.version`.
-- **Body budget**: target 180–450 tokens, recommended max 700, hard max 1000. Move detail (examples, schemas, long rules) into `references/`.
+- **Body budget**: target 400–1200 tokens, hard max 3000. Move rationale, examples, and lookup checklists into `references/` — but never a gate, threshold, or output shape, since references go unread at runtime.
 - **Section order**: Frontmatter → Activation Contract → Hard Rules → Decision Gates → Execution Steps → Output Contract → References.
 - Write imperative runtime instructions, not tutorial prose. Decision forks go in compact tables. References point to local files only — never external URLs as the primary source.
 
