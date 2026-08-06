@@ -24,7 +24,7 @@ Do not create a skill when the pattern is trivial, one-off, or better served by 
 - A skill is a runtime instruction contract for an LLM, not human documentation.
 - Do not add a `Keywords` section; preserve essential trigger words in `description`.
 - References must point to local files.
-- Keep the skill body concise: target 180–450 tokens, recommended max 700, hard max 1000.
+- Keep the skill body concise: target 400–1200 tokens, hard max 3000. Move rationale and examples to `references/` — never a gate, threshold, or output shape, which agents will not read there.
 
 ## Decision Gates
 
