@@ -7,6 +7,28 @@ format).
 Each skill is a directory under `skills/` containing a `SKILL.md` with YAML
 frontmatter (`name`, `description`) and a markdown body of runtime instructions.
 
+## Install
+
+Skills install via [`skills.sh`](https://skills.sh) (`npx skills`), the open
+agent-skills installer. No build step — the `SKILL.md` files are consumed as-is.
+
+```bash
+# Install all skills to the agents you choose (interactive)
+npx skills add pavp/skillkit
+```
+
+Use `npx skills list` to see what's installed and `npx skills update` to refresh.
+
+### Recommended bundle: cleanup
+
+`leave-it-cleaner` works standalone, but it consults the `clean-*` judgment
+skills when they are installed — each judge is also independently useful on its
+own. To install the full cleanup family:
+
+```bash
+npx skills add pavp/skillkit -s leave-it-cleaner -s clean-comments -s clean-names -s clean-functions -s clean-structure -a claude-code
+```
+
 ## Skills
 
 Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
@@ -36,18 +58,28 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`ts-function-signatures`](skills/typescript/ts-function-signatures/SKILL.md) | Design function/hook/component signatures — positional vs options object, defaults, overloads vs unions. |
 | [`ts-module-organization`](skills/typescript/ts-module-organization/SKILL.md) | Organize modules — `import type` / `verbatimModuleSyntax`, barrel files, path aliases, circular deps. |
 
+### review
+
+| Skill | What it does |
+|-------|--------------|
+| [`review-6-lens`](skills/review/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. Every blocking finding is then challenged by an independent refuter; a finding only stops blocking on a cited counter-example, and nothing is ever dropped. |
+| [`pr-review`](skills/review/pr-review/SKILL.md) | Review someone else's PR end-to-end and leave one consolidated comment on it. Orchestrates only: `review-6-lens` judges, you pick which findings become comments, `review-comments` writes them. Nothing posts unconfirmed. |
+| [`review-comments`](skills/review/review-comments/SKILL.md) | Handle reviewer comments on your PR and reply to feedback — fires the moment comments need a written response, even after you fix the flagged code. Organic teammate voice, the mechanism behind every claim, a closing question only when a real decision belongs to the other person. Consolidates, gates on confirmation; never posts. |
+
+### clean
+
+| Skill | What it does |
+|-------|--------------|
+| [`leave-it-cleaner`](skills/clean/leave-it-cleaner/SKILL.md) | Boy Scout Rule, any language — after the asked task, make a cohesive, proportional, behavior-preserving cleanup of the zone you touched, and say what you did. |
+| [`clean-comments`](skills/clean/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / out-of-domain via the surprise test and reason-token gate, then prescribes a remedy (delete / delete-comment-span / keep / defer). A caller-declared `fresh` / `established` provenance axis sets how strict the bar is. Judges and prescribes; never edits. |
+| [`clean-names`](skills/clean/clean-names/SKILL.md) | Judgment authority on names, any language — classifies an identifier against Clean Code rules N1–N7 (descriptive, abstraction, standard, unambiguous, scope-length, no encoding, side-effect) and suggests a fix; defers TS type/signature/module concerns to the `ts-*` skills. Judges; never renames. |
+| [`clean-functions`](skills/clean/clean-functions/SKILL.md) | Judgment authority on functions, any language — classifies against F2–F5 (output-arg mutation, flag arg, dead code, single-responsibility) and suggests a split boundary; arg-count (F1) defers to `ts-function-signatures` in TS, names/types defer to `clean-names` / `ts-*`. Judges; never edits. |
+| [`clean-structure`](skills/clean/clean-structure/SKILL.md) | Judgment authority on the shape of a code body, any language — classifies against S1–S5 (duplication, magic value, obscured intent, repeated type switch, train wreck) and suggests a fix direction; names/types/comments/single-purpose defer to `clean-names` / `ts-*` / `clean-comments` / `clean-functions`. Judges; never edits. |
+
 ### workflow
 
 | Skill | What it does |
 |-------|--------------|
-| [`review-6-lens`](skills/workflow/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. Every blocking finding is then challenged by an independent refuter; a finding only stops blocking on a cited counter-example, and nothing is ever dropped. |
-| [`pr-review`](skills/workflow/pr-review/SKILL.md) | Review someone else's PR end-to-end and leave one consolidated comment on it. Orchestrates only: `review-6-lens` judges, you pick which findings become comments, `review-comments` writes them. Nothing posts unconfirmed. |
-| [`review-comments`](skills/workflow/review-comments/SKILL.md) | Handle reviewer comments on your PR and reply to feedback — fires the moment comments need a written response, even after you fix the flagged code. Organic teammate voice, the mechanism behind every claim, a closing question only when a real decision belongs to the other person. Consolidates, gates on confirmation; never posts. |
-| [`leave-it-cleaner`](skills/workflow/leave-it-cleaner/SKILL.md) | Boy Scout Rule, any language — after the asked task, make a cohesive, proportional, behavior-preserving cleanup of the zone you touched, and say what you did. |
-| [`clean-comments`](skills/workflow/clean-comments/SKILL.md) | Judgment authority on comments, any language — classifies each as noise / load-bearing / commented-out / out-of-domain via the surprise test and reason-token gate, then prescribes a remedy (delete / delete-comment-span / keep / defer). A caller-declared `fresh` / `established` provenance axis sets how strict the bar is. Judges and prescribes; never edits. |
-| [`clean-names`](skills/workflow/clean-names/SKILL.md) | Judgment authority on names, any language — classifies an identifier against Clean Code rules N1–N7 (descriptive, abstraction, standard, unambiguous, scope-length, no encoding, side-effect) and suggests a fix; defers TS type/signature/module concerns to the `ts-*` skills. Judges; never renames. |
-| [`clean-functions`](skills/workflow/clean-functions/SKILL.md) | Judgment authority on functions, any language — classifies against F2–F5 (output-arg mutation, flag arg, dead code, single-responsibility) and suggests a split boundary; arg-count (F1) defers to `ts-function-signatures` in TS, names/types defer to `clean-names` / `ts-*`. Judges; never edits. |
-| [`clean-structure`](skills/workflow/clean-structure/SKILL.md) | Judgment authority on the shape of a code body, any language — classifies against S1–S5 (duplication, magic value, obscured intent, repeated type switch, train wreck) and suggests a fix direction; names/types/comments/single-purpose defer to `clean-names` / `ts-*` / `clean-comments` / `clean-functions`. Judges; never edits. |
 | [`slice-plan`](skills/workflow/slice-plan/SKILL.md) | Forecast the changed lines of a planned implementation BEFORE code exists — itemized per-file estimates against the review budget (default 400, user-overridable via invocation or project context) that `slice-diff` enforces after the fact. Over budget, plans slice boundaries (files and commits per slice, dependency order) and gates on confirmation; under it, states the total and steps aside. Plans only; never implements, never mutates git. |
 | [`slice-diff`](skills/workflow/slice-diff/SKILL.md) | Slice an oversized git diff into a chain of reviewable PRs — pure git (no SDD), the review budget as the hard gate (default 400, user-overridable via invocation or project context), domain/layer as a soft cut signal, cut by commit boundary first. Shows the plan, gates on confirmation, then executes. |
 | [`browser-automation-safety`](skills/workflow/browser-automation-safety/SKILL.md) | Resource-safety rules loaded before any browser automation (Playwright, Puppeteer, browser MCP) — always tear down contexts, one browser instance, never full-page screenshots, mandatory timeouts, RAM-scaled concurrency — so a run never exhausts memory or leaks browser processes. A rules authority; never drives a browser. |
@@ -61,34 +93,6 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 |-------|--------------|
 | [`qa-test-plan`](skills/qa/qa-test-plan/SKILL.md) | Turn a requirement into the journeys worth walking — blast-radius ranked, written as continuous narrative prose rather than decoupled steps, each labeled REQUIREMENT / REQUIREMENT GAP / EXPLORATORY. Never reads the implementation, so it catches what the code omitted; the requirement's own gaps are the headline finding. Plans; never executes. |
 | [`qa-manual`](skills/qa/qa-manual/SKILL.md) | Walk a running app by hand and report whether it holds — verifies against the requirement, pushes past it for edge cases, observes user-visible slowness. Every finding carries its authority so opinions never get filed as citable failures. Blocks and asks for missing access instead of inventing it; never reads the implementation. Reports; never fixes (→ `diagnose-fix`). |
-
-## Install
-
-Skills install via [`skills.sh`](https://skills.sh) (`npx skills`), the open
-agent-skills installer. No build step — the `SKILL.md` files are consumed as-is.
-
-```bash
-# Install all skills to the agents you choose (interactive)
-npx skills add pavp/skillkit
-
-# Pick specific skills and agents
-npx skills add pavp/skillkit -s react-component -a claude-code -a opencode
-
-# Install everything to every detected agent
-npx skills add pavp/skillkit --all
-```
-
-Use `npx skills list` to see what's installed and `npx skills update` to refresh.
-
-### Recommended bundle: cleanup
-
-`leave-it-cleaner` works standalone, but it consults the `clean-*` judgment
-skills when they are installed — each judge is also independently useful on its
-own. To install the full cleanup family:
-
-```bash
-npx skills add pavp/skillkit -s leave-it-cleaner -s clean-comments -s clean-names -s clean-functions -s clean-structure -a claude-code
-```
 
 ## Authoring
 
