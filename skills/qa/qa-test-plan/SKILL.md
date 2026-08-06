@@ -17,7 +17,7 @@ Do NOT load to run anything (→ `qa-manual`), to author automated test code, or
 
 - **Never execute.** No browser, no test run, no code, no app.
 - **Never read the implementation.** Cases come from the requirement and the domain — never from code or a diff. Code-derived cases mirror what was built and go blind to what was omitted, the gap this skill exists to find.
-- **Declare isolation, defaulting to degraded.** Report the plan as isolated ONLY if this context never authored or edited the implementation, never read an implementation file, and received no code or diff excerpt in its instructions. If any is true or unclear, declare NOT isolated and mark the coverage claim degraded.
+- **Isolate first; declaring the bias is the fallback, never the choice.** This context is CONTAMINATED if it authored or edited the implementation, read an implementation file, or received a code or diff excerpt in its instructions — if unclear, contaminated. Contaminated and able to start a fresh run that lacks all three (a capability, never a named runtime)? Hand the derivation to it with the requirement only, and relay its plan — a degraded plan is a choice when a clean one was available. No such capability? Derive here, declare NOT isolated, mark the coverage claim degraded, and say which capability was missing. Clean? Derive and declare isolated.
 - **A PR is never a requirement source** — not its title, body, commits, or diff. It describes what was built, not what was asked. Resolve a PR link to its linked issue, or plan with no requirement.
 - **Cases are narrative prose covering a complete journey**, entry to outcome — never decoupled numbered steps. A continuous narration exposes state breaking mid-flow; a step list reads fine out of order without anyone noticing it lost meaning.
 - **Every case carries its authority** (see gate). Unlabeled is a violation — mixing opinion into citable failures is how real findings get discarded alongside them.
@@ -65,7 +65,7 @@ See `references/journey-derivation.md` for the boundary checklist, state-transit
 
 `qa-manual` walks this output: the blast-radius ordering, each case's authority label, and each case's access list are load-bearing — never drop or reorder them. Return, in order:
 
-- **Requirement source + authority + isolation** — which gates fired, and the isolation declaration. For degraded or absent authority, that no case can be called a failure.
+- **Requirement source + authority + isolation** — which gates fired, and the isolation verdict as one of: isolated · derived by a fresh isolated run · NOT isolated because no isolated run was available (name what was missing). For degraded or absent authority, that no case can be called a failure.
 - **Journeys** — blast-radius ranked, one line each on why it matters.
 - **Cases** — grouped by journey in blast-radius order; within a journey, the baseline case first, then variants. Each is narrative prose walking the complete path, carrying its authority label, the access it needs, and the expected outcome inside the narration. A REQUIREMENT GAP case names the undefined condition instead.
 - **Requirement gaps** — the headline: each undefined condition and the decision it needs. This section is the deliverable even if no case ever runs.
