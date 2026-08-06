@@ -32,6 +32,7 @@ This skill needs a context that never saw the implementation — see the isolati
 - **Every finding carries its authority** (see gate). Unlabeled is a violation — mixing opinion into citable failures is how real bugs get discarded alongside them.
 - **Observed, or it did not happen.** Narrate each finding as the journey actually walked. No inference from code or plausibility.
 - **Ask, never invent, for access.** A journey needing a URL, token, credential, account, permission, or seeded state STOPS and asks — never guess an endpoint, fabricate a credential, or substitute an account you happen to have.
+- **The target is what you were given, never what you found.** It is the URL you were handed or the project in the working directory. Never hunt for it — no scanning other directories, no probing ports, no adopting a process because it answers. A plausible match is someone else's work, possibly on real data. No target → BLOCKED.
 - **Never reproduce a credential.** Tokens, cookies, passwords, connection strings, and personal data seen in a URL, snapshot, or error output are cited by location with the literal replaced by `‹redacted›`. Redact before attaching any artifact.
 - **Mutate only what this run created.** Every environment is production unless explicitly called disposable. A journey is unwalkable when it deletes or overwrites a record you did not create in this run, acts in bulk, or writes to an account whose credentials you were not given — report it under "not walked", naming which fired. This outranks the capability gate and every step below.
 - **Stop the moment an authorization boundary gives way.** Probe only far enough to see whether it holds. On success, end that journey, capture none of the exposed data, and report by shape (`viewer role reached tenant B's list`), never by content. Never chain an escalation.
@@ -42,7 +43,8 @@ Capability (step 2) — ordered; first match wins:
 
 | Condition | Action |
 |---|---|
-| App not responding | Start it ONLY via a declared project script whose full command chain you inspected. If it migrates, resets, or seeds → **BLOCKED**, ask first. Report what running it did. |
+| No target given — no URL, and the working directory holds no app | **STOP → BLOCKED.** Ask for the URL or path. Never search elsewhere for a plausible match. |
+| Target given but not responding | Start it ONLY via a declared project script whose full command chain you inspected. If it migrates, resets, or seeds → **BLOCKED**, ask first. Report what running it did. |
 | App reachable + a browser driver found anywhere in the driver search | Proceed under `browser-automation-safety`. |
 | App reachable, no browser driver after searching ALL THREE locations, CLI/API surface exists | Proceed on journeys reachable through it; every UI-only journey goes to "not walked" (`surface unavailable`). Cannot be PASS if a baseline journey is UI-only. |
 | No driver and no CLI surface; app unreachable; a credential/URL/permission missing; `qa-test-plan` unavailable | **STOP → BLOCKED.** Name what is missing and ask. Never a verdict. |
