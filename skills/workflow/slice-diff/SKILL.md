@@ -4,19 +4,19 @@ description: "Trigger: a diff too big to review. Slices an oversized git diff in
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.2"
+  version: "1.3"
 ---
 
 ## Activation Contract
 
-Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branch) may exceed **400 changed lines**, or the user asks to split a PR, cut review slices, chain/stack PRs, or reduce reviewer load. Operate on git alone — `git diff`, `git log`, `git diff --stat` are the only sources of truth. Do not read external forecasts, planning config, or delivery strategy.
+Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branch) may exceed the review budget (default **400 changed lines**), or the user asks to split a PR, cut review slices, chain/stack PRs, or reduce reviewer load. Operate on git alone for measurement — `git diff`, `git log`, `git diff --stat` are the only sources of truth. Do not read external forecasts, planning config, or delivery strategy; the sole non-git input is an explicitly named review budget (per Hard Rules).
 
 ## Hard Rules
 
 - Resolve the base branch from git via the fallback chain, never assume `main`; if it cannot resolve, STOP and ask. `main` here is an illustrative placeholder. See references → "Resolving the Base".
-- Treat **>400 changed lines** (`additions + deletions` over the range) as the hard gate: over it, split unless the user accepts `size:exception`. Exclude binary files from the sum. See references → "Measuring the Range".
+- The review budget defaults to **400 changed lines** (`additions + deletions` over the range, binary files excluded) and is the hard gate: over it, split unless the user accepts `size:exception`. Use a different number ONLY when the user names one explicitly — in the invocation ("budget 800", including one carried by a confirmed `slice-plan` checkpoint), or in the project's agent-instruction files (AGENTS.md or the runtime's equivalent) explicitly designated as the PR/review size budget — a stray line count is not a budget; when non-default, quote the exact source line in the output. Invocation beats project context. NEVER infer a budget from repo size, history, or diff feel, and never adjust it mid-run; no explicit number → 400. A named budget must be a positive integer; under 50 or over 5000, restate it and STOP for confirmation before applying. Read every "budget" in this skill as the active number. See references → "Measuring the Range".
 - Use domain/layer only as a soft signal for WHERE to cut, never as a second blocking gate; infer it from path segments, no config file. When grouping collapses to one bucket, fall through to `size:exception`.
-- Keep each PR one deliverable work unit that builds independently; the 400-line budget is the binding gate (a ~≤60-minute review is a non-binding heuristic under it).
+- Keep each PR one deliverable work unit that builds independently; the active budget is the binding gate (a ~≤60-minute review is a non-binding heuristic under it).
 - Screen the range for merge commits before cutting; if any exist, cut by `--first-parent` or path — never naively cherry-pick a merge (it silently drops a parent's changes). See references → "Cut Priority".
 - SHOW the full cut plan and STOP for explicit user confirmation before any mutation. Never create branches, cherry-pick, push, or open PRs before confirmation.
 - Re-validate git state immediately before executing. If dirty or diverged, do not loop: report the concrete blocker and STOP, asking the user to reconcile. See references → "State Re-Validation".
@@ -30,9 +30,9 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 
 | Condition | Action |
 |---|---|
-| Range ≤400 lines and focused | Keep single PR. |
-| >400, commits split cleanly under the budget | Cut by commit boundaries. |
-| A single commit alone exceeds 400 | Subdivide that commit by layer/domain paths. |
+| Range within budget and focused | Keep single PR. |
+| Over budget, commits split cleanly under it | Cut by commit boundaries. |
+| A single commit alone exceeds the budget | Subdivide that commit by layer/domain paths. |
 | Cannot split into independent units (generated/vendor/migration or indivisible authored logic) | Mark `size:exception`, do not force. |
 | Each slice builds/merges alone (autonomous) | Ask; recommend Stacked PRs to base. |
 | A slice cannot stand alone until the chain completes | Ask; recommend Feature Branch Chain with draft tracker. |
@@ -48,7 +48,7 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 
 ## Output Contract
 
-Before confirmation, return the cut plan: chain strategy, PR order, files/commits per PR, dependency diagram (`📍` on the current PR), per-PR review budget (`additions + deletions`), and any `size:exception` rationale. After execution, return the created branches/PRs and each PR's verification result.
+Before confirmation, return the cut plan opening with the active budget and its source (`default 400` or the user's explicit number, quoting its source line): chain strategy, PR order, files/commits per PR, dependency diagram (`📍` on the current PR), per-PR measured lines (`additions + deletions`), and any `size:exception` rationale. After execution, return the created branches/PRs and each PR's verification result.
 
 ## References
 
