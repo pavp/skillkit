@@ -1,6 +1,6 @@
 ---
 name: slice-plan
-description: "Trigger: sizing work BEFORE coding it. Forecasts the changed lines of a planned implementation and, over 400, plans slice boundaries — which files and commits per slice — before any code exists. Use whenever implementation is about to start with no size plan: 'plan this feature', 'will this fit one PR', a ticket that smells bigger than one review. Diff already exists → slice-diff."
+description: "Trigger: sizing work BEFORE coding it. Forecasts the changed lines of planned work and, over 400, plans slice boundaries — files and commits per slice. Use whenever implementation is about to start with no size plan, or is mid-flight unsized: 'plan this feature', 'will this fit one PR', a ticket that smells bigger than one review. Diff already too big → slice-diff."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
@@ -9,37 +9,42 @@ metadata:
 
 ## Activation Contract
 
-Load this skill when an implementation is about to start and its size is unplanned — before code exists. Forecast the changed lines of the whole change; over **400**, plan slice boundaries first so commits are born ordered by slice. This skill plans only: it never writes implementation code and never mutates git. Splitting a diff that already exists → `slice-diff`.
+Load this skill when an implementation is about to start and its size is unplanned — before code exists. Forecast the changed lines of the whole change; over **400**, plan slice boundaries first so commits are born ordered by slice. This skill plans only: it never writes implementation code and never mutates git. Splitting a diff that is already oversized → `slice-diff`.
 
 ## Hard Rules
 
-- Forecast BEFORE the first edit. If implementation already began, measure the real diff (`git diff --stat` against the base) and hand what exists to `slice-diff`; forecast only the remainder.
-- The forecast MUST be itemized: every file or area to touch, its own estimated `additions + deletions`, and a one-line basis (existing file size, a comparable past change, scope of a new file). A single unbacked total is not a forecast — itemize it or report that you cannot estimate and why.
+- Forecast BEFORE the first edit. If implementation already began, measure the real diff (`git diff --stat` against the base; resolve the base per `slice-diff`'s fallback chain, and if it cannot resolve, STOP and ask) and apply the gate to the COMBINED total: real lines + remainder forecast. Over 400 combined, the existing diff routes to `slice-diff` and the remainder gets a slice plan — never judge the halves separately.
+- The forecast MUST be itemized: every file or area to touch, its own estimated `additions + deletions` as a low–high range, and a one-line basis (existing file size, a comparable past change, scope of a new file). A point estimate counts only when backed by a measured comparable. A single unbacked total is not a forecast — itemize it or declare `unestimable`.
 - Treat **>400 estimated changed lines** (binaries excluded) as the gate — the same budget `slice-diff` enforces after the fact. Estimation runs on the same currency so plan and remedy agree.
-- When an estimate is uncertain and its plausible range crosses 400, plan slices; never average the range into a pass.
+- When an estimate is uncertain and its plausible range crosses 400 (high end above it), plan slices; never average the range into a pass.
 - Each slice is one deliverable work unit that builds and passes tests on its own, sliced along natural boundaries (layer, domain, feature); order slices so each depends only on earlier ones.
-- Never invent ceremony under the budget: forecast ≤400 → state the total in one line and let implementation proceed as a single unit. No slice plan, no confirmation stop.
+- Never invent ceremony under the budget: forecast ≤400 → state the total in one line and let implementation proceed as a single unit. No slice plan, no confirmation stop — but the overrun checkpoint below still applies.
 - Over the budget: SHOW the slice plan and STOP for explicit user confirmation before implementation starts.
-- If mid-implementation the current slice's real diff exceeds its estimate and crosses 400 on its own, stop and re-forecast the remaining slices; the accumulated diff belongs to `slice-diff`, not to a silently stretched plan.
 
 ## Decision Gates
 
-| Forecast | Action |
+| Situation | Action |
 |---|---|
-| Total ≤400 | Single work unit. State the total, proceed — no plan. |
-| >400, natural boundaries exist | Slice plan: each slice ≤400, buildable alone, ordered by dependency. |
-| >400, no independent boundaries (indivisible logic, generated code, migration) | Flag `size:exception` up front with rationale; single unit by user decision. |
-| Estimate range straddles 400 | Plan slices. |
+| Total ≤400 | Single work unit. State the total and the checkpoint, proceed — no plan. |
+| >400, natural boundaries exist | Slice plan: each slice ≤400, buildable alone, ordered by dependency. STOP for confirmation. |
+| >400, no independent boundaries (indivisible logic, generated code, migration) | Flag `size:exception` up front with rationale; STOP for user decision. |
+| Estimate range straddles 400 | Plan slices (Hard Rule; never average into a pass). |
+| Implementation already began | Measure the real diff; gate on real + forecast combined; over 400, existing diff → `slice-diff`, remainder → slice plan. |
+| An item cannot be estimated | Verdict `unestimable`: report which items, why, and what input would unblock; STOP for user decision. Never fabricate a number to reach another verdict. |
 
 ## Execution Steps
 
 1. List every file or area the change touches (create / modify / delete). Read enough of each to ground the estimate — do not implement anything.
-2. Estimate per item with its basis; sum the total.
-3. Apply the decision gate.
+2. Estimate per item with its range and basis; sum the total.
+3. Apply the decision gates.
 4. Over budget: define slices — contents (files, planned commits), estimated lines, order, and what each depends on.
-5. Present the plan and STOP for confirmation.
-6. On confirmation, implementation follows the plan slice by slice, commits scoped to the current slice — each slice lands as its own PR (chaining an already-cut diff is `slice-diff`'s job).
+5. Present the plan (or the single-unit total) with the overrun checkpoint embedded, and STOP when a gate requires confirmation.
+6. On confirmation, implementation follows the plan slice by slice, commits scoped to the current slice; the implementer opens each slice's PR in plan order on the planned base. `slice-diff` enters only if a cut diff is itself oversized.
 
 ## Output Contract
 
-Return the itemized forecast table (item, estimated lines, basis) and the total, then the verdict: `single unit` (≤400), `slice plan`, or `size:exception`. For a slice plan, add a per-slice table — slice name, contents, estimated lines, depends-on — and the implementation order. STOP before any implementation when a plan or exception is on the table.
+Return the itemized forecast table (item, estimated range, basis) and the total, then the verdict: `single unit` (≤400), `slice plan`, `size:exception`, or `unestimable`. For a slice plan, add a per-slice table — slice name, contents, estimated lines, depends-on — and the implementation order. Every emitted plan or single-unit verdict MUST embed this checkpoint verbatim, so the guard travels with the artifact into sessions where this skill is no longer loaded: "Before each commit, run `git diff --stat <base>`; if the current work unit — slice or single unit — exceeds 400 real changed lines, stop: hand the accumulated diff to `slice-diff` and re-forecast the remainder with `slice-plan`." STOP before any implementation when a plan, exception, or `unestimable` verdict is on the table.
+
+## References
+
+- [../slice-diff/SKILL.md](../slice-diff/SKILL.md) — the after-the-fact sibling: base-resolution fallback chain, measurement commands, cut priority, and chain strategies for a diff that already exists.
