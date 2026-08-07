@@ -44,7 +44,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
 3. Resolve the spec (Decision Gates); normalize to text. Resolve `<baseline>` once per `references/dispatch.md` (~2000 tokens: stack, architecture rules, conventions, tooling) and inject it into every lens prompt — six lenses rediscovering the repo alone is the bulk of a run's cost.
 4. Dispatch the lenses as isolated reviews per `references/dispatch.md`, injecting `<baseline>`. Skip Spec if no spec; skip a lens whose surface is provably absent from the diff (`dispatch.md`'s applicability gate — fail toward running, executable content cancels every skip). Wait for all dispatched lenses — the next step needs the full set.
-5. Refute the blocking findings per `references/refute.md` (its triage table decides which; >15 blocking → 🔴/🟠 only, and point at `slice-diff`). Best-effort: if refutation cannot finish for ANY reason — no capable runtime, gate, failure, budget — go to step 6 with those findings unrefuted and record it. Never lose the report to a stalled step 5.
+5. Refute the blocking findings per `references/refute.md` (its triage table decides which; >6 blocking → 🔴/🟠 only, and >15 also points at `slice-diff`). The gate cuts by whole severity bands, never by importance; unrefuted findings keep their severity and their place. Best-effort: if refutation cannot finish for ANY reason — no capable runtime, gate, failure, budget — go to step 6 with those findings unrefuted and record it. Never lose the report to a stalled step 5.
 6. Aggregate per Output Contract. Do not merge.
 
 ## Output Contract
