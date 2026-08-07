@@ -15,7 +15,7 @@ Read the severity and the causality tag the lens already set (Spec findings have
 
 Nothing to refute → skip the step entirely and report as before.
 
-**Scale gate**: refutation costs roughly what the lenses did — one agent per blocking finding — so the fan-out is bounded by severity, not by appetite. Above **6** blocking findings, refute the 🔴 and 🟠 subset only (the severities that gate the merge) and leave the 🟡 unrefuted. Above **15**, keep that same 🔴/🟠 subset and add the `slice-diff` pointer: a diff that blocks in more than 15 places is asking to be split.
+**Scale gate**: refutation costs roughly what the lenses did — one agent per blocking finding — so the fan-out is bounded by severity, not by appetite. `SKILL.md` step 5 declares the thresholds and is their single authority; apply them as written there. Above the first, refute the 🔴 and 🟠 subset only (the severities that gate the merge) and leave the 🟡 unrefuted. Above the second, keep that same subset and add the `slice-diff` pointer: a diff that blocks in that many places is asking to be split.
 
 The full report ships unchanged either way. Unrefuted findings stay in the severity sections at their original severity — they are **not** downgraded, moved, or dropped, and §5 records both counts ("refuted N of M blocking findings"). The `slice-diff` pointer is an addition to the report, never a replacement for it: the reader still needs every finding.
 
