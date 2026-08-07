@@ -56,9 +56,12 @@ Invoke `review-6-lens` on `<base>...HEAD`. Pass the spec explicitly so it never 
 
 | Delegate result | Action |
 |-----------------|--------|
-| All 6 lenses returned (or Spec skipped for want of a spec) | continue; note the coverage |
-| Fewer lenses returned, or refutation was incomplete | continue, and carry that state **verbatim** into the gate header — the human must never read partial coverage as complete |
+| Every dispatched lens returned | continue; note the coverage |
+| A lens was **skipped** — by the applicability gate (`skipped (no applicable surface)`) or Spec for want of a spec | continue; report the skips as intended coverage, not as a caveat. A skip is a decision the delegate made on evidence, not a loss |
+| A **dispatched** lens did not return, or refutation was incomplete | continue, and carry that state **verbatim** into the gate header — the human must never read partial coverage as complete |
 | Errored, or returned nothing at all | abort entry A with the reason; emit no gate |
+
+Read the skip/clean distinction off the delegate's clean-lenses line; never infer it from a lens's absence. A skipped lens and a lens that died both produce no findings — only that line separates them, and the caveat belongs to the second alone. Reserving the caveat is what keeps it meaningful: a warning that fires on every correct docs-only run trains the reader to ignore the one that matters.
 
 ## Triage (entry A, step 4)
 
@@ -78,7 +81,7 @@ Emit `review-6-lens`'s report **verbatim first** — its findings carry the mech
 ```
 ## PR #<n> — <title> · <public|private> repo
 head <full-sha> · base <ref>
-<m> findings from <k> of 6 lenses<, coverage caveat if any>. Pick what to comment on.
+<m> findings from <k> lenses<, N skipped: no applicable surface><, coverage caveat if any>. Pick what to comment on.
 
 | # | Sev | Finding | Where | Lens | Note |
 |---|-----|---------|-------|------|------|

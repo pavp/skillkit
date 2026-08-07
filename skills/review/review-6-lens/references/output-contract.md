@@ -1,6 +1,6 @@
 # Output Contract
 
-How the orchestrator assembles the final report after the 6 lenses return. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order.
+How the orchestrator assembles the final report after every dispatched lens returns. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order.
 
 ## 1. Human lead
 
@@ -26,7 +26,7 @@ A `## ✅ Verified OK` section: bullets of what a lens **actively checked and cl
 
 ## 5. Clean lenses note
 
-One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "refuted N of M blocking findings" (scale gate, or a refuter that never returned). A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
+One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. List any lens skipped by the applicability gate separately as `<Lens>: skipped (no applicable surface)` — never fold it in with the clean lenses. A clean lens looked and found nothing; a skipped lens never looked, and the reader must be able to tell which coverage they actually have. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "refuted N of M blocking findings" (scale gate, or a refuter that never returned). A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
 
 ## 6. Verdict (optional)
 
@@ -42,6 +42,8 @@ Risk 3 (🔴, +1 pre-existing 🟠) | Read 4 (🟡) | Reliab 2 (🟠, +1 refuted
 
 A lens whose every finding is non-blocking shows `0` with no emoji: `Arch 0 (+2 pre-existing 🟡)`.
 
+A lens the applicability gate skipped shows `— (skipped)`, never `0`: `Resil — (skipped)`. `0` claims the lens ran and found nothing; a skipped lens never ran, and the most-scanned line of the report must not blur the two.
+
 ## All clean
 
-If every lens is clean: emit the human lead, skip the severity headings, state "All 6 lenses clean — no findings.", and still emit the summary line. Never collapse to a bare "all good".
+If every **dispatched** lens is clean: emit the human lead, skip the severity headings, state `All <n> dispatched lenses clean — no findings.` with `<n>` the count that actually ran, and still emit the summary line. A skipped lens NEVER satisfies "clean" — when any lens was skipped, this branch must also carry §5's skipped-lens list, and the literal "All 6" is forbidden. Never collapse to a bare "all good".
