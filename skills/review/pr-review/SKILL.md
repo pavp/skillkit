@@ -4,7 +4,7 @@ description: "Trigger: reviewing someone else's PR and leaving a comment on it. 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 ## Activation Contract
@@ -47,7 +47,7 @@ Detail for every step lives in `references/pipeline.md`.
 
 1. Check eligibility; capture head SHA, base, PR number, visibility. Ineligible or unreadable → stop.
 2. Fetch AND check out the PR head; its SHA must match step 1. Range is `<base>...HEAD`.
-3. Invoke `review-6-lens` on that range, spec passed explicitly (PR body / linked issue, else "no spec"). Its verdict is final. Partial → carry the coverage forward; failed → abort.
+3. Invoke `review-6-lens` on that range, spec passed explicitly (PR body / linked issue, else "no spec"). Its verdict is final. A lens it skipped for want of applicable surface is intended coverage, not a caveat; a dispatched lens that did not return is — carry that state forward. Failed → abort.
 4. Triage: preserve its order and tags verbatim, one row per finding.
 5. Emit its report verbatim, then the gate table, and **stop**. Draft nothing this turn.
 6. On a selection: hand those findings to `review-comments` (locus + fix; mechanism for 🔴🟠🟡, none for 🔵; severities dropped), and take its gated drafts unchanged.
