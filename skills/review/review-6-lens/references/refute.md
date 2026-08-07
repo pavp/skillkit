@@ -1,6 +1,6 @@
 # Refutation Contract
 
-How the orchestrator challenges blocking findings after the 6 lenses return. One independent refuter per finding, each asked to **disprove** it. The default is survival: a finding stands unless the refuter produces positive evidence against it.
+How the orchestrator challenges blocking findings after every dispatched lens returns. One independent refuter per finding, each asked to **disprove** it. The default is survival: a finding stands unless the refuter produces positive evidence against it.
 
 ## Triage — which findings are refuted
 
@@ -15,7 +15,7 @@ Read the severity and the causality tag the lens already set (Spec findings have
 
 Nothing to refute → skip the step entirely and report as before.
 
-**Scale gate**: refutation costs roughly what the lenses did — one agent per blocking finding — so the fan-out is bounded by severity, not by appetite. `SKILL.md` step 5 declares the thresholds and is their single authority; apply them as written there. Above the first, refute the 🔴 and 🟠 subset only (the severities that gate the merge) and leave the 🟡 unrefuted. Above the second, keep that same subset and add the `slice-diff` pointer: a diff that blocks in that many places is asking to be split.
+**Scale gate**: refutation costs roughly what the lenses did — one agent per blocking finding — so the fan-out is bounded by severity, not by appetite. `SKILL.md` step 5 declares the two thresholds and is their single authority. Above the **subset gate**, refute the 🔴 and 🟠 subset only (the severities that gate the merge) and leave the 🟡 unrefuted. Above the **split gate**, keep that same subset and add the `slice-diff` pointer: a diff that blocks in that many places is asking to be split. If you cannot resolve a threshold's value, apply the narrower band (🔴/🟠 only) — never fan out over every blocking finding.
 
 The full report ships unchanged either way. Unrefuted findings stay in the severity sections at their original severity — they are **not** downgraded, moved, or dropped, and §5 records both counts ("refuted N of M blocking findings"). The `slice-diff` pointer is an addition to the report, never a replacement for it: the reader still needs every finding.
 
@@ -23,7 +23,7 @@ The gate cuts by **severity, never by importance**: it takes whole severity band
 
 ## Dispatch
 
-Refutation runs **once, after all 6 lenses have returned** — never per-lens as results arrive. The triage needs the full set, and a refuter dispatched mid-review could see a lens's context.
+Refutation runs **once, after all dispatched lenses have returned** — never per-lens as results arrive. A lens the applicability gate skipped was never dispatched; do not wait for it. The triage needs the full set, and a refuter dispatched mid-review could see a lens's context.
 
 One refuter per blocking finding, **in parallel**, each isolated. Prefer parallel isolated sub-agents; else sequential **with reset context between findings**; else skip refutation (findings stay in the severity sections, unrefuted — note this in the report). Cap concurrency at 6 at a time, matching the lens fan-out; queue the rest. This file owns refuter dispatch end-to-end — label each `Refuter #<finding-number>` for traceability, the same role the label convention in `dispatch.md` serves for lenses.
 

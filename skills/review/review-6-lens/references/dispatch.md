@@ -38,13 +38,13 @@ Every row is **conjunctive**: skip only when EVERY condition in it holds. One co
 | Risk | no code AND no dependency/lockfile change AND no config AND no CI/workflow file AND **no added line carrying a credential-shaped literal, an authz/permission rule, or an auth/crypto term** — in any file kind, prose and examples included |
 | Resilience | no runtime AND no network AND no I/O AND no deploy surface AND **no added line changing a timeout, retry, limit, threshold, probe, or replica value** — a number a runtime consumes is runtime surface, wherever it lives |
 | Architecture | no source files (docs/assets only) AND **no manifest, schema, IDL, or module-resolution file** (`tsconfig` paths, `.proto`, OpenAPI, DI wiring — these declare boundaries) AND **no edit to a file naming the repo's architecture rules** (`ARCHITECTURE.md`, ADRs — Architecture's own baseline is Architecture's surface) |
-| Reliability | no executable code AND no test files |
+| Reliability | no executable code AND no test files AND **no added line stating a testable contract** — a threshold, cap, default value, determinism or coverage requirement, or a behavioural guarantee a test could assert on |
 
 Readability and Spec never skip — prose is in scope for both.
 
 **Fail toward running.** Ambiguous, mixed, generated, or unknown content runs the lens. Executable content anywhere (scripts, CI, IaC, migrations, templates that render) cancels every skip.
 
-A skip needs the absence to be **checkable** — the file list settles the file-kind conditions, the added lines settle the content ones. Read the added lines before skipping Risk, Resilience, or Architecture; a file-list glance is not evidence for a content condition. "Probably nothing there" is never evidence. **An undefined term is a doubt, not a licence**: if you cannot check a condition, it does not hold.
+A skip needs the absence to be **checkable** — the file list settles the file-kind conditions, the added lines settle the content ones. Read the added lines before skipping ANY of the four skippable lenses; a file-list glance is not evidence for a content condition. "Probably nothing there" is never evidence. **An undefined term is a doubt, not a licence**: if you cannot check a condition, it does not hold.
 
 Report a skipped lens as `Lens — skipped (no applicable surface)` in the clean-lenses line — never silently, and never as `No findings.` The two are different claims: one was checked, the other was not.
 

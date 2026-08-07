@@ -1,6 +1,6 @@
 # Output Contract
 
-How the orchestrator assembles the final report after the 6 lenses return. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order.
+How the orchestrator assembles the final report after every dispatched lens returns. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order.
 
 ## 1. Human lead
 
@@ -42,6 +42,8 @@ Risk 3 (🔴, +1 pre-existing 🟠) | Read 4 (🟡) | Reliab 2 (🟠, +1 refuted
 
 A lens whose every finding is non-blocking shows `0` with no emoji: `Arch 0 (+2 pre-existing 🟡)`.
 
+A lens the applicability gate skipped shows `— (skipped)`, never `0`: `Resil — (skipped)`. `0` claims the lens ran and found nothing; a skipped lens never ran, and the most-scanned line of the report must not blur the two.
+
 ## All clean
 
-If every lens is clean: emit the human lead, skip the severity headings, state "All 6 lenses clean — no findings.", and still emit the summary line. Never collapse to a bare "all good".
+If every **dispatched** lens is clean: emit the human lead, skip the severity headings, state `All <n> dispatched lenses clean — no findings.` with `<n>` the count that actually ran, and still emit the summary line. A skipped lens NEVER satisfies "clean" — when any lens was skipped, this branch must also carry §5's skipped-lens list, and the literal "All 6" is forbidden. Never collapse to a bare "all good".
