@@ -12,6 +12,7 @@ Scope: naming, complexity, intention, maintainability, duplication, dead code, r
 - Flag dead code: commented-out blocks, unused imports, unreachable branches, never-called functions.
 - Flag naming that hides intent or needs comment-heavy explanation.
 - Flag a diff whose intent/impact is too vague to review safely; require concrete intent.
+- Flag a change that materially grows an already-large file, even when the diff itself is small — judge the resulting file, not the diff size. Cite the file's total line count; around 1000 lines is an inspection signal, not a hard cap. Fix is to extract helpers or split the file first, then add.
 - Flag violations of documented repo coding standards when standards files exist (e.g. `CONTRIBUTING.md`, `CODING_STANDARDS.md`); cite the rule. Skip anything tooling already enforces.
 - Require evidence for "too complex" claims: cite the exact function, branch, or repeated pattern.
 - Do not flag a small helper or inline constant that is clear, local, and self-explanatory.
