@@ -4,7 +4,7 @@ description: "Trigger: reviewing a diff. Reviews any git range — branch, PR, c
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.7.0
+  version: 1.8.0
 ---
 
 Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliability, Resilience, Architecture, Spec), then aggregate by severity without merging.
@@ -13,7 +13,8 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 - Read-only. Report findings; never edit code.
 - Validate the ref and a non-empty diff BEFORE dispatching any lens. Bad ref or empty diff fails here.
-- Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated sub-agents (one per lens); else sequential with reset context. Never let one lens bias another.
+- Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated sub-agents (one per lens); else sequential with reset context. Never let one lens bias another. Isolation covers **judgment, not facts**: the diff, the intent, and `<baseline>` are shared inputs every lens already receives identically; a finding, hint, or suspicion from one lens never reaches another.
+- **A skipped lens is not a clean lens.** Skipping needs positive evidence the surface is absent from the diff (`references/dispatch.md`); ambiguity, mixed content, or anything executable runs the lens. Report it as `skipped`, never as `No findings.` — one was checked, the other was not.
 - The aggregate orders by severity but never lets one lens alter another's: no finding dropped, reworded, softened, or absorbed because a different lens saw the same code. Each keeps its lens label and verbatim text. Two lenses, one issue → two findings.
 - The verdict is **derived, not editorial**: references existing findings by number, in the severities the lenses actually emitted (never invent a 🔴 if the worst is 🟠). It guides the merge call; it may not silence, downgrade, or overrule a lens.
 - **Causality**: each code-lens finding is classified by changed-region membership (`references/dispatch.md`'s causality contract). `introduced` is the safe default; `behavior-activated` (the diff makes a pre-existing defect reachable) also blocks; `pre-existing` needs positive evidence it sits outside the diff and is the only non-blocking tag — it moves to the follow-up section (severity never downgraded). Spec is exempt.
@@ -41,8 +42,8 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 1. Fix `<diff-cmd>` **once** — `git diff <point>...HEAD` (3-dot = vs merge-base) for a committed range, `git diff HEAD` uncommitted — and reuse it for every derivation so regions always match the reviewed diff. From it: the diff + `git log <point>..HEAD --oneline`; `<N>` (changed-line count, `<diff-cmd> --shortstat`, gates sweep depth); and `<changed-hunks>` (per-file changed regions, `<diff-cmd> --unified=0`, gates causality). Build `<changed-hunks>` per `references/dispatch.md` — compact form, per-file size cap, and the degraded-input fail-safe all specified there.
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
-3. Resolve the spec (Decision Gates); normalize to text.
-4. Dispatch the 6 lenses as isolated reviews per `references/dispatch.md`. Skip Spec if no spec. Wait for all 6 — the next step needs the full set.
+3. Resolve the spec (Decision Gates); normalize to text. Resolve `<baseline>` once per `references/dispatch.md` (~2000 tokens: stack, architecture rules, conventions, tooling) and inject it into every lens prompt — six lenses rediscovering the repo alone is the bulk of a run's cost.
+4. Dispatch the lenses as isolated reviews per `references/dispatch.md`, injecting `<baseline>`. Skip Spec if no spec; skip a lens whose surface is provably absent from the diff (`dispatch.md`'s applicability gate — fail toward running, executable content cancels every skip). Wait for all dispatched lenses — the next step needs the full set.
 5. Refute the blocking findings per `references/refute.md` (its triage table decides which; >15 blocking → 🔴/🟠 only, and point at `slice-diff`). Best-effort: if refutation cannot finish for ANY reason — no capable runtime, gate, failure, budget — go to step 6 with those findings unrefuted and record it. Never lose the report to a stalled step 5.
 6. Aggregate per Output Contract. Do not merge.
 

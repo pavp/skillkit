@@ -26,7 +26,7 @@ A `## ✅ Verified OK` section: bullets of what a lens **actively checked and cl
 
 ## 5. Clean lenses note
 
-One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "refuted N of M blocking findings" (scale gate, or a refuter that never returned). A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
+One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. List any lens skipped by the applicability gate separately as `<Lens>: skipped (no applicable surface)` — never fold it in with the clean lenses. A clean lens looked and found nothing; a skipped lens never looked, and the reader must be able to tell which coverage they actually have. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "refuted N of M blocking findings" (scale gate, or a refuter that never returned). A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
 
 ## 6. Verdict (optional)
 
