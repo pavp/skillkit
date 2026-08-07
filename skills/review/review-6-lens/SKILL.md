@@ -4,7 +4,7 @@ description: "Trigger: reviewing a diff. Reviews any git range — branch, PR, c
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.6.0
+  version: 1.7.0
 ---
 
 Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliability, Resilience, Architecture, Spec), then aggregate by severity without merging.

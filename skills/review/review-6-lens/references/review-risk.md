@@ -14,6 +14,9 @@ Scope: security, privilege boundaries, data exposure, dependency risks, merge-bl
 - Require evidence that security-sensitive changes are covered by backend checks, not UI disabled states.
 - Do not flag when framework default escaping is used and no raw HTML sink exists.
 - Require evidence for dependency/security findings: cite the scan failure or vulnerable package, not "looks risky".
+- Flag a dependency upgrade whose lockfile diff is missing, hand-edited, or uncommitted — the lockfile pins what actually ships, so an unreviewed one means the installed graph is unknown.
+- Flag a bulk upgrade of several unrelated dependencies in one change: when it breaks, the responsible package is unrecoverable and the revert is not clean. Fix is one dependency per change.
+- Flag a major-version bump with no evidence the changelog or migration notes were read. Semver is a promise the maintainer may not have kept; a patch can carry a behavioral change.
 
 ## Output contract
 
