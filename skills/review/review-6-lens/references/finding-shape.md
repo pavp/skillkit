@@ -34,7 +34,7 @@ Rules:
 
 ## Refuted-by field (refuted findings only)
 
-A refuted finding (`refute.md`) keeps its whole shape unchanged and gains ONE trailing blockquote, appended verbatim by the orchestrator. The refuter emits exactly this — no other shape:
+A refuted finding (`refute.md`) keeps its whole shape unchanged and gains ONE trailing blockquote. A refuter emits exactly this — no other shape — and the orchestrator appends it verbatim; when the counter-example came from the orchestrator's own inline read of a deterministic finding, the orchestrator authors this same block from that read. Either way the shape is identical:
 
 ```
 > **Refuted by:** `<path>:<line>` — <the code or fact that disproves the finding, quoted>
