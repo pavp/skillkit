@@ -62,7 +62,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 
 | Skill | What it does |
 |-------|--------------|
-| [`review-6-lens`](skills/review/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. Every blocking finding is then challenged by an independent refuter; a finding only stops blocking on a cited counter-example, and nothing is ever dropped. |
+| [`review-6-lens`](skills/review/review-6-lens/SKILL.md) | Review a diff across 6 isolated lenses — Risk, Readability, Reliability, Resilience, Architecture and Spec — and report each separately. Every blocking finding is then challenged — by an independent refuter, or inline when reading the cited lines settles it; a finding only stops blocking on a cited counter-example, and nothing is ever dropped. |
 | [`pr-review`](skills/review/pr-review/SKILL.md) | Review someone else's PR end-to-end and leave one consolidated comment on it. Orchestrates only: `review-6-lens` judges, you pick which findings become comments, `review-comments` writes them. Nothing posts unconfirmed. |
 | [`review-comments`](skills/review/review-comments/SKILL.md) | Handle reviewer comments on your PR and reply to feedback — fires the moment comments need a written response, even after you fix the flagged code. Organic teammate voice, the mechanism behind every claim, a closing question only when a real decision belongs to the other person. Consolidates, gates on confirmation; never posts. |
 
