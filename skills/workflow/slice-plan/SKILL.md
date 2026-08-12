@@ -1,6 +1,6 @@
 ---
 name: slice-plan
-description: "Trigger: sizing work BEFORE coding it. Forecasts the changed lines of planned work and, over the budget (default 400), plans slice boundaries — files and commits per slice. Use whenever implementation is about to start with no size plan, or is mid-flight unsized: 'plan this feature', 'will this fit one PR', a ticket bigger than one review. Diff already too big → slice-diff."
+description: "Trigger: sizing work BEFORE coding it. Forecasts changed lines and, over the budget (default 400), plans slice boundaries and how they ship — stacked PRs or a feature branch chain. Use whenever implementation is about to start unsized, or planned slices need a delivery call: 'plan this feature', 'will this fit one PR', 'stacked or chained?'. Diff already too big → slice-diff."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
