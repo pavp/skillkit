@@ -15,7 +15,7 @@ skills/
   typescript/  ts-types, ts-function-signatures, ts-module-organization
   review/      review-6-lens, pr-review, review-comments
   clean/       leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure
-  workflow/    slice-plan, slice-diff, browser-automation-safety, diagnose-fix
+  workflow/    slice-plan, slice-diff, browser-automation-safety
   qa/          qa-test-plan, qa-manual
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)

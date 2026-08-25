@@ -29,7 +29,7 @@ Read once via the host's code-forge capability: state, draft flag, author, repos
 | Closed or merged | nothing to act on |
 | Draft | the author has not asked for review |
 | You already left a review | a second pass re-posts what was said |
-| Author is the current user | you are not reviewing someone else's work → `review-6-lens` locally, then `diagnose-fix` |
+| Author is the current user | you are not reviewing someone else's work → `review-6-lens` locally |
 | **The read itself cannot be performed** (no capability, auth error, rate limit, timeout) | an unverifiable pre-condition is a failed pre-condition — never a passed one |
 
 State the reason and stop. Never review-then-discard: an abort happens before the lenses run, so nothing is wasted.

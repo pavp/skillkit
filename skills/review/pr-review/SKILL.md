@@ -13,7 +13,7 @@ Load when a review of **someone else's** PR should end up posted on it. Requires
 
 - Publishing intent: "comment on PR 42", "leave them a review", "flag this on the PR".
 - A selection answering a gate report from this skill ("1, 3 and 7", "all but 4"), or an answer to its draft gate.
-- NOT this skill: a local verdict with nothing posted (→ `review-6-lens`); answering comments others left you (→ `review-comments`); your own PR (→ `review-6-lens`, then `diagnose-fix`).
+- NOT this skill: a local verdict with nothing posted (→ `review-6-lens`); answering comments others left you (→ `review-comments`); your own PR (→ `review-6-lens`).
 
 ## Hard Rules
 
