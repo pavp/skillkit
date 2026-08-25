@@ -1,6 +1,6 @@
 ---
 name: clean-comments
-description: "Trigger: judging comments. Classifies each as noise / load-bearing / commented-out / out-of-domain and prescribes delete-or-keep — a judgment authority, never edits. Use whenever a comment's worth is in doubt: 'is this comment useful', 'clean up these comments', an agent-generated file dense with comments, a comment restating the code, a stale TODO. Docs outside the code → doc-sync."
+description: "Trigger: judging comments. Classifies each as noise / load-bearing / commented-out / out-of-domain and prescribes delete-or-keep — a judgment authority, never edits. Use whenever a comment's worth is in doubt: 'is this comment useful', 'clean up these comments', an agent-generated file dense with comments, a comment restating the code, a stale TODO."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
