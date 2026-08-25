@@ -83,14 +83,13 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`slice-plan`](skills/workflow/slice-plan/SKILL.md) | Forecast the changed lines of a planned implementation BEFORE code exists — itemized per-file estimates against the review budget (default 400, user-overridable via invocation or project context) that `slice-diff` enforces after the fact. Over budget, plans slice boundaries (files and commits per slice, dependency order) and gates on confirmation; under it, states the total and steps aside. Plans only; never implements, never mutates git. |
 | [`slice-diff`](skills/workflow/slice-diff/SKILL.md) | Slice an oversized git diff into a chain of reviewable PRs — pure git (no SDD), the review budget as the hard gate (default 400, user-overridable via invocation or project context), domain/layer as a soft cut signal, cut by commit boundary first. Shows the plan, gates on confirmation, then executes. |
 | [`browser-automation-safety`](skills/workflow/browser-automation-safety/SKILL.md) | Resource-safety rules loaded before any browser automation (Playwright, Puppeteer, browser MCP) — always tear down contexts, one browser instance, never full-page screenshots, mandatory timeouts, RAM-scaled concurrency — so a run never exhausts memory or leaks browser processes. A rules authority; never drives a browser. |
-| [`diagnose-fix`](skills/workflow/diagnose-fix/SKILL.md) | Resolve a concrete defect from any source (tracker, traceback, description) via a gated four-phase engine — reproduce → root-cause → hypothesis → fix + regression test — under the Iron Law (no fix without a reproduced failure and a named cause). Routes design gaps out (undefined behavior isn't a bug) and only suggests opening a PR. An actor; fixes, but never mutates remote state. |
 
 ### qa
 
 | Skill | What it does |
 |-------|--------------|
 | [`qa-test-plan`](skills/qa/qa-test-plan/SKILL.md) | Turn a requirement into the journeys worth walking — blast-radius ranked, written as continuous narrative prose rather than decoupled steps, each labeled REQUIREMENT / REQUIREMENT GAP / EXPLORATORY. Never reads the implementation, so it catches what the code omitted; the requirement's own gaps are the headline finding. Plans; never executes. |
-| [`qa-manual`](skills/qa/qa-manual/SKILL.md) | Walk a running app by hand and report whether it holds — verifies against the requirement, pushes past it for edge cases, observes user-visible slowness. Every finding carries its authority so opinions never get filed as citable failures. Blocks and asks for missing access instead of inventing it; never reads the implementation. Reports; never fixes (→ `diagnose-fix`). |
+| [`qa-manual`](skills/qa/qa-manual/SKILL.md) | Walk a running app by hand and report whether it holds — verifies against the requirement, pushes past it for edge cases, observes user-visible slowness. Every finding carries its authority so opinions never get filed as citable failures. Blocks and asks for missing access instead of inventing it; never reads the implementation. Reports; never fixes. |
 
 ## Authoring
 
