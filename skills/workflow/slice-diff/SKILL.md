@@ -22,8 +22,8 @@ Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branc
 - Re-validate git state immediately before executing. If dirty or diverged, do not loop: report the concrete blocker and STOP, asking the user to reconcile. See references → "State Re-Validation".
 - On any mid-execution failure, STOP before further mutation and never force past it; report what exists and offer resume-vs-teardown. See references → "Mid-Execution Failure".
 - Every child PR states its position, base, and dependency, plus a diagram marking the current PR with `📍`. See references → "Chain Context Section".
-- Describe every forge action as the capability it needs, never as one vendor's CLI; the command table in references → "Commands" holds the concrete instance. Stacks need all branches in ONE repository — a cross-fork chain cannot be grouped, so state that and chain the PRs unchanged.
-- After the last PR is open, group the chain into a native stack when the forge offers one; never in place of creating the PRs. If the capability is absent the chain is already correct — report it, never STOP for it. See references → "Native Stacks".
+- Describe every forge action as the capability it needs, never as one vendor's CLI; the command table in references → "Commands" holds the concrete instance.
+- After the last PR is open, group the chain into a native stack; never in place of creating the PRs. Probe the client for the capability before planning on it — a forge that offers stacks does not imply this checkout can reach them, and cross-fork chains cannot be grouped at all. If it is absent the chain is already correct — report it, never STOP for it. See references → "Native Stacks".
 - Always ask the user to pick the chain strategy — never auto-select; recommend one from git-detected slice autonomy. Do not mix strategies after one is chosen. See references → "Choosing the Strategy".
 
 ## Decision Gates
@@ -46,7 +46,7 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 2. Cut by the priority order (references → "Cut Priority"); keep each PR under the budget.
 3. Present the plan: PRs, files/commits per PR, order, dependencies, per-PR review budget. Detect whether the forge can group the chain natively and, when it cannot, add one line naming what the PRs lack and the command that would enable it — informational, never a question or a gate. STOP.
 4. On confirmation, re-validate git state; if diverged or dirty, report the concrete blocker and STOP — do not recompute or loop.
-5. Execute the chosen strategy only. If the user chose Stacked for non-autonomous slices, warn a slice may land broken before proceeding — unless the chain will be grouped natively, which merges each PR with every unmerged PR below it. Create branches, cherry-pick, push, open PRs with Chain Context, then group the chain (references → "Native Stacks").
+5. Execute the chosen strategy only. If the user chose Stacked for non-autonomous slices, warn a slice may land broken before proceeding — unless the chain will be grouped natively. Create branches, cherry-pick, push, open PRs with Chain Context, then group the chain (references → "Native Stacks").
 6. Verify each PR independently: CI/tests/docs, rollback scope, clean diff showing only its unit.
 
 ## Output Contract
