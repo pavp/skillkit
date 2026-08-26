@@ -57,7 +57,8 @@ If the tree is dirty or the branch diverged since the plan, do not loop recomput
 Execution mutates in sequence (branches → cherry-pick → push → PRs). On any failure partway through a chain:
 
 - **Cherry-pick conflict:** stop, surface the conflicting files, never force past it.
-- **Rejected push or `gh` error:** stop before creating further PRs.
+- **Rejected push or forge-client error:** stop before creating further PRs.
+- **Stack grouping fails or the client is absent:** not a failure — the PRs are already chained. Report it and finish.
 
 Then report which branches/PRs already exist and offer the user a choice: resume from the failed step, or tear down the created branches/PRs. Keep steps ordered so a resume does not duplicate existing branches or PRs.
 
@@ -70,6 +71,8 @@ Detect slice autonomy from git: does each slice build and merge on its own, or d
 - **Autonomous slices** → recommend **Stacked PRs to base** (simplest, each ships in order).
 - **Not autonomous** (a slice would land broken until the chain completes) → recommend **Feature Branch Chain**. Here Stacked is not just weaker — it is unsafe: merging slice 1 alone breaks or half-ships the feature. If the user still picks Stacked, warn them of that consequence before executing; do not silently comply.
 
+That unsafety assumes each PR merges on its own. A native stack (see "Native Stacks") merges a PR together with every unmerged PR below it, so partial landing stops being an accident and Stacked carries no such warning. Recommend on autonomy alone when the chain will be grouped, and never let the grouping decide the strategy — an ungrouped chain, on any forge, keeps the warning.
+
 ## Strategy Notes
 
 | | Stacked PRs to base | Feature Branch Chain |
@@ -78,6 +81,8 @@ Detect slice autonomy from git: does each slice build and merge on its own, or d
 | Rollback | Revert individual base-branch PRs | Revert/hold the whole feature branch |
 | Risk | Partial behavior may land | Nothing lands until the chain completes |
 | Complexity | Simpler retarget/rebase | Requires tracker and strict diff hygiene |
+
+Both rows describe an ungrouped chain. Grouped into a native stack, Stacked's risk row reads like Chain's — merging any PR takes every unmerged PR below it with it — and its retarget cost drops to zero, which is what leaves Chain worth choosing only where no native stack exists.
 
 ## Feature Branch Chain
 
@@ -112,7 +117,7 @@ main <- PR 1: foundation
                 └── PR 3: docs/tests built on PR 2
 ```
 
-After a parent PR merges, rebase/retarget the next PR so GitHub shows only the current slice.
+After a parent PR merges, rebase/retarget the next PR so it shows only the current slice — unless the chain was grouped into a native stack, which retargets the next PR itself.
 
 The diagram is always nested (each PR branches off the previous PR's branch), even when the slices are logically independent — the nesting reflects the branch chain, not a code dependency. A flat diagram (every PR hanging off the base) is a different strategy (independent PRs to base), not Stacked; do not draw it that way when the chosen strategy is Stacked.
 
@@ -135,11 +140,19 @@ Position: <N of total> · Base: `<target branch>` · Depends on: <#NNN or "None"
 
 ## Commands
 
-```bash
-gh pr view <PR_NUMBER> --json additions,deletions,changedFiles,title,url
-gh pr create --base feat/my-feature --title "feat(scope): focused slice" --body-file pr-body.md
-gh pr create --base feat/my-feature-01-core --title "feat(scope): next focused slice" --body-file pr-body.md
-```
+Each row is a capability the execution needs; the command column is one forge's instance of it. On another forge, substitute its equivalent — the steps do not change.
+
+| Capability | GitHub (`gh`) |
+|---|---|
+| Measure an existing PR | `gh pr view <PR_NUMBER> --json additions,deletions,changedFiles,title,url` |
+| Open a PR targeting the previous slice's branch | `gh pr create --base <parent-branch> --title "feat(scope): focused slice" --body-file pr-body.md` |
+| Group the chain into a native stack | `gh stack link <pr1> <pr2> <pr3>` |
+
+## Native Stacks
+
+A forge that groups a PR chain into a first-class stack retargets and merges it for you. GitHub does; it requires the `gh-stack` extension (`gh extension list` → `gh stack`) and all branches in one repository.
+
+`gh stack link` takes the already-created PRs bottom-to-top and groups them without touching branches, commits, or bases — run it after the last PR is open, never instead of creating them. Its absence costs only the grouping: the PRs stay chained and reviewable exactly as this skill builds them, so report it in the plan and continue.
 
 ## Verification
 
