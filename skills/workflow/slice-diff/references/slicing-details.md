@@ -58,9 +58,10 @@ Execution mutates in sequence (branches → cherry-pick → push → PRs). On an
 
 - **Cherry-pick conflict:** stop, surface the conflicting files, never force past it.
 - **Rejected push or forge-client error:** stop before creating further PRs.
-- **Stack grouping fails or the client is absent:** not a failure — the PRs are already chained. Report it and finish.
 
 Then report which branches/PRs already exist and offer the user a choice: resume from the failed step, or tear down the created branches/PRs. Keep steps ordered so a resume does not duplicate existing branches or PRs.
+
+A grouping call that fails, or a missing client, is not one of those failures: the PRs are already chained and complete. Report the chain as ungrouped and finish — never offer teardown over it.
 
 ## Choosing the Strategy
 
@@ -71,7 +72,7 @@ Detect slice autonomy from git: does each slice build and merge on its own, or d
 - **Autonomous slices** → recommend **Stacked PRs to base** (simplest, each ships in order).
 - **Not autonomous** (a slice would land broken until the chain completes) → recommend **Feature Branch Chain**. Here Stacked is not just weaker — it is unsafe: merging slice 1 alone breaks or half-ships the feature. If the user still picks Stacked, warn them of that consequence before executing; do not silently comply.
 
-That unsafety assumes each PR merges on its own. A native stack (see "Native Stacks") merges a PR together with every unmerged PR below it, so partial landing stops being an accident and Stacked carries no such warning. Recommend on autonomy alone when the chain will be grouped, and never let the grouping decide the strategy — an ungrouped chain, on any forge, keeps the warning.
+Grouping the chain into a native stack (see "Native Stacks") does not lift that warning. A stack merges a PR together with every unmerged PR below it, which forecloses an upper slice landing without its dependencies — but merging slice 1 by itself stays available, and that is the hazard the warning names. Recommend on autonomy alone, and never let grouping decide the strategy.
 
 ## Strategy Notes
 
@@ -82,7 +83,7 @@ That unsafety assumes each PR merges on its own. A native stack (see "Native Sta
 | Risk | Partial behavior may land | Nothing lands until the chain completes |
 | Complexity | Simpler retarget/rebase | Requires tracker and strict diff hygiene |
 
-Both rows describe an ungrouped chain. Grouped into a native stack, Stacked's risk row reads like Chain's — merging any PR takes every unmerged PR below it with it — and its retarget cost drops to zero, which is what leaves Chain worth choosing only where no native stack exists.
+The Risk and Complexity rows describe an ungrouped chain. Grouped into a native stack, Stacked's retarget cost drops to zero and no slice can land ahead of the slices below it — but the bottom PR still merges alone, so the Risk row's partial landing survives.
 
 ## Feature Branch Chain
 
@@ -146,13 +147,20 @@ Each row is a capability the execution needs; the command column is one forge's 
 |---|---|
 | Measure an existing PR | `gh pr view <PR_NUMBER> --json additions,deletions,changedFiles,title,url` |
 | Open a PR targeting the previous slice's branch | `gh pr create --base <parent-branch> --title "feat(scope): focused slice" --body-file pr-body.md` |
-| Group the chain into a native stack | `gh stack link <pr1> <pr2> <pr3>` |
+| Probe the stack capability | `gh extension list` → a `gh stack` row |
+| Check the chain is single-repository | `gh pr view <PR_NUMBER> --json headRepositoryOwner` |
+| Group the chain into a native stack | `gh stack link <bottom-pr> <…> <top-pr>` |
+| Enable the capability (report, never run) | `gh extension install github/gh-stack` |
 
 ## Native Stacks
 
 A forge that groups a PR chain into a first-class stack retargets and merges it for you. GitHub does; it requires the `gh-stack` extension (`gh extension list` → `gh stack`) and all branches in one repository.
 
-`gh stack link` takes the already-created PRs bottom-to-top and groups them without touching branches, commits, or bases — run it after the last PR is open, never instead of creating them. Its absence costs only the grouping: the PRs stay chained and reviewable exactly as this skill builds them, so report it in the plan and continue.
+`gh stack link` takes the already-created PRs bottom-to-top and groups them without touching branches, commits, or bases — run it after the last PR is open, never instead of creating them. Read back which PRs it actually covers and report that; a call that fails or covers only some of them leaves the rest ungrouped, never "grouped".
+
+Group under Stacked only. A Feature Branch Chain holds its tracker PR draft until the chain completes, and a stack would merge that tracker along with any PR above it — the one thing that strategy exists to prevent.
+
+Its absence costs only the grouping: the PRs stay chained and reviewable exactly as this skill builds them. Report it and continue; never install the client yourself — name the command and let the user decide.
 
 ## Verification
 
