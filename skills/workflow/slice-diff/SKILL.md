@@ -4,7 +4,7 @@ description: "Trigger: a diff too big to review. Slices an oversized git diff in
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.3"
+  version: "1.4"
 ---
 
 ## Activation Contract
@@ -22,6 +22,8 @@ Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branc
 - Re-validate git state immediately before executing. If dirty or diverged, do not loop: report the concrete blocker and STOP, asking the user to reconcile. See references → "State Re-Validation".
 - On any mid-execution failure, STOP before further mutation and never force past it; report what exists and offer resume-vs-teardown. See references → "Mid-Execution Failure".
 - Every child PR states its position, base, and dependency, plus a diagram marking the current PR with `📍`. See references → "Chain Context Section".
+- Describe every forge action as the capability it needs, never as one vendor's CLI; the command table in references → "Commands" holds the concrete instance.
+- Under Stacked only, group the chain into a native stack after the last PR is open — never in place of creating them, and never under a Chain, whose draft tracker a stack would merge along with it. Probe the client for the capability and confirm every branch is in ONE repository (references → "Commands"); a forge offering stacks does not imply this checkout reaches them. Never install the client yourself. Report the outcome you observed, not the one you attempted; anything short of every PR grouped is ungrouped. Its absence leaves the chain already correct — report it, never STOP for it. See references → "Native Stacks".
 - Always ask the user to pick the chain strategy — never auto-select; recommend one from git-detected slice autonomy. Do not mix strategies after one is chosen. See references → "Choosing the Strategy".
 
 ## Decision Gates
@@ -36,19 +38,20 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 | Cannot split into independent units (generated/vendor/migration or indivisible authored logic) | Mark `size:exception`, do not force. |
 | Each slice builds/merges alone (autonomous) | Ask; recommend Stacked PRs to base. |
 | A slice cannot stand alone until the chain completes | Ask; recommend Feature Branch Chain with draft tracker. |
+| The chain will not be grouped natively (Chain strategy, no capability, or cross-fork) | Report it in the plan; chain the PRs unchanged. Never STOP, never re-plan. |
 
 ## Execution Steps
 
 1. Resolve the base branch (references → "Resolving the Base"). If the repo is shallow (`git rev-parse --is-shallow-repository` = true), warn and recommend `git fetch --unshallow` before trusting any budget. Then measure the range (references → "Measuring the Range").
 2. Cut by the priority order (references → "Cut Priority"); keep each PR under the budget.
-3. Present the plan: PRs, files/commits per PR, order, dependencies, per-PR review budget. STOP.
+3. Present the plan: PRs, files/commits per PR, order, dependencies, per-PR review budget. Add one line on native grouping — that the chain will be grouped and merging any PR then takes every unmerged PR below it, or that it will not and why (client absent, quoting the enabling command from references → "Commands"; cross-fork; or a Chain). Informational, never a question or a gate. STOP.
 4. On confirmation, re-validate git state; if diverged or dirty, report the concrete blocker and STOP — do not recompute or loop.
-5. Execute the chosen strategy only. If the user chose Stacked for non-autonomous slices, warn a slice may land broken before proceeding. Create branches, cherry-pick, push, open PRs with Chain Context.
+5. Execute the chosen strategy only. If the user chose Stacked for non-autonomous slices, warn a slice may land broken before proceeding; grouping does not lift that warning. Create branches, cherry-pick, push, open PRs with Chain Context, then group the chain (references → "Native Stacks").
 6. Verify each PR independently: CI/tests/docs, rollback scope, clean diff showing only its unit.
 
 ## Output Contract
 
-Before confirmation, return the cut plan opening with the active budget and its source (`default 400` or the user's explicit number, quoting its source line): chain strategy, PR order, files/commits per PR, dependency diagram (`📍` on the current PR), per-PR measured lines (`additions + deletions`), and any `size:exception` rationale. After execution, return the created branches/PRs and each PR's verification result.
+Before confirmation, return the cut plan opening with the active budget and its source (`default 400` or the user's explicit number, quoting its source line): chain strategy, PR order, files/commits per PR, dependency diagram (`📍` on the current PR), per-PR measured lines (`additions + deletions`), whether the chain will be grouped into a native stack, and any `size:exception` rationale. After execution, return the created branches/PRs, whether the chain was grouped into a native stack, and each PR's verification result.
 
 ## References
 
