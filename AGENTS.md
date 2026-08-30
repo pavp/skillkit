@@ -23,7 +23,7 @@ README.md
 ```
 
 A skill may ship supporting files alongside `SKILL.md`:
-- `references/` — local docs the skill loads on demand (rules, dispatch contracts, edge cases).
+- `references/` — rationale, worked examples, and lookup tables the agent may open while the skill is loaded. Never a rule, gate, or contract: see the body budget below.
 - `assets/` — templates, schemas, fixtures.
 
 ## Authoring a skill
@@ -41,7 +41,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 
 - **Author**: `metadata.author: pedro-villarreal(pavp)` across skills.
 - **Categories** group by domain (`react`, `typescript`), process (`review`, `clean`, `workflow`), or discipline (`qa`). Add a new category folder when a skill fits none. A judge skill (the clean-* contract: classifies, never edits) lives in its DOMAIN when it is domain-specific (e.g. `react/style-in-regime`); only language-agnostic judges belong in `clean/`.
-- Skills are **runtime-agnostic**: do not hardcode a specific agent type (e.g. `general-purpose`) or a vendor's nomenclature. Describe the capability a skill needs, not the API that provides it.
+- Skills are **runtime-agnostic**: do not hardcode a specific agent type (e.g. `general-purpose`), and write every step as the capability it needs, not the API that provides it. One forge's concrete commands may still appear, confined to a capability→command table so another forge is a substitution and the steps never change (`workflow/slice-diff`, `workflow/slice-plan`).
 - Keep the lens/finding naming internal to a skill consistent (see `review/review-6-lens` for the L1–L6 lens pattern).
 - **Comments in authored code**: default is NONE. Write a comment ONLY for a WHY the code cannot show; never restate WHAT the code does. When unsure, apply the `clean/clean-comments` surprise test — if deleting it loses nothing, don't write it. This governs code you author here (skill examples, references); `clean-comments` remains the authority for judging existing comments.
 

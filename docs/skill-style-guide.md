@@ -55,8 +55,14 @@ The upstream [Agent Skills spec](https://agentskills.io/specification) sets no b
 ## Supporting Files
 
 - Use `assets/` for templates, schemas, fixtures, or generated examples.
-- Use `references/` for local docs that explain concepts or edge cases.
+- Use `references/` for local docs that explain concepts or edge cases — rationale and worked examples, never a rule the run depends on (see the body budget).
 - Keep references stable and relative to the skill directory when possible.
+
+## Vendor Instances
+
+Write every step as the capability it needs, so another forge or client is a substitution rather than a rewrite. One vendor's concrete commands may still appear when a step is useless without them — confine them to a capability→command table, and let the prose name the capability. `workflow/slice-diff` and `workflow/slice-plan` do this for `gh`.
+
+Mark whether the skill itself may run each command. A skill that plans but never mutates still needs a read-only probe; saying so per row stops one run from executing what another only names.
 
 ## Registry Behavior
 
