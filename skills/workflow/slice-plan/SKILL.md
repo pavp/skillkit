@@ -4,7 +4,7 @@ description: "Trigger: sizing work BEFORE coding it. Forecasts changed lines and
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.5"
+  version: "1.6"
 ---
 
 ## Activation Contract
@@ -70,7 +70,7 @@ Load this skill when an implementation is about to start and its size is unplann
 
 **Once the user picks**, restate that table with a `branch` and a `base` column, both holding real branch names, never prose:
 
-- Name every branch — `feat/<change>` for the tracker, `feat/<change>-<n>-<slug>` per slice — unless the user names their own, or the base is itself a live feature branch, which becomes the tracker under `Chain` and keeps its own name.
+- Name every branch `<prefix>/<change>` for the tracker and `<prefix>/<change>-<n>-<slug>` per slice. Take `<prefix>` from what the repo already does — the prefix its existing branches use for this kind of work (`git branch -a`) — kind means the nature of the change, not its subject area, so a fix to a feature's code follows the repo's fix branches and not that feature's, or failing that the type its commit messages give this kind of change. Never assume `feat`: a bug fix planned under a `feat/` branch contradicts the convention the repo states elsewhere. With no signal either way, say which prefix you chose and why. A branch the user names wins over all of it, and under `Chain` a base that is itself a live feature branch stays the tracker under its own name.
 - Under Stacked, a slice with no depends-on bases on the resolved base; one that depends on earlier slices bases on the LAST of them. A slice cannot base on a branch missing the code it builds on, so "Stacked" governs where the chain merges, never a promise that every base is the resolved base.
 - Under Chain, slice 1 bases on the tracker and each later slice on the previous slice's branch.
 
