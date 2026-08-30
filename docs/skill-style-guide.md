@@ -28,7 +28,7 @@ Every `SKILL.md` MUST use this order unless a section is truly irrelevant:
 ## Body Budget
 
 - Target **400–1200 tokens** for the skill body.
-- Hard maximum: **3000 tokens**. Past it, the skill is doing too much or explaining too much — split it, or move rationale out.
+- Hard maximum: **5000 tokens** — the ceiling the Agent Skills guidance recommends for a skill body. Past it, the skill is doing too much or explaining too much — split it, or move rationale out.
 - **What lives in `SKILL.md` is what gets executed**: activation, hard rules, decision gates, thresholds, output shapes. `references/` holds rationale, worked examples, and lookup checklists. The budget never justifies moving a gate, a threshold, or a machine-parsed shape into a reference — agents routinely do not read reference files at runtime, so anything exiled there stops existing in practice.
 - Trim rationale before structure. One clause of WHY inside a hard rule is what makes an agent obey it instead of reasoning around it; the third paragraph restating the same point is what to cut.
 

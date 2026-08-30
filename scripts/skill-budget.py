@@ -20,7 +20,7 @@ import statistics
 import sys
 from pathlib import Path
 
-TARGET_LOW, TARGET_HIGH, HARD_MAX = 400, 1200, 3000
+TARGET_LOW, TARGET_HIGH, HARD_MAX = 400, 1200, 5000
 
 # Tokens per regex piece, set to the highest ratio observed across this repo's
 # skills so the estimate never lands under the real count.
