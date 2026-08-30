@@ -4,7 +4,7 @@ description: "Trigger: sizing work BEFORE coding it. Forecasts changed lines and
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.4"
+  version: "1.5"
 ---
 
 ## Activation Contract
@@ -13,7 +13,7 @@ Load this skill when an implementation is about to start and its size is unplann
 
 ## Hard Rules
 
-- Forecast BEFORE the first edit. If implementation already began, measure the real diff (`git diff --stat` against the base, resolved per the base rule below; here an unresolved base IS a STOP, since the measurement depends on it) and apply the gate to the COMBINED total: real lines + remainder forecast. Over the budget combined, the existing diff routes to `slice-diff` and the remainder gets a slice plan — never judge the halves separately.
+- Forecast BEFORE the first edit. If implementation already began, measure the real diff (`git diff --stat` against the base, resolved per the base rule below; here an unresolved base IS a STOP, since the measurement depends on it) and apply the gate to the COMBINED total: real lines + remainder forecast. Over the budget combined, the existing diff routes to `slice-diff` and the remainder gets a slice plan — never judge the halves separately. When the remainder is zero — every item asked for is already written — there is nothing left to forecast: return the verdict `already implemented`, hand the measured diff to `slice-diff`, and plan nothing. Describing cuts through code that already exists is measurement, not forecasting, and belongs to the sibling that can read it.
 - The forecast MUST be itemized: every file or area to touch, its own estimated `additions + deletions` as a low–high range, and a one-line basis (existing file size, a comparable past change, scope of a new file). A basis may be measured by you or stated by the user — a line count the user supplies is valid, and greenfield work often has no other. Range every item; drop to a point estimate only when a measured comparable makes the range meaningless (an identical generated file, a mechanical rename). A single unbacked total is not a forecast — itemize it or declare `unestimable`.
 - The review budget defaults to **400 changed lines** (binaries excluded) — the same budget `slice-diff` enforces after the fact, so plan and remedy agree. Use a different number ONLY when the user names one explicitly: in the invocation ("budget 800"), or in the project's agent-instruction files (AGENTS.md or the runtime's equivalent) explicitly designated as the PR/review size budget — a stray line count is not a budget; when non-default, quote the exact source line in the output. Invocation beats project context. NEVER infer a budget from repo size, history, or task feel, and never adjust it mid-run; no explicit number → 400. A named budget must be a positive integer; under 50 or over 5000, restate it and STOP for confirmation before applying. Read every "budget" in this skill as the active number, including in the embedded checkpoint.
 - Gate on the HIGH end of a range, never the average — for the total and for each slice alike. Over budget means **strictly above** the active number; landing exactly on it passes. A total over budget plans slices; a slice over budget is cut further, and if it cannot be, it carries a stated re-forecast trigger and the reason it resisted cutting.
@@ -37,7 +37,8 @@ Load this skill when an implementation is about to start and its size is unplann
 | Slice plan, every slice ships reachable behavior alone | Ask; recommend Stacked PRs to base. |
 | Slice plan, a slice lands unreachable code until a later one arrives | Ask; recommend Feature Branch Chain with draft tracker. |
 | A range's high end is over budget | Total → plan slices. A single slice → cut it further; if it resists, state its re-forecast trigger and why. Never average into a pass. |
-| Implementation already began | Measure the real diff; gate on real + forecast combined; over budget, existing diff → `slice-diff`, remainder → slice plan. |
+| Implementation already began, work remains | Measure the real diff; gate on real + forecast combined; over budget, existing diff → `slice-diff`, remainder → slice plan. |
+| Implementation already began, nothing remains | Verdict `already implemented`: report the measured total and route the diff to `slice-diff`. Emit no slice plan, no strategy question — there is nothing left to forecast. |
 | The chain will not be grouped natively (Chain strategy, two slices sharing a parent, no client capability, or no native stacking on the forge) | State it in the plan with the enabling command; the slices stand as planned. Never STOP, never re-plan. |
 | An item cannot be estimated | Verdict `unestimable`: report which items, why, and what input would unblock; STOP for user decision. Never fabricate a number to reach another verdict. |
 
@@ -57,9 +58,9 @@ Load this skill when an implementation is about to start and its size is unplann
 **Every verdict** returns the same base form, and the checkpoint below. Nothing about being under budget shortens it:
 
 - the active budget and its source (`default 400` or the user's explicit number);
-- the itemized forecast table — item, estimated range, basis;
+- the itemized forecast table — item, estimated range, basis. A measured comparable may collapse the range to a point estimate (Hard Rules); measured real lines carry `measured` as their basis and need no range;
 - the total;
-- the verdict — `single unit`, `slice plan`, `size:exception`, or `unestimable`.
+- the verdict — `single unit`, `slice plan`, `already implemented`, `size:exception`, or `unestimable`.
 
 **A slice plan** adds, in this order:
 
@@ -82,7 +83,7 @@ Load this skill when an implementation is about to start and its size is unplann
 | Stacked · capability absent | NOT grouped; `gh extension install github/gh-stack` would enable it; the slices stand as planned. |
 | Chain | Never grouped: a stack would merge the draft tracker. |
 
-**Every emitted plan or single-unit verdict** MUST embed this checkpoint exactly, substituting `<budget>` with the active number and `<base>` with the base that work unit targets — once per slice when they differ, since a placeholder cannot resolve itself in a later session. The guard, the budget, and the base travel with the artifact into sessions where this skill is no longer loaded:
+**Every emitted plan or single-unit verdict** MUST embed this checkpoint exactly, substituting `<budget>` with the active number and `<base>` with the base that work unit targets, since a placeholder cannot resolve itself in a later session. Emit the body ONCE; when slices target different bases, follow it with one line per slice naming that slice's base — never repeat the whole checkpoint per slice. The guard, the budget, and the base travel with the artifact into sessions where this skill is no longer loaded:
 
 > Before each commit, run `git diff --stat <base>`; if the current work unit — slice or single unit — is over <budget> real changed lines, stop: hand the accumulated diff to `slice-diff` (budget <budget>), then re-forecast every slice not yet started with `slice-plan` (budget <budget>) — a slice that overran invalidates the estimates that assumed its size, not just its own. Slices already merged stay as they are.
 
