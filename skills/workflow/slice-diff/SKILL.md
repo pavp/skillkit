@@ -4,7 +4,7 @@ description: "Trigger: a diff too big to review. Slices an oversized git diff in
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.4"
+  version: "1.5"
 ---
 
 ## Activation Contract
@@ -23,7 +23,7 @@ Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branc
 - On any mid-execution failure, STOP before further mutation and never force past it; report what exists and offer resume-vs-teardown. See references → "Mid-Execution Failure".
 - Every child PR states its position, base, and dependency, plus a diagram marking the current PR with `📍`. See references → "Chain Context Section".
 - Describe every forge action as the capability it needs, never as one vendor's CLI; the command table in references → "Commands" holds the concrete instance.
-- Under Stacked only, group the chain into a native stack after the last PR is open — never in place of creating them, and never under a Chain, whose draft tracker a stack would merge along with it. Probe the client for the capability and confirm every branch is in ONE repository (references → "Commands"); a forge offering stacks does not imply this checkout reaches them. Never install the client yourself. Report the outcome you observed, not the one you attempted; anything short of every PR grouped is ungrouped. Its absence leaves the chain already correct — report it, never STOP for it. See references → "Native Stacks".
+- Under Stacked only, group the chain into a native stack after the last PR is open — never in place of creating them, and never under a Chain, whose draft tracker a stack would merge along with it. Grouping rewrites each PR's base to the one before it, imposing ONE line: group only when every PR already builds on its immediate predecessor. Two PRs sharing a parent make a tree — skip grouping and say so, since reparenting a PR onto a branch without what it builds on swells its diff with another slice's files. Probe the client for the capability and confirm every branch is in ONE repository (references → "Commands"); a forge offering stacks does not imply this checkout reaches them. Never install the client yourself. Read back each PR's base AND diff and report what you observed, not what you attempted; a grown diff is mis-grouped, anything short of every PR grouped is ungrouped, and correcting a base needs the stack dissolved first. Its absence leaves the chain already correct — report it, never STOP for it. See references → "Native Stacks".
 - Always ask the user to pick the chain strategy — never auto-select; recommend one from git-detected slice autonomy. Do not mix strategies after one is chosen. See references → "Choosing the Strategy".
 
 ## Decision Gates
@@ -38,7 +38,7 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 | Cannot split into independent units (generated/vendor/migration or indivisible authored logic) | Mark `size:exception`, do not force. |
 | Each slice builds/merges alone (autonomous) | Ask; recommend Stacked PRs to base. |
 | A slice cannot stand alone until the chain completes | Ask; recommend Feature Branch Chain with draft tracker. |
-| The chain will not be grouped natively (Chain strategy, no capability, or cross-fork) | Report it in the plan; chain the PRs unchanged. Never STOP, never re-plan. |
+| The chain will not be grouped natively (Chain strategy, two PRs sharing a parent, no capability, or cross-fork) | Report it in the plan; chain the PRs unchanged. Never STOP, never re-plan. |
 
 ## Execution Steps
 
