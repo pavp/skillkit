@@ -149,14 +149,17 @@ Each row is a capability the execution needs; the command column is one forge's 
 | Open a PR targeting the previous slice's branch | `gh pr create --base <parent-branch> --title "feat(scope): focused slice" --body-file pr-body.md` |
 | Probe the stack capability | `gh extension list` → a `gh stack` row |
 | Check the chain is single-repository | `gh pr view <PR_NUMBER> --json headRepositoryOwner` |
-| Group the chain into a native stack | `gh stack link <bottom-pr> <…> <top-pr>` |
+| Group the chain into a native stack (linear chain only) | `gh stack link <bottom-pr> <…> <top-pr>` |
+| Dissolve a stack before correcting a base | `gh stack unstack <stack>` |
 | Enable the capability (report, never run) | `gh extension install github/gh-stack` |
 
 ## Native Stacks
 
 A forge that groups a PR chain into a first-class stack retargets and merges it for you. GitHub does; it requires the `gh-stack` extension (`gh extension list` → `gh stack`) and all branches in one repository.
 
-`gh stack link` takes the already-created PRs bottom-to-top and groups them without touching branches, commits, or bases — run it after the last PR is open, never instead of creating them. Read back which PRs it actually covers and report that; a call that fails or covers only some of them leaves the rest ungrouped, never "grouped".
+`gh stack link` takes the already-created PRs bottom-to-top — run it after the last PR is open, never instead of creating them. It leaves branches and commits alone but DOES rewrite each PR's base to the one before it (`✓ Updated base branch for PR #N`), imposing one linear order. Group only a chain that is already that line: every PR building on its immediate predecessor. Force a tree into it — two PRs on the same parent — and the reparented PR is measured against a branch missing what it builds on, so its diff swells with the other slice's files. Measured: a PR went 88 → 310 lines that way.
+
+Rewritten bases are declarations, not history: the branches are not rebased, so `gh stack view` reports `needsRebase` and merging one PR does not fast-forward those above it. Read back every PR's base AND diff after the call, and report that; a call that fails, covers only some, or grows a diff leaves the chain mis-grouped, never "grouped". Correcting a base needs `gh stack unstack <stack>` first — a stacked PR refuses `gh pr edit --base`.
 
 Group under Stacked only. A Feature Branch Chain holds its tracker PR draft until the chain completes, and a stack would merge that tracker along with any PR above it — the one thing that strategy exists to prevent.
 
