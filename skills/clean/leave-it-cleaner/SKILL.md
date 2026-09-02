@@ -55,11 +55,11 @@ No gate returned `applied`/`proposed` → apply nothing, but still emit the rece
    | `clean` | you ran the classification and it holds | any gate | when the judge returned `defer` |
    | `degraded` | the companion skill is absent; you ran its `references/gates-detail.md` fallback instead | `G1`–`G4`, `G8` | when the fallback saw a smell |
    | `skipped` | a candidate was flagged, then dropped as unsafe or reverted | any gate | always |
-   | `n/a` | the gate's subject is absent from the zone | `G2` (no comments), `G5` (no locals), `G6` (no imports), `G7` (no nesting at all), `G8` (non-TS file) only | — |
+   | `n/a` | the gate's subject is absent from the zone | `G2` (no comments), `G5` (no locals at all), `G6` (no imports), `G7` (no nesting at all), `G8` (non-TS file) only | — |
 
    `G1`, `G3`, `G4` judge a property any code has — in a non-empty zone they are never `n/a`. Subject-absence is checked first: a non-TS file is `G8 n/a` whatever is installed, and `G8 degraded` is only a TS file with the `ts-*` skills absent.
 
-   A subject that is present but does not qualify is `clean`, not `n/a` — imports that are all used, nesting too shallow to extract. `G7 n/a` needs zero nested blocks (no block inside another block); one that exists but is too shallow to warrant extracting is `clean(nesting-too-shallow)`. Cite the ground on every `clean` and every `n/a` (`clean(all-imports-used)`, `n/a(no-imports)`).
+   A subject that is present but does not qualify is `clean`, not `n/a` — imports that are all used, nesting too shallow to extract. `G5 n/a` needs zero locals and `G7 n/a` zero nested blocks; locals that are all live, or one nested block too shallow to extract, are `clean(no-dead-locals)` / `clean(nesting-too-shallow)`. Cite the ground on every `clean` and every `n/a` (`clean(all-imports-used)`, `n/a(no-imports)`).
 
    A gate that SAW something it could not settle owes the suffix `+candidate` and one `unresolved:` line. Without it the verdict claims the gate found nothing — a coverage claim you did not earn. `skipped` names a candidate by definition, so it is ALWAYS `skipped+candidate`, whatever the gate and whoever dropped it — step 4's caller-safety drop and step 5's revert included. `degraded` takes it when the fallback saw a smell it was told to leave alone, and `clean` when the judge itself returned `defer`/`defer-signature` — a real finding you may not act on is not a gate that holds. One primary verdict per gate: a `degraded` fallback that both won something and saw something records the win in the cleanup line and the gate as `degraded+candidate`.
 3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
