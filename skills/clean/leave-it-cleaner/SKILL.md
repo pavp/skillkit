@@ -4,7 +4,7 @@ description: "Trigger: cleaning the zone you already touched. Applies the Boy Sc
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.2.0
+  version: 1.3.0
 ---
 
 # Leave It Cleaner
@@ -18,11 +18,10 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 ## Hard Rules
 
 - **Task first.** Complete the user's request before any cleanup. Cleanup is secondary and must never compromise or delay it.
-- **One cohesive set, zone-bounded.** Apply every safe win in the touched zone — several categories at once is fine (rename + name a magic number + drop a redundant comment). The touched zone IS the proportionality bound: never other functions, never other files, never a rewrite the task didn't require.
+- **One cohesive set, zone-bounded.** Apply every safe win in the touched zone; several categories at once is fine. The touched zone IS the proportionality bound: never other functions, never other files, never a rewrite the task didn't require.
 - **Scaffolding is out of scope.** Never touch `console.*`, `debugger`, or `// TODO`/`// FIXME` — do not judge "active vs trash", just leave them. Never remove a symbol still referenced anywhere you can see.
 - **Task-is-cleanup guard.** If the task WAS itself a cleanup/refactor, the task IS the win — add nothing on top.
-- **Auto-apply only what can't affect callers.** A change is auto-applicable only if it is behavior-preserving AND cannot affect anything outside the touched zone. A rename is auto only when the symbol is NOT exported / not part of the public surface AND is referenced only within the zone — an exported symbol is never auto-renamed even if its only visible use is in-zone (callers may live in files you never opened). Changing a signature, params, return type, or a side effect is likewise never auto-applied; skip it or propose. The Decision Gates mark which rows are auto vs propose.
-- **Behavior-preserving.** Must not change what the code does. Unsure it is safe → skip.
+- **Behavior-preserving, callers untouched.** Every win must leave behavior identical; unsure it is safe → skip. Auto additionally requires no reach outside the touched zone: an exported symbol is never auto-renamed even when its only visible use is in-zone, and a change to a signature, params, return type, or side effect is never auto-applied. The Decision Gates mark auto vs propose.
 
 ## Decision Gates
 
@@ -30,32 +29,43 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 
 Full per-row conditions + companion contract in `references/gates-detail.md`.
 
-| Opportunity | Action | Tier |
-|-------------|--------|------|
-| Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
-| Comment | Classify via `clean-comments`, declaring provenance per comment (`fresh` = you wrote it this session, `established` = already there); apply the remedy it returns, `delete-comment-span` never taking the line | Auto on a deletion remedy |
-| Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5` verdict, never `clean`/`defer-signature` | Propose |
-| Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
-| Dead local var (unused in whole file) | Remove it | Auto |
-| Unused import | Remove only a plain named/default import unused in the whole file (not side-effect/re-export) | Auto |
-| Deeply nested block | Extract one small named function — only if no new params/side effects | Propose |
-| TypeScript: types, signatures, module/imports | Follow the matching `ts-*` skill; don't invent rules | Per that skill |
-| No safe win in the zone | Do nothing; ship the task alone | — |
+| # | Opportunity | Action | Tier |
+|---|-------------|--------|------|
+| G1 | Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
+| G2 | Comment | Classify via `clean-comments`, declaring each comment's provenance; apply the remedy it returns | Auto on a deletion remedy |
+| G3 | Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5`, never `clean`/`defer-signature` | Propose |
+| G4 | Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
+| G5 | Dead local var (unused in whole file) | Remove it | Auto |
+| G6 | Unused import | Remove only a plain named/default import unused in the whole file (not side-effect/re-export) | Auto |
+| G7 | Deeply nested block | Extract one small named function — only if no new params/side effects | Propose |
+| G8 | TypeScript: types, signatures, module/imports | Follow the matching `ts-*` skill; don't invent rules | Per that skill |
 
 ## Execution Steps
 
 1. Finish the requested task. If the task WAS the cleanup, stop here.
-2. Scan the touched zone for the cohesive set of wins in the gates above.
-3. Confirm each is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
+2. Read `references/gates-detail.md` for the per-gate conditions, then sweep the touched zone gate by gate, `G1` through `G8`, in order. Visit every gate — a gate is never skipped for being expensive, unlikely, or already "covered" by another gate. Each visit ends in exactly one verdict — `applied`, `proposed`, `clean`, or `n/a` (the gate cannot apply: no imports in the zone, non-TS file for `G8`) — and you carry all eight to step 6. A gate that delegates to a companion skill is only `clean` once that skill returned `clean`; never write `clean` for a classification you did not run. Companion absent → follow its degradation rule in `references/gates-detail.md`, and the verdict is that rule's outcome.
+3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
 4. Auto-apply the Auto-tier wins; for Propose-tier wins, offer them instead of applying. Drop anything that could affect callers.
 5. Self-check: the applied changes stayed in the touched zone, changed no control flow, return type, or side effect. If any did, revert it.
-6. Annotate in one line what was cleaned.
+6. Emit the gate receipt, then the cleanup line.
 
 ## Output Contract
 
-The completed task, plus one line naming the cleanup (or nothing if there was no safe win). One line, not a report: ``also: renamed `x` → `results`, named the tax rate``.
+Two parts, both required, after the completed task.
 
-See `references/example.md` for a worked cohesive, behavior-preserving cleanup and a contrasting out-of-scope refactor.
+**Gate receipt** — one line, all eight gates, in order, each with its step-2 verdict. Never omit a gate; never collapse the line to a summary. A gate with no verdict is a defect in the run, not a formatting choice:
+
+```
+gates: G1 applied · G2 applied · G3 clean · G4 proposed · G5 clean · G6 n/a · G7 clean · G8 n/a
+```
+
+**Cleanup line** — one line naming what changed, or `no safe win` when every gate came back `clean`/`n/a`:
+
+```
+also: renamed `x` → `results`, dropped a comment restating the loop
+```
+
+Unsure whether a win is cohesive or an out-of-scope refactor → read `references/example.md`, which contrasts the two.
 
 ## References
 

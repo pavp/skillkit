@@ -1,18 +1,17 @@
 # Decision Gates — detail & companion contract
 
-The per-row rules behind the Decision Gates table in `SKILL.md`, and the companion-skill degradation contract. The table stays terse; the full conditions live here.
+The per-row rules behind the Decision Gates table in `SKILL.md`, and the companion-skill degradation contract. Gate IDs (`G1`–`G8`) match the table and the gate receipt. The table stays terse; the full conditions live here.
 
 ## Per-row detail
 
-- **Poor variable/function name** — Classify via `clean-names`; rename only a flagged verdict (`N1`–`N7`), never a `clean` one. Auto ONLY if the flagged symbol is non-exported and referenced solely within the touched zone; an exported/public symbol is proposed, never auto-renamed (callers may live in files you never opened).
-- **Comment** — Classify via `clean-comments`, declaring provenance per comment: `fresh` for a comment you authored in this session, `established` for one that was already there. Never declare a whole file or hunk `fresh` — that hands pre-existing comments to the strict bar. Act on the returned remedy: `delete` removes the comment; `delete-comment-span` removes ONLY the comment text and keeps the code and formatting on that line; `keep` and `defer` are never deleted. Auto if the remedy is a deletion and the comment sits in the touched zone.
-- **Function doing two things / mutated arg / flag param / dead helper** — Classify via `clean-functions`; act only on a flagged verdict (`F2`–`F5`), never `clean` or `defer-signature`. Always Propose — a split, a mutation-to-return, or a deletion touches call sites, so it is never auto-applied even when the symbol looks zone-local.
-- **Duplicated logic / magic value / obscured intent / repeated type switch / train wreck** — Classify via `clean-structure`; act only on a flagged verdict (`S1`–`S5`), never `clean`. Auto ONLY for `S2` (name a bare literal — behavior-preserving, no call sites move). `S1` (extract a single source), `S4` (polymorphic dispatch), and `S5` (add a method on the collaborator) touch call sites → Propose. `S3` (intention-revealing extraction) → Propose. This gate replaces the old inline "Magic number → Auto" rule, which double-owned `clean-structure`'s S2 axis.
-- **Dead local var** — Remove only if unused in the whole file. Auto.
-- **Unused import** — Remove ONLY a plain named/default import, unused in the whole file, that is not a side-effect import (`import 'x'`) or a re-export; else skip. Auto.
-- **Deeply nested block / function doing two things** — Extract one small, well-named function ONLY if it needs no new params and adds no side effects; else skip. Propose.
-- **TypeScript: types, signatures, module/imports** — Follow the matching `ts-*` skill; do not invent rules. Per that skill.
-- **No safe win** — Do nothing; ship the task alone.
+- **`G1` Poor variable/function name** — Classify via `clean-names`; rename only a flagged verdict (`N1`–`N7`), never a `clean` one. Auto ONLY if the flagged symbol is non-exported and referenced solely within the touched zone; an exported/public symbol is proposed, never auto-renamed (callers may live in files you never opened).
+- **`G2` Comment** — Classify via `clean-comments`, declaring provenance per comment: `fresh` for a comment you authored in this session, `established` for one that was already there. Never declare a whole file or hunk `fresh` — that hands pre-existing comments to the strict bar. Act on the returned remedy: `delete` removes the comment; `delete-comment-span` removes ONLY the comment text and keeps the code and formatting on that line; `keep` and `defer` are never deleted. Auto if the remedy is a deletion and the comment sits in the touched zone.
+- **`G3` Function doing two things / mutated arg / flag param / dead helper** — Classify via `clean-functions`; act only on a flagged verdict (`F2`–`F5`), never `clean` or `defer-signature`. Always Propose — a split, a mutation-to-return, or a deletion touches call sites, so it is never auto-applied even when the symbol looks zone-local.
+- **`G4` Duplicated logic / magic value / obscured intent / repeated type switch / train wreck** — Classify via `clean-structure`; act only on a flagged verdict (`S1`–`S5`), never `clean`. Auto ONLY for `S2` (name a bare literal — behavior-preserving, no call sites move). `S1` (extract a single source), `S4` (polymorphic dispatch), and `S5` (add a method on the collaborator) touch call sites → Propose. `S3` (intention-revealing extraction) → Propose. This gate replaces the old inline "Magic number → Auto" rule, which double-owned `clean-structure`'s S2 axis.
+- **`G5` Dead local var** — Remove only if unused in the whole file. Auto.
+- **`G6` Unused import** — Remove ONLY a plain named/default import, unused in the whole file, that is not a side-effect import (`import 'x'`) or a re-export; else skip. Auto.
+- **`G7` Deeply nested block** — Extract one small, well-named function ONLY if it needs no new params and adds no side effects; else skip. Propose.
+- **`G8` TypeScript: types, signatures, module/imports** — Follow the matching `ts-*` skill; do not invent rules. Per that skill.
 
 ## Companion skills
 
