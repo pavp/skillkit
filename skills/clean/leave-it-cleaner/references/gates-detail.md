@@ -15,7 +15,7 @@ The per-row rules behind the Decision Gates table in `SKILL.md`, and the compani
 
 ## Companion skills
 
-Each is referenced by name and installed separately. If one is absent, never guess: run the fallback below and record the gate as `degraded` — plus `applied`/`proposed` if the fallback still found a win.
+Each is referenced by name and installed separately. If one is absent, never guess: run the fallback below and record the gate as `degraded` — plus `applied`/`proposed` if the fallback still found a win. A fallback that tells you to leave something alone still owes the sighting: mark the gate `degraded+candidate` and name it under `unresolved:`. Skipping the ACTION is not the same as reporting nothing.
 
 - **`clean-comments`** — classifies a comment (noise / load-bearing / commented-out / out-of-domain) and prescribes a remedy (`delete` / `delete-comment-span` / `keep` / `defer`); you declare each comment's provenance (`fresh` / `established`). Delete only on a deletion remedy, and only the span it names. Absent → `degraded`: delete only an own-line comment that plainly restates code; leave every comment that shares a line with code alone.
 - **`clean-names`** — classifies an identifier against naming rules (`N1`–`N7` or `clean`); rename only a flagged verdict, and only when the symbol is non-exported and referenced only within the touched zone. Absent → `degraded`: rename only an obviously cryptic zone-local, never a public/exported symbol.

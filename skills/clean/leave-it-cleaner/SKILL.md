@@ -4,7 +4,7 @@ description: "Trigger: cleaning the zone you already touched. Applies the Boy Sc
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.0.0
+  version: 2.1.0
 ---
 
 # Leave It Cleaner
@@ -58,6 +58,8 @@ No gate returned `applied`/`proposed` → do nothing; ship the task alone.
    | `n/a` | the gate has no subject in this zone | `G2` (no comments), `G5` (no locals), `G6` (no imports), `G7` (no nested block), `G8` (non-TS file) only |
 
    `G1`, `G3`, `G4` judge a property any code has — in a non-empty zone they are never `n/a`. Subject-absence is checked first: a non-TS file is `G8 n/a` whatever is installed, and `G8 degraded` is only a TS file with the `ts-*` skills absent.
+
+   A `degraded` or `skipped` gate where you still SAW something — a smell the missing judge would have ruled on, a candidate the safety rules dropped — takes the suffix `+candidate` and owes an `unresolved:` entry naming it. Without the suffix the verdict claims the gate found nothing, which is a coverage claim you did not earn.
 3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
 4. Auto-apply the Auto-tier wins; for Propose-tier wins, offer them instead of applying. Drop anything that could affect callers.
 5. Self-check: the applied changes stayed in the touched zone, changed no control flow, return type, or side effect. If any did, revert it — a reverted win downgrades its gate to `proposed` if you offer it instead, else `skipped`.
@@ -65,18 +67,24 @@ No gate returned `applied`/`proposed` → do nothing; ship the task alone.
 
 ## Output Contract
 
-Two parts, both required, after the completed task — owed only when step 2 ran: a task-is-cleanup stop at step 1 emits neither.
+Two parts after the completed task, plus a third when any gate is marked — owed only when step 2 ran: a task-is-cleanup stop at step 1 emits none.
 
 **Gate receipt** — one line, all eight gates, in order, each with its step-2 verdict. Never omit a gate; never collapse the line to a summary. A gate with no verdict is a defect in the run, not a formatting choice. Every `n/a` carries its ground and every delegated `clean` carries the judge verdict that produced it, so the claim cites a fact a reader can check:
 
 ```
-gates: G1 applied · G2 applied · G3 clean(F-clean) · G4 proposed · G5 skipped · G6 n/a(no-imports) · G7 n/a(no-nesting) · G8 degraded
+gates: G1 applied · G2 applied · G3 degraded+candidate · G4 proposed · G5 skipped · G6 n/a(no-imports) · G7 n/a(no-nesting) · G8 clean(ts-clean)
 ```
 
-**Cleanup line** — one line naming what changed, or `no safe win` when no gate came back `applied`/`proposed`:
+**Cleanup line** — one line, `also:` then what changed. When no gate came back `applied`/`proposed` the whole line is `no safe win`, without the prefix:
 
 ```
 also: renamed `x` → `results`, dropped a comment restating the loop
+```
+
+**Unresolved** — one line per `+candidate` gate, naming what you saw, where, and why no verdict settled it. Never propose the fix here; a candidate no judge ruled on is not yet a win to offer:
+
+```
+unresolved: G4 the retry delay is duplicated in `send` and `flush` (possible S1) — extracting it moves both call sites, dropped as unsafe here
 ```
 
 Unsure whether a win is cohesive or an out-of-scope refactor → read `references/example.md`, which contrasts the two.
