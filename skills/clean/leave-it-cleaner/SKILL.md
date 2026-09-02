@@ -21,7 +21,7 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 - **One cohesive set, zone-bounded.** Apply every safe win in the touched zone; several categories at once is fine. The touched zone IS the proportionality bound: never other functions, never other files, never a rewrite the task didn't require.
 - **Scaffolding is out of scope.** Never touch `console.*`, `debugger`, or `// TODO`/`// FIXME` — do not judge "active vs trash", just leave them. Never remove a symbol still referenced anywhere you can see.
 - **Task-is-cleanup guard.** If the task WAS itself a cleanup/refactor, the task IS the win — add nothing on top.
-- **Behavior-preserving, callers untouched.** Every win must leave behavior identical; unsure it is safe → skip. Auto additionally requires no reach outside the touched zone: an exported symbol is never auto-renamed even when its only visible use is in-zone, and a change to a signature, params, return type, or side effect is never auto-applied. The Decision Gates mark auto vs propose.
+- **Behavior-preserving, callers untouched.** Every win must leave behavior identical; unsure it is safe → skip. Auto additionally requires no reach outside the touched zone: an exported symbol is never auto-renamed even when its only visible use is in-zone (callers may live in files you never opened), and a change to a signature, params, return type, or side effect is never auto-applied. The Decision Gates mark auto vs propose.
 
 ## Decision Gates
 
@@ -43,7 +43,17 @@ Full per-row conditions + companion contract in `references/gates-detail.md`.
 ## Execution Steps
 
 1. Finish the requested task. If the task WAS the cleanup, stop here.
-2. Read `references/gates-detail.md` for the per-gate conditions, then sweep the touched zone gate by gate, `G1` through `G8`, in order. Visit every gate — a gate is never skipped for being expensive, unlikely, or already "covered" by another gate. Each visit ends in exactly one verdict — `applied`, `proposed`, `clean`, or `n/a` (the gate cannot apply: no imports in the zone, non-TS file for `G8`) — and you carry all eight to step 6. A gate that delegates to a companion skill is only `clean` once that skill returned `clean`; never write `clean` for a classification you did not run. Companion absent → follow its degradation rule in `references/gates-detail.md`, and the verdict is that rule's outcome.
+2. Read `references/gates-detail.md` for the per-gate conditions, then sweep the touched zone gate by gate, `G1` through `G8`, in order. Visit every gate — a gate is never skipped for being expensive, unlikely, or already "covered" by another gate. Each visit ends in exactly one of five verdicts, and you carry all eight to step 6:
+
+   | Verdict | Means | Allowed on |
+   |---------|-------|------------|
+   | `applied` | an Auto-tier win you made | any gate |
+   | `proposed` | a Propose-tier win you offered | any gate |
+   | `clean` | you ran the classification and it holds | any gate |
+   | `degraded` | the companion skill is absent; you ran its `references/gates-detail.md` fallback instead | `G1`–`G4`, `G8` |
+   | `n/a` | the gate has no subject in this zone | `G2` (no comments), `G6` (no imports), `G8` (non-TS file) only |
+
+   `G1`, `G3`, `G4`, `G5`, `G7` always have a subject in a non-empty zone — they are never `n/a`. Never write `clean` for a classification you did not run: an absent companion is `degraded`, and whatever its fallback found still lands as `applied`/`proposed` when it finds something.
 3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
 4. Auto-apply the Auto-tier wins; for Propose-tier wins, offer them instead of applying. Drop anything that could affect callers.
 5. Self-check: the applied changes stayed in the touched zone, changed no control flow, return type, or side effect. If any did, revert it.
@@ -56,10 +66,10 @@ Two parts, both required, after the completed task.
 **Gate receipt** — one line, all eight gates, in order, each with its step-2 verdict. Never omit a gate; never collapse the line to a summary. A gate with no verdict is a defect in the run, not a formatting choice:
 
 ```
-gates: G1 applied · G2 applied · G3 clean · G4 proposed · G5 clean · G6 n/a · G7 clean · G8 n/a
+gates: G1 applied · G2 applied · G3 clean · G4 proposed · G5 clean · G6 n/a · G7 clean · G8 degraded
 ```
 
-**Cleanup line** — one line naming what changed, or `no safe win` when every gate came back `clean`/`n/a`:
+**Cleanup line** — one line naming what changed, or `no safe win` when no gate came back `applied`/`proposed`:
 
 ```
 also: renamed `x` → `results`, dropped a comment restating the loop
