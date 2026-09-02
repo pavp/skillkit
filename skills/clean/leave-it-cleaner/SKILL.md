@@ -17,7 +17,7 @@ Load right AFTER completing an edit to existing code, when a quick proportional 
 
 ## Hard Rules
 
-- **Task first.** Complete the user's request before any cleanup. Cleanup is secondary and must never compromise or delay it.
+- **Task first.** Complete the user's request before any cleanup. Cleanup is secondary and must never compromise or delay it. A win the task edit produced on its own still counts as that gate's `applied` — the receipt records what the zone ended up with, not which pass did it.
 - **One cohesive set, zone-bounded.** Apply every safe win in the touched zone; several categories at once is fine. The touched zone IS the proportionality bound: never other functions, never other files, never a rewrite the task didn't require.
 - **Scaffolding is out of scope.** Never touch `console.*`, `debugger`, or `// TODO`/`// FIXME` — do not judge "active vs trash", just leave them. Never remove a symbol still referenced anywhere you can see.
 - **Task-is-cleanup guard.** If the task WAS itself a cleanup/refactor, the task IS the win — add nothing on top.
@@ -55,9 +55,11 @@ No gate returned `applied`/`proposed` → do nothing; ship the task alone.
    | `clean` | you ran the classification and it holds | any gate |
    | `degraded` | the companion skill is absent; you ran its `references/gates-detail.md` fallback instead | `G1`–`G4`, `G8` |
    | `skipped` | a candidate was flagged, then dropped as unsafe or reverted | any gate |
-   | `n/a` | the gate has no subject in this zone | `G2` (no comments), `G5` (no locals), `G6` (no imports), `G7` (no nested block), `G8` (non-TS file) only |
+   | `n/a` | the gate's subject is absent from the zone | `G2` (no comments), `G5` (no locals), `G6` (no imports), `G7` (no nesting at all), `G8` (non-TS file) only |
 
    `G1`, `G3`, `G4` judge a property any code has — in a non-empty zone they are never `n/a`. Subject-absence is checked first: a non-TS file is `G8 n/a` whatever is installed, and `G8 degraded` is only a TS file with the `ts-*` skills absent.
+
+   A subject that is present but does not qualify is `clean`, not `n/a` — imports that are all used, nesting too shallow to extract. Cite the ground either way (`clean(all-imports-used)`, `n/a(no-imports)`).
 
    A `degraded` or `skipped` gate where you still SAW something — a smell the missing judge would have ruled on, a candidate the safety rules dropped — takes the suffix `+candidate` and owes an `unresolved:` entry naming it. Without the suffix the verdict claims the gate found nothing, which is a coverage claim you did not earn.
 3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
@@ -72,7 +74,7 @@ Two parts after the completed task, plus a third when any gate is marked — owe
 **Gate receipt** — one line, all eight gates, in order, each with its step-2 verdict. Never omit a gate; never collapse the line to a summary. A gate with no verdict is a defect in the run, not a formatting choice. Every `n/a` carries its ground and every delegated `clean` carries the judge verdict that produced it, so the claim cites a fact a reader can check:
 
 ```
-gates: G1 applied · G2 applied · G3 degraded+candidate · G4 proposed · G5 skipped · G6 n/a(no-imports) · G7 n/a(no-nesting) · G8 clean(ts-clean)
+gates: G1 applied · G2 applied · G3 degraded+candidate · G4 proposed · G5 skipped · G6 clean(all-imports-used) · G7 n/a(no-nesting) · G8 clean(ts-clean)
 ```
 
 **Cleanup line** — one line, `also:` then what changed. When no gate came back `applied`/`proposed` the whole line is `no safe win`, without the prefix:
