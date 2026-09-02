@@ -1,6 +1,6 @@
 # Decision Gates — detail & companion contract
 
-The per-row rules behind the Decision Gates table in `SKILL.md`, and the companion-skill degradation contract. Gate IDs (`G1`–`G8`) match the table and the gate receipt. The table stays terse; the full conditions live here.
+The per-row rules behind the Decision Gates table in `SKILL.md`, and the companion-skill degradation contract. Gate IDs (`G1`–`G8`) match the table and the gate receipt; `SKILL.md` owns the ID space, so adding or renumbering a gate edits both files together. The table stays terse; the full conditions live here.
 
 ## Per-row detail
 
@@ -10,7 +10,7 @@ The per-row rules behind the Decision Gates table in `SKILL.md`, and the compani
 - **`G4` Duplicated logic / magic value / obscured intent / repeated type switch / train wreck** — Classify via `clean-structure`; act only on a flagged verdict (`S1`–`S5`), never `clean`. Auto ONLY for `S2` (name a bare literal — behavior-preserving, no call sites move). `S1` (extract a single source), `S4` (polymorphic dispatch), and `S5` (add a method on the collaborator) touch call sites → Propose. `S3` (intention-revealing extraction) → Propose. This gate replaces the old inline "Magic number → Auto" rule, which double-owned `clean-structure`'s S2 axis.
 - **`G5` Dead local var** — Remove only if unused in the whole file. Auto.
 - **`G6` Unused import** — Remove ONLY a plain named/default import, unused in the whole file, that is not a side-effect import (`import 'x'`) or a re-export; else skip. Auto.
-- **`G7` Deeply nested block** — Extract one small, well-named function ONLY if it needs no new params and adds no side effects; else skip. Propose.
+- **`G7` Deeply nested block** — Extract one small, well-named function ONLY if it needs no new params and adds no side effects; else skip. Propose. Nesting depth only: a function doing two things is `G3`'s alone, under its stricter remedy.
 - **`G8` TypeScript: types, signatures, module/imports** — Follow the matching `ts-*` skill; do not invent rules. Per that skill.
 
 ## Companion skills
