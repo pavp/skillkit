@@ -4,7 +4,7 @@ description: "Trigger: cleaning the zone you already touched. Applies the Boy Sc
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # Leave It Cleaner
@@ -33,7 +33,7 @@ Full per-row conditions + companion contract in `references/gates-detail.md`.
 | # | Opportunity | Action | Tier |
 |---|-------------|--------|------|
 | G1 | Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
-| G2 | Comment | Classify via `clean-comments`, declaring each comment's provenance (`fresh` = you wrote it this session, `established` = already there, and undeclared defaults to `established`); apply the remedy it returns, `delete-comment-span` removing the comment text only, never the line | Auto on a deletion remedy |
+| G2 | Comment | Classify via `clean-comments`, declaring each comment's provenance (`fresh` = you wrote it this session, `established` = already there, and undeclared defaults to `established`); apply the remedy it returns, recording the bar each verdict names, `delete-comment-span` removing the comment text only, never the line | Auto on a deletion remedy |
 | G3 | Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5`, never `clean`/`defer-signature` | Propose |
 | G4 | Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
 | G5 | Dead local var (unused in whole file) | Remove it | Auto |
