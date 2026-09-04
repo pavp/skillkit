@@ -4,7 +4,7 @@ description: "Trigger: judging comments. Classifies each as noise / load-bearing
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.0.0
+  version: 2.1.0
 ---
 
 # Clean Comments
@@ -17,6 +17,8 @@ Load when an EXISTING comment needs a verdict: a cleanup actor (e.g. `leave-it-c
 
 **Provenance.** The caller declares each comment's provenance: `fresh` (just generated, or never human-reviewed) or `established` (pre-existing, survived review). It sets which bar applies (see Decision Gates). Undeclared → `established`, the conservative side. The judge does not derive provenance; it never inspects git.
 
+A human is a caller too, and declares in plain words: "I just wrote this" / "an agent generated this" → `fresh`; "this was already there" / "this is old" → `established`.
+
 ## Hard Rules
 
 - **Judge, never act.** Emit a verdict plus its remedy per comment. Never delete, rewrite, or move a comment yourself.
@@ -24,6 +26,7 @@ Load when an EXISTING comment needs a verdict: a cleanup actor (e.g. `leave-it-c
 - **Default is no comment.** A comment earns its place only if a reader would be SURPRISED by the code without it (the surprise test). Restating the code = noise.
 - **Restatement dies in both regimes.** A comment that purely restates present code is `noise` whatever its provenance or age. Surviving review does not make a restatement load-bearing.
 - **Two speeds, for genuine doubt only.** After the restatement test has run: `fresh` → unresolved doubt about a why → `noise`. `established` → unresolved doubt → `load-bearing`. No code to read against → `load-bearing` in both. Rationale in `references/comment-criteria.md`.
+- **Only a declaration sets the bar, and every verdict names it.** Nothing else moves the bar: not how sceptical the ask sounds, not how many comments a file carries, not the judge's own hunch. Scepticism is answered by the restatement test (step 5), which needs no declaration and runs before any provenance check — a comment restating its code comes back `noise` however the question was phrased. An undeclared ask runs `established` and reports `established (undeclared)` as the assumption it is; never resolve it by asking the human to declare, and never guess.
 - **Reason-token gate — automatic only for `established`.** On `established`, any reason token (`because`, `to avoid`, `fails`, `workaround`, an external system's name, a ticket cited as the reason …) → `load-bearing`. On `fresh`, the token must come with a clause naming a fact not derivable from the code; a token inside a restatement does not save it (`// safe to mutate here` → `noise`). Full token list and the fresh-mode test in `references/comment-criteria.md`.
 - **Trailing is a removal constraint, not a verdict shield.** A comment sharing a line with code is judged on content like any other; the structural fact sets only the remedy (`delete-comment-span` — never take the line). Never "keep because trailing".
 - **Judge blocks whole.** A multi-line or doc comment is one unit: any segment carrying a why (per the regime's token rule) makes the whole block `load-bearing`.
@@ -41,8 +44,8 @@ Apply in order; first match wins. Sharing a line with code does NOT short-circui
 | Referenced code is unavailable, or the comment points outside the code supplied | `load-bearing` (both regimes) |
 | Restates the WHAT of nearby code, carries no why | `noise` (both regimes, any age) |
 | Metadata ONLY — author / date / history / a ticket id, no reason clause anywhere | `noise` (both regimes) |
-| Names a why the code cannot show — counterintuitive / a scar / a road-not-taken | `load-bearing` |
-| Verifiably describes code that no longer exists / works differently AND names no reason | `noise` (obsolete) |
+| Names a why the code cannot show — counterintuitive / a scar / a road-not-taken | `load-bearing` (both regimes) |
+| Verifiably describes code that no longer exists / works differently AND names no reason | `noise` (obsolete, both regimes) |
 | Carries a reason token, `established` | `load-bearing` (gate is automatic) |
 | Carries a reason token, `fresh` | Token names a real why → `load-bearing`; token inside a restatement → `noise` |
 | Genuine unresolved doubt a why exists / is still current, `established` | `load-bearing` (conservative) |
@@ -50,21 +53,23 @@ Apply in order; first match wins. Sharing a line with code does NOT short-circui
 
 ## Execution Steps
 
-Steps 2–8 reach a verdict; step 9 then assigns its remedy. `Stop.` ends the verdict cascade, never the procedure — every comment exits through step 9.
+Steps 2–8 reach a verdict; step 9 then assigns its remedy and reports its bar. `Stop.` ends the verdict cascade, never the procedure — every comment exits through step 9.
 
-1. Isolate the comment and the code it refers to. Note its declared provenance (`fresh` / `established`; undeclared → `established`).
+1. Isolate the comment and the code it refers to. Note TWO facts: its provenance (`fresh` / `established`) and whether a declaration arrived. A human's plain words are a declaration; a sceptical question is not — an ask like "does this really deserve a comment?" leaves it undeclared. No declaration → provenance `established`, bar `established (undeclared)`; a declared `established` → bar `established`.
 2. If it is a `// TODO`/`// FIXME` marker, a tooling pragma, a license header, or a generated banner → `out-of-domain`. Stop.
 3. If it is commented-out code → `commented-out`. Stop.
 4. If the referenced code is unavailable, or the comment names anything outside the code you were given → `load-bearing`. Stop. (Nothing to read against means no test ran.)
 5. Apply the surprise test against the code you read: purely restates the WHAT of present code, or is metadata with no reason clause anywhere in it → `noise`. Stop. Runs before any token or provenance check — restatement dies in both regimes, at any age.
 6. Check the three load-bearing cases — counterintuitive (a non-obvious choice), scar (a bug/quirk/workaround), road-not-taken (why an alternative was rejected); detail in `references/comment-criteria.md`. Any hit → `load-bearing`. Stop.
 7. Run the reason-token gate under the declared regime: `established` → any token hits, `load-bearing`. `fresh` → the token must be accompanied by a clause naming a fact not derivable from the referenced lines (an external system, an observed failure, a rejected alternative). Hit → `load-bearing`. Stop.
-8. Verifiably obsolete and naming no reason → `noise`. Otherwise doubt remains: `established` → `load-bearing`; `fresh` → `noise`.
-9. Assign the remedy for the verdict reached: `noise` → `delete`, or `delete-comment-span` when the comment shares a line with code. `load-bearing` → `keep`. `commented-out` / `out-of-domain` → `defer` (caller's rules), still span-only if it shares a line with code.
+8. Verifiably obsolete and naming no reason → `noise` (obsolete) in both regimes — the bar did not decide it. Otherwise doubt remains, and here the bar decides: `established` → `load-bearing`; `fresh` → `noise`.
+9. Assign the remedy for the verdict reached: `noise` → `delete`, or `delete-comment-span` when the comment shares a line with code. `load-bearing` → `keep`. `commented-out` / `out-of-domain` → `defer` (caller's rules), still span-only if it shares a line with code. Then report the bar per the Output Contract.
 
 ## Output Contract
 
-Per comment: `file:line` + verdict + remedy + a one-clause reason. Verdicts: `noise` / `load-bearing` / `commented-out` / `out-of-domain`. Remedies: `delete` / `delete-comment-span` / `keep` / `defer` (caller's rules). `trailing` is never a verdict — a trailing restatement reports `noise` + `delete-comment-span`.
+Per comment: `file:line` + verdict + remedy + the bar it ran under + a one-clause reason. Verdicts: `noise` / `load-bearing` / `commented-out` / `out-of-domain`. Remedies: `delete` / `delete-comment-span` / `keep` / `defer` (caller's rules). Bars: `fresh` / `established` / `established (undeclared)`. `trailing` is never a verdict — a trailing restatement reports `noise` + `delete-comment-span`.
+
+Every verdict names its bar. On `established (undeclared)` report it as the assumption it is, and add what a `fresh` declaration would change on exactly the two paths where the bar decided the verdict: a step-8 tie, or a step-7 token gate that fired automatically. Never anywhere else — a verdict from steps 2–6, a step-7 token naming a real why, and `noise (obsolete)` hold in both regimes, so there a redeclaration changes nothing and claiming otherwise invites the one `fresh` declaration that costs a why. Naming redeclaration as available is not asking for one.
 
 The judge emits no edits. But a `noise` remedy is a prescription, not a suggestion: the caller deletes, or states why it did not. Rewriting a `noise` comment into a shorter comment does not discharge it. When the caller is a human asking directly, phrase the verdict, the remedy, and the reason plainly.
 
