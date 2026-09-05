@@ -4,7 +4,7 @@ description: "Trigger: judging comments. Classifies each as noise / load-bearing
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.2.0
+  version: 3.0.0
 ---
 
 # Clean Comments
@@ -37,7 +37,7 @@ A human is a caller too, and declares in plain words: "I just wrote this" / "an 
 
 ## Decision Gates
 
-Apply in order; first match wins. Sharing a line with code does NOT short-circuit these — it only sets the remedy (see the Output Contract).
+Apply in order; first match wins — per SEGMENT, since step 1b splits a block before the cascade runs. Sharing a line with code does NOT short-circuit these — it only sets the remedy (see the Output Contract). The last two rows are step-9 reassembly outcomes, not cascade matches: they run after every segment has already matched a row above, so a mixed block does not stop at the first restating segment.
 
 | Comment shape | Verdict |
 |---------------|---------|
@@ -59,7 +59,7 @@ Apply in order; first match wins. Sharing a line with code does NOT short-circui
 
 Steps 2–8 reach a verdict; step 9 then reassembles the block, assigns the remedy, and reports the bar. `Stop.` ends the verdict cascade for the unit being judged, never the procedure — every comment exits through step 9.
 
-A multi-line block runs the cascade ONCE PER SEGMENT (step 1 splits it). A segment's `Stop.` ends that segment only; the next segment starts at step 2. Step 9 turns the per-segment verdicts back into one verdict for the block.
+A multi-line block runs the cascade ONCE PER SEGMENT (step 1b splits it). A segment's `Stop.` ends that segment only; the next segment starts at step 2. Step 9 turns the per-segment verdicts back into one verdict for the block.
 
 1. Isolate the comment and the code it refers to. Note TWO facts: its provenance (`fresh` / `established`) and whether a declaration arrived. A human's plain words are a declaration; a sceptical question is not — an ask like "does this really deserve a comment?" leaves it undeclared. No declaration → provenance `established`, bar `established (undeclared)`; a declared `established` → bar `established`.
 1b. If the comment is a multi-line block or doc comment, split it into segments (a line, or a self-contained sentence) and run steps 2–8 on each. Provenance and bar are the block's — they never vary by segment. A single-line comment is one segment; skip to step 2.

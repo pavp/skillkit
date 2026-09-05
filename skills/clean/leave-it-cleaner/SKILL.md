@@ -54,7 +54,7 @@ No gate returned `applied`/`proposed` → apply nothing, but still emit the rece
    | `proposed` | a Propose-tier win you offered | any gate | — |
    | `clean` | you ran the classification and it holds | any gate | when the judge returned `defer` |
    | `degraded` | the companion skill is absent; you ran its `references/gates-detail.md` fallback instead | `G1`–`G4`, `G8` | when the fallback saw a smell |
-   | `skipped` | a candidate was flagged, then dropped as unsafe or reverted | any gate | always |
+   | `skipped` | a candidate was flagged, then not carried out — dropped as unsafe, reverted, or a judge remedy you could not execute (malformed payload, a form you cannot place) | any gate | always |
    | `n/a` | the gate's subject is absent from the zone | `G2` (no comments), `G5` (no locals at all), `G6` (no imports), `G7` (no nesting at all), `G8` (non-TS file) only | — |
 
    `G1`, `G3`, `G4` judge a property any code has — in a non-empty zone they are never `n/a`. Subject-absence is checked first: a non-TS file is `G8 n/a` whatever is installed, and `G8 degraded` is only a TS file with the `ts-*` skills absent.

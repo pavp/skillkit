@@ -67,7 +67,7 @@ All of these are the surprise test failing — the reader loses nothing if the c
 
 - **Redundant** — restates the code: `user.save(); // save the user`. (Fix by better naming, not by commenting.)
 - **Metadata** — attribution and NOTHING else: `// Author: jdoe, 2021-03, JIRA-123`. Git already has it → `noise`. Any reason clause anywhere in the comment disqualifies this gate, whatever else it carries: `// Author: jdoe — disabled because Safari 14 crashes` is `load-bearing`, not metadata. The test is "attribution only", not "starts with attribution".
-- **Obsolete** — verifiably describes code that no longer exists or works differently AND carried no why to begin with. Stale comments misdirect → `noise`. If unsure whether the code changed, or whether a why remains → `load-bearing` (delete bar = add bar). An obsolete comment that still names a reason is `load-bearing` — the why may still bind the current code.
+- **Obsolete** — verifiably describes code that no longer exists or works differently AND carried no why to begin with. Stale comments misdirect → `noise`. If unsure whether the code changed, or whether a why remains → `load-bearing` (delete bar = add bar). An obsolete comment that still names a reason is `load-bearing` — the why may still bind the current code. In a multi-line block that protection is per segment, not blanket: the segment naming the reason is what survives, and obsolete restatement around it is trimmed (see Blocks and doc comments).
 
 ## commented-out and out-of-domain
 
