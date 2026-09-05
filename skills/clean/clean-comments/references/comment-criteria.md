@@ -76,7 +76,71 @@ All of these are the surprise test failing — the reader loses nothing if the c
 
 ## Blocks and doc comments
 
-A multi-line comment or a doc block (`/* */`, JSDoc/TSDoc) is judged as ONE unit. If any segment carries a why — a reason token under the declared regime's rule — the whole block is `load-bearing`, even if other segments are metadata (`@author`) or restatement. A block comment sharing a line with code is judged on content like any other; the shared line sets its remedy (see Trailing).
+A multi-line comment or a doc block (`/* */`, JSDoc/TSDoc) is judged **segment by segment**, then reassembled. A segment is a line, or a self-contained sentence.
+
+An earlier version judged the block as one atomic unit: any segment carrying a why made the whole block `load-bearing`, restatement included. That kept the why — and everything glued to it. Agent-generated doc blocks are mostly signature restatement wrapped around one real remark, so the atomic rule preserved the noise in bulk, and no other rule here could reach it: the block had already exited as `load-bearing`.
+
+What survives from that rule is the protection, not the free ride:
+
+- **Contagion upward stands.** One `load-bearing` segment makes the BLOCK `load-bearing`. A block with a why is never deleted whole.
+- **Inheritance downward is gone.** A restating segment is `noise` on its own merits; sharing a block with a why does not launder it.
+- A block whose segments split is `load-bearing` + `keep-trim`, and the remedy carries the segments to delete.
+
+A block comment sharing a line with code is judged on content like any other; the shared line sets its remedy (see Trailing).
+
+### The self-sufficiency cut
+
+Segmentation cuts text, and text is not as separable as code. A segment may exist only to set up the next one:
+
+```ts
+/**
+ * The list arrives already sorted by the ranking service.   <- reads as restatement of the API call
+ * So we skip the sort here.                                 <- the why, and it points at line 1
+ */
+```
+
+Trim line 1 and line 2 becomes `So we skip the sort here.` — "so" pointing at nothing. The block still says `load-bearing`, but the why it was protecting is now unreadable. A trim that breaks the surviving why costs more than the noise it removed.
+
+Before trimming a `noise` segment, read the rest of the block WITHOUT it. It stays if what remains leaves:
+
+- an **anaphor** dangling — `so`, `hence`, `therefore`, `this`, `that`, `it`, a pronoun whose antecedent was the segment you are cutting;
+- a **split enumeration** — `First, …` / `Second, …` where one item goes;
+- a **continuing clause** — a sentence running across the segment break.
+
+Doubt about a dependency → it stays, in both regimes. The trim inherits the same bias the `established` bar has: preserving one restatement is cheap, breaking a why is not.
+
+Worked case:
+
+```ts
+/**
+ * Fetches the user by id.                                   <- noise, self-sufficient -> trim
+ * Takes an id and returns a User.                           <- noise, self-sufficient -> trim
+ * Returns null if not found.                                <- noise, self-sufficient -> trim
+ * Retries twice — the auth service 502s on cold start.      <- scar -> keep
+ */
+```
+
+Verdict `load-bearing`, remedy `keep-trim`, payload the three trimmed segments. The block goes from four lines to one because three segments failed the surprise test — not because four lines is too many. **There is no line limit here, and adding one would be wrong:** a scar sometimes needs three lines to name the bug, its cause, and why the workaround stands. Length is an outcome of the surprise test, never an input to it.
+
+## Form: the shape a surviving comment takes
+
+Form is judged ONLY on `load-bearing`, and only after the trim. A comment about to be deleted is never reformatted, and form never changes a verdict — it cannot rescue `noise` or condemn a why.
+
+The gate: the comment **documents a declaration** (function, method, class, module, exported constant) and sits outside its language's doc-block form → remedy gains `keep-reformat`. A comment inside a function body, on a statement or a branch, is not documenting a declaration — it stays where it is.
+
+| Language | Doc form | Placement |
+|---|---|---|
+| TS / JS | `/** … */` | directly above the declaration |
+| Python | triple-quoted docstring | first statement INSIDE the body |
+| Rust | `///` (`//!` for a module) | directly above the item |
+| Go | `// …` starting with the identifier's name | directly above, no blank line |
+| Java / Kotlin | `/** … */` javadoc/kdoc | directly above |
+| Ruby | `#` block | directly above |
+| PHP | `/** … */` phpdoc | directly above |
+
+Two cautions. **Python inverts placement** — a `#` comment above a `def` becomes a docstring INSIDE it; treating it like JSDoc puts the text in the wrong place entirely. And **Go's doc comment is already `//`** — the reformat there is about the placement and the leading identifier name, not the marker, so a `//` line already sitting correctly above a func is `keep`, not `keep-reformat`.
+
+Do not invent a doc tag the text did not have. `keep-reformat` re-wraps existing text; it never authors `@param`/`@returns` — and a tag that only restates a typed signature is `noise` by the surprise test, so writing one would create work for the next run of this same judge.
 
 ## Trailing (a removal constraint, not a verdict)
 
