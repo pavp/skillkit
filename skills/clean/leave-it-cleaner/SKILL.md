@@ -4,7 +4,7 @@ description: "Trigger: cleaning the zone you already touched. Applies the Boy Sc
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # Leave It Cleaner
@@ -33,7 +33,7 @@ Full per-row conditions + companion contract in `references/gates-detail.md`.
 | # | Opportunity | Action | Tier |
 |---|-------------|--------|------|
 | G1 | Poor variable/function name | Classify via `clean-names`; rename only a flagged `N1`–`N7`, never `clean` | Auto if non-exported and zone-local; else propose |
-| G2 | Comment | Classify via `clean-comments`, declaring each comment's provenance (`fresh` = you wrote it this session, `established` = already there, and undeclared defaults to `established`); apply the remedy it returns, recording the bar each verdict names, `delete-comment-span` removing the comment text only, never the line | Auto on a deletion remedy |
+| G2 | Comment | Classify via `clean-comments`, declaring each comment's provenance (`fresh` = you wrote it this session, `established` = already there, and undeclared defaults to `established`); apply the remedy it returns, recording the bar each verdict names, `delete-comment-span` removing the comment text only, never the line | Auto on `delete`/`delete-comment-span`; Propose on `keep-trim`/`keep-reformat` |
 | G3 | Function doing two things / mutated arg / flag param / dead helper | Classify via `clean-functions`; act only on a flagged `F2`–`F5`, never `clean`/`defer-signature` | Propose |
 | G4 | Duplicated logic / magic value / obscured intent / repeated switch / train wreck | Classify via `clean-structure`; act only on a flagged `S1`–`S5`, never `clean` | Auto if `S2`; else propose |
 | G5 | Dead local var (unused in whole file) | Remove it | Auto |
@@ -54,14 +54,14 @@ No gate returned `applied`/`proposed` → apply nothing, but still emit the rece
    | `proposed` | a Propose-tier win you offered | any gate | — |
    | `clean` | you ran the classification and it holds | any gate | when the judge returned `defer` |
    | `degraded` | the companion skill is absent; you ran its `references/gates-detail.md` fallback instead | `G1`–`G4`, `G8` | when the fallback saw a smell |
-   | `skipped` | a candidate was flagged, then dropped as unsafe or reverted | any gate | always |
+   | `skipped` | a candidate was flagged, then not carried out — dropped as unsafe, reverted, or a judge remedy you could not execute (malformed payload, a form you cannot place) | any gate | always |
    | `n/a` | the gate's subject is absent from the zone | `G2` (no comments), `G5` (no locals at all), `G6` (no imports), `G7` (no nesting at all), `G8` (non-TS file) only | — |
 
    `G1`, `G3`, `G4` judge a property any code has — in a non-empty zone they are never `n/a`. Subject-absence is checked first: a non-TS file is `G8 n/a` whatever is installed, and `G8 degraded` is only a TS file with the `ts-*` skills absent.
 
    A subject that is present but does not qualify is `clean`, not `n/a` — imports that are all used, nesting too shallow to extract. `G5 n/a` needs zero locals and `G7 n/a` zero nested blocks; locals that are all live, or one nested block too shallow to extract, are `clean(no-dead-locals)` / `clean(nesting-too-shallow)`. Cite the ground on every `clean` and every `n/a` (`clean(all-imports-used)`, `n/a(no-imports)`).
 
-   A gate that SAW something it could not settle owes the suffix `+candidate` and one `unresolved:` line. Without it the verdict claims the gate found nothing — a coverage claim you did not earn. `skipped` names a candidate by definition, so it is ALWAYS `skipped+candidate`, whatever the gate and whoever dropped it — step 4's caller-safety drop and step 5's revert included. `degraded` takes it when the fallback saw a smell it was told to leave alone, and `clean` when the judge itself returned `defer`/`defer-signature` — a real finding you may not act on is not a gate that holds. One primary verdict per gate: a `degraded` fallback that both won something and saw something records the win in the cleanup line and the gate as `degraded+candidate`.
+   A gate that SAW something it could not settle owes the suffix `+candidate` and one `unresolved:` line. Without it the verdict claims the gate found nothing — a coverage claim you did not earn. `skipped` names a candidate by definition, so it is ALWAYS `skipped+candidate`, whatever the gate and whoever dropped it — step 4's caller-safety drop and step 5's revert included. `degraded` takes it when the fallback saw a smell it was told to leave alone, and `clean` when the judge itself returned `defer`/`defer-signature` — a real finding you may not act on is not a gate that holds. One primary verdict per gate: a `degraded` fallback that both won something and saw something records the win in the cleanup line and the gate as `degraded+candidate`. A gate that both applied an Auto win and offered a Propose win records `applied`, with the offer in the cleanup line — `applied` outranks `proposed` so the receipt is derivable, never chosen.
 3. Confirm each win is behavior-preserving; in TypeScript, align type/signature/module changes with the relevant `ts-*` skill.
 4. Auto-apply the Auto-tier wins; for Propose-tier wins, offer them instead of applying. Drop anything that could affect callers — a drop is `skipped+candidate`, and a `+candidate` sighting is never offered as a Propose-tier win: it goes to `unresolved:` and nowhere else. Unsure whether a win is cohesive or an out-of-scope refactor → read `references/example.md`, which contrasts the two.
 5. Self-check: the applied changes stayed in the touched zone, changed no control flow, return type, or side effect. If any did, revert it — a reverted win downgrades its gate to `proposed` if you offer it instead, else `skipped+candidate`.
