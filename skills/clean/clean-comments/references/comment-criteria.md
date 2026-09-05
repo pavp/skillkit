@@ -101,13 +101,7 @@ Segmentation cuts text, and text is not as separable as code. A segment may exis
 
 Trim line 1 and line 2 becomes `So we skip the sort here.` — "so" pointing at nothing. The block still says `load-bearing`, but the why it was protecting is now unreadable. A trim that breaks the surviving why costs more than the noise it removed.
 
-Before trimming a `noise` segment, read the rest of the block WITHOUT it. It stays if what remains leaves:
-
-- an **anaphor** dangling — `so`, `hence`, `therefore`, `this`, `that`, `it`, a pronoun whose antecedent was the segment you are cutting;
-- a **split enumeration** — `First, …` / `Second, …` where one item goes;
-- a **continuing clause** — a sentence running across the segment break.
-
-Doubt about a dependency → it stays, in both regimes. The trim inherits the same bias the `established` bar has: preserving one restatement is cheap, breaking a why is not.
+Step 9b in `SKILL.md` carries the binding tests (dangling anaphor, split enumeration, continuing clause) — this section motivates them, and the worked cases below show what each looks like. Doubt about a dependency → the segment stays, in both regimes. The trim inherits the same bias the `established` bar has: preserving one restatement is cheap, breaking a why is not.
 
 Worked case:
 
@@ -139,6 +133,8 @@ The gate: the comment **documents a declaration** (function, method, class, modu
 | PHP | `/** … */` phpdoc | directly above |
 
 Two cautions. **Python inverts placement** — a `#` comment above a `def` becomes a docstring INSIDE it; treating it like JSDoc puts the text in the wrong place entirely. And **Go's doc comment is already `//`** — the reformat there is about the placement and the leading identifier name, not the marker, so a `//` line already sitting correctly above a func is `keep`, not `keep-reformat`.
+
+**A language with no row above takes plain `keep`**, and the verdict says the doc form is undeterminable for that language. Never guess a form — the same rule the span check uses when it cannot establish an opener lexically. And a block containing a pragma is never reformatted whatever its language: re-wrapping moves the directive, and a line-scoped `eslint-disable-next-line` or `@ts-expect-error` inside a doc block stops firing.
 
 Do not invent a doc tag the text did not have. `keep-reformat` re-wraps existing text; it never authors `@param`/`@returns` — and a tag that only restates a typed signature is `noise` by the surprise test, so writing one would create work for the next run of this same judge.
 
