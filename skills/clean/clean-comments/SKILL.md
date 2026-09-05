@@ -67,7 +67,7 @@ A multi-line block runs the cascade ONCE PER SEGMENT (step 1 splits it). A segme
 3. If it is commented-out code → `commented-out`. Stop.
 4. If the referenced code is unavailable, or the comment names anything outside the code you were given → `load-bearing`. Stop. (Nothing to read against means no test ran.)
 5. Apply the surprise test against the code you read: purely restates the WHAT of present code, or is metadata with no reason clause anywhere in it → `noise`. Stop. Runs before any token or provenance check — restatement dies in both regimes, at any age.
-6. Check the three load-bearing cases — counterintuitive (a non-obvious choice), scar (a bug/quirk/workaround), road-not-taken (why an alternative was rejected); detail in `references/comment-criteria.md`. Any hit → `load-bearing`. Stop.
+6. Check the load-bearing shapes — counterintuitive (a non-obvious choice), scar (a bug/quirk/workaround), road-not-taken (why an alternative was rejected); detail in `references/comment-criteria.md`. These three are the common shapes, not the whole set: the surprise test of step 5 is the authority, so a why that fits none of them (a behavioural contract, an invariant) is still `load-bearing`. Any hit → `load-bearing`. Stop.
 7. Run the reason-token gate under the declared regime: `established` → any token hits, `load-bearing`. `fresh` → the token must be accompanied by a clause naming a fact not derivable from the referenced lines (an external system, an observed failure, a rejected alternative). Hit → `load-bearing`. Stop.
 8. Verifiably obsolete and naming no reason → `noise` (obsolete) in both regimes — the bar did not decide it. Otherwise doubt remains, and here the bar decides: `established` → `load-bearing`; `fresh` → `noise`.
 9. Reassemble, then assign the remedy.
@@ -81,12 +81,12 @@ A multi-line block runs the cascade ONCE PER SEGMENT (step 1 splits it). A segme
 
 Per comment: `file:line` + verdict + remedy + the bar it ran under + a one-clause reason. Verdicts: `noise` / `load-bearing` / `commented-out` / `out-of-domain`. Remedies: `delete` / `delete-comment-span` / `keep` / `keep-trim` / `keep-reformat` / `defer` (caller's rules). Bars: `fresh` / `established` / `established (undeclared)`. `trailing` is never a verdict — a trailing restatement reports `noise` + `delete-comment-span`.
 
-`keep-trim` and `keep-reformat` are modifiers on `keep`, never verdicts and never standalone: both report `load-bearing`, and one comment may carry both. **`keep-trim` is incomplete without its payload** — the segments to delete, quoted verbatim so the caller need not re-derive them. A `keep-trim` with no listed segment is a defect in the run; emit plain `keep` instead. `keep-reformat` names the target form (`/** */`, docstring, `///`, godoc) and carries no payload — the text is unchanged, only its wrapper.
+`keep-trim` and `keep-reformat` are modifiers on `keep`, never verdicts and never standalone: both report `load-bearing`, and one comment may carry both. **`keep-trim` is incomplete without its payload** — the segments to DELETE, quoted verbatim so the caller need not re-derive them. The payload is a delete list and never a replacement: it names what goes, never what the comment should say instead, since a remedy carrying new text would be this judge authoring a comment. A `keep-trim` with no listed segment is a defect in the run; emit plain `keep` instead. A single-line comment is one segment and can never be mixed, so it never takes `keep-trim`. `keep-reformat` names the target form (`/** */`, docstring, `///`, godoc) and carries no payload — the text is unchanged, only its wrapper.
 
 ```
-utils.ts:12 load-bearing keep+trim [established] — block mixes a scar with 3 restatements
+utils.ts:12 load-bearing keep-trim [established] — block mixes a scar with 3 restatements
   trim: "Fetches the user by id." / "Takes an id and returns a User." / "Returns null if not found."
-utils.ts:40 load-bearing keep+reformat [established] — documents `parseDate`; move to /** */ above the declaration
+utils.ts:40 load-bearing keep-reformat [established] — documents `parseDate`; move to /** */ above the declaration
 ```
 
 Every verdict names its bar. On `established (undeclared)` report it as the assumption it is, and add what a `fresh` declaration would change on exactly the two paths where the bar decided the verdict: a step-8 tie, or a step-7 token gate that fired automatically. Never anywhere else — a verdict from steps 2–6, a step-7 token naming a real why, and `noise (obsolete)` hold in both regimes, so there a redeclaration changes nothing and claiming otherwise invites the one `fresh` declaration that costs a why. Naming redeclaration as available is not asking for one.
