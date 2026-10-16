@@ -4,7 +4,7 @@ description: "Trigger: a diff too big to review. Slices an oversized git diff in
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.7"
+  version: "1.8"
 ---
 
 ## Activation Contract
@@ -21,7 +21,6 @@ Load this skill when a diff over a git range (`<base>...HEAD`, a tag, or a branc
 - SHOW the full cut plan and STOP for explicit user confirmation before any mutation. Never create branches, cherry-pick, push, or open PRs before confirmation.
 - Re-validate git state immediately before executing. If dirty or diverged, do not loop: report the concrete blocker and STOP, asking the user to reconcile. See references → "State Re-Validation".
 - On any mid-execution failure, STOP before further mutation and never force past it; report what exists and offer resume-vs-teardown. See references → "Mid-Execution Failure".
-- Every child PR states its position, base, and dependency, plus a diagram marking the current PR with `📍`. See references → "Chain Context Section".
 - Describe every forge action as the capability it needs, never as one vendor's CLI; the command table in references → "Commands" holds the concrete instance.
 - Under Stacked only, group the chain into a native stack after the last PR is open — never in place of creating them, and never under a Chain, whose draft tracker a stack would merge along with it. Grouping rewrites each PR's base to the one before it, imposing ONE line: group only when every PR already builds on its immediate predecessor. Two PRs sharing a parent make a tree — skip grouping and say so, since reparenting a PR onto a branch without what it builds on swells its diff with another slice's files. Probe the client for the capability and confirm every branch is in ONE repository (references → "Commands"); a forge offering stacks does not imply this checkout reaches them. Never install the client yourself. Read back each PR's base AND diff and report what you observed, not what you attempted; a grown diff is mis-grouped, anything short of every PR grouped is ungrouped, and correcting a base needs the stack dissolved first. Its absence leaves the chain already correct — report it, never STOP for it. See references → "Native Stacks".
 - Always ask the user to pick the chain strategy — never auto-select. Recommend one by judging **shippability** (does the slice deliver behavior a user can reach?), not the buildability every slice already has: every slice shippable alone → Stacked PRs to base; any slice that lands unreachable code until a later slice arrives → Feature Branch Chain. Label the two options literally `Stacked` and `Chain`, and accept only an answer that matches exactly one label unambiguously; on an ambiguous answer, or one matching neither, re-emit the strategy choice and ask again — NEVER infer it, since inferring Stacked where Chain was meant merges slice 1 alone and ships broken behavior. Do not mix strategies after one is chosen. See references → "Choosing the Strategy".
@@ -47,13 +46,13 @@ Terms ("focused", "splits cleanly") are defined in references → "Cut Priority"
 2. Cut by the priority order (references → "Cut Priority"); keep each PR under the budget.
 3. Present the plan: PRs, files/commits per PR, order, dependencies, per-PR review budget. Add one line on native grouping — that the chain will be grouped and merging any PR then takes every unmerged PR below it, or that it will not and why (client absent, quoting the enabling command from references → "Commands"; cross-fork; or a Chain). Informational, never a question or a gate. STOP.
 4. On confirmation, re-validate git state; if diverged or dirty, report the concrete blocker and STOP — do not recompute or loop.
-5. Execute the chosen strategy only. If the user chose Stacked over a Feature Branch Chain recommendation, warn that merging slice 1 alone lands broken or half-shipped behavior before proceeding; grouping does not lift that warning. Create branches, cherry-pick, push, open PRs with Chain Context, then group the chain (references → "Native Stacks").
+5. Execute the chosen strategy only. If the user chose Stacked over a Feature Branch Chain recommendation, warn that merging slice 1 alone lands broken or half-shipped behavior before proceeding; grouping does not lift that warning. Create branches, cherry-pick, push, open PRs, then group the chain (references → "Native Stacks").
 6. Verify each PR independently: CI/tests/docs, rollback scope, clean diff showing only its unit.
 
 ## Output Contract
 
-Before confirmation, return the cut plan opening with the active budget and its source (`default 400` or the user's explicit number, quoting its source line): the strategy choice offering `Stacked` (Stacked PRs to base) and `Chain` (Feature Branch Chain) under those exact labels, one recommended by shippability; the branch name per PR; PR order, files/commits per PR, dependency diagram (`📍` on the current PR), per-PR measured lines (`additions + deletions`), whether the chain will be grouped into a native stack, and any `size:exception` rationale. After execution, return the created branches/PRs, whether the chain was grouped into a native stack, and each PR's verification result.
+Before confirmation, return the cut plan opening with the active budget and its source (`default 400` or the user's explicit number, quoting its source line): the strategy choice offering `Stacked` (Stacked PRs to base) and `Chain` (Feature Branch Chain) under those exact labels, one recommended by shippability; the branch name per PR; PR order, files/commits per PR, dependency diagram, per-PR measured lines (`additions + deletions`), whether the chain will be grouped into a native stack, and any `size:exception` rationale. After execution, return the created branches/PRs, whether the chain was grouped into a native stack, and each PR's verification result.
 
 ## References
 
-- [references/slicing-details.md](references/slicing-details.md) — measurement commands, strategy diagrams, PR Chain Context section, and execution/verification detail.
+- [references/slicing-details.md](references/slicing-details.md) — measurement commands, strategy diagrams, and execution/verification detail.

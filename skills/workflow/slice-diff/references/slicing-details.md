@@ -124,23 +124,6 @@ After a parent PR merges, rebase/retarget the next PR so it shows only the curre
 
 The diagram is always nested (each PR branches off the previous PR's branch), even when the slices are logically independent — the nesting reflects the branch chain, not a code dependency. A flat diagram (every PR hanging off the base) is a different strategy (independent PRs to base), not Stacked; do not draw it that way when the chosen strategy is Stacked.
 
-## Chain Context Section
-
-Append this to the PR body; never replace the repo's PR template. Keep it to what a reviewer needs to see the slice in its chain — position, base, and dependency. The diagram carries the rest (previous/next PRs); the diff and the repo template carry scope and checklists, so do not duplicate them here.
-
-````markdown
-## Chain Context
-
-Position: <N of total> · Base: `<target branch>` · Depends on: <#NNN or "None">
-
-```text
-<base>
- └── #NNN Previous PR
-      └── 📍 #NNN This PR
-           └── #NNN Next PR
-```
-````
-
 ## Commands
 
 Each row is a capability the execution needs; the command column is one forge's instance of it. On another forge, substitute its equivalent — the steps do not change.
