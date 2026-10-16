@@ -69,12 +69,12 @@ A grouping call that fails, or a missing client, is not one of those failures: t
 
 Never auto-select. Always present both and let the user choose; the skill's job is to recommend, not decide — the pick is often a team convention (speed-first vs. coordinated release), not a purely technical call.
 
-Detect slice autonomy from git: does each slice build and merge on its own, or does a later slice depend on an earlier one to be functional?
+Judge shippability from the cut: does each slice, merged alone, deliver behavior a user can reach — or does it land code that stays unreachable until a later slice arrives? Every slice already builds on its own (Hard Rules), so building proves nothing here.
 
-- **Autonomous slices** → recommend **Stacked PRs to base** (simplest, each ships in order).
-- **Not autonomous** (a slice would land broken until the chain completes) → recommend **Feature Branch Chain**. Here Stacked is not just weaker — it is unsafe: merging slice 1 alone breaks or half-ships the feature. If the user still picks Stacked, warn them of that consequence before executing; do not silently comply.
+- **Every slice shippable alone** → recommend **Stacked PRs to base** (simplest, each ships in order).
+- **A slice lands unreachable or half-wired code** until the chain completes → recommend **Feature Branch Chain**. Here Stacked is not just weaker — it is unsafe: merging slice 1 alone breaks or half-ships the feature. If the user still picks Stacked, warn them of that consequence before executing; do not silently comply.
 
-Grouping the chain into a native stack (see "Native Stacks") does not lift that warning. A stack merges a PR together with every unmerged PR below it, which forecloses an upper slice landing without its dependencies — but merging slice 1 by itself stays available, and that is the hazard the warning names. Recommend on autonomy alone, and never let grouping decide the strategy.
+Grouping the chain into a native stack (see "Native Stacks") does not lift that warning. A stack merges a PR together with every unmerged PR below it, which forecloses an upper slice landing without its dependencies — but merging slice 1 by itself stays available, and that is the hazard the warning names. Recommend on shippability alone, and never let grouping decide the strategy.
 
 ## Strategy Notes
 
