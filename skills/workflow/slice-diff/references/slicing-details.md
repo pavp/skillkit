@@ -28,6 +28,8 @@ The 3-dot in `diff` (vs merge base) and 2-dot in `log` are intentional and must 
 
 Binary files emit `-\t-\t<path>` in `--numstat`. Never coerce `-` to 0: exclude those rows from the `additions + deletions` sum and surface them as "N binary files" in the plan. Flag the binaries themselves for `size:exception` (they are indivisible) — this does not push the surrounding source PR to exception when its own line sum is under budget.
 
+Generated files are excluded the same way: drop their rows from the `additions + deletions` sum and surface them as "N generated files" (with their line count) beside the binaries. Decide "generated" by path only, never by guessing from content: lockfiles (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`, `Cargo.lock`, `go.sum`), anything under `__snapshots__/`, and files marked `linguist-generated` in `.gitattributes` (`git check-attr linguist-generated -- <path>` reports `set` or `true`).
+
 Shallow clone (`git rev-parse --is-shallow-repository` = true): the merge base may lie beyond the grafted boundary, so the budget and boundaries are silently wrong. Warn and recommend `git fetch --unshallow` before trusting any measurement.
 
 Domain grouping: take the first path segment after conventional container prefixes (`src`, `packages`, `apps`, `lib`) — e.g. the domain of `packages/core/src/auth/x.ts` is `auth`. Files sharing that segment are one domain. A flat/unconventional layout, or a grouping that collapses to one bucket, weakens this signal — fall back to commit boundaries, then to `size:exception`.
