@@ -20,7 +20,8 @@ skills/
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)
 snippets/
-  react.md     AGENTS.md block for React projects (copied by users; not installed)
+  react.md       AGENTS.md block for React projects (copied by users; not installed)
+  typescript.md  AGENTS.md block for TypeScript projects (copied by users; not installed)
 README.md
 ```
 
@@ -51,7 +52,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 
 - `SKILL.md` is the source of truth for a skill; nothing generated replaces its content.
 - After adding, moving, or renaming a skill, update `README.md`'s skill table.
-- `snippets/react.md` restates react skills' triggers and Hard Rules: change either and update the snippet (and bump its version) in the same PR.
+- `snippets/<category>.md` restates that category's triggers and Hard Rules (`react`, `typescript`): change either and update the snippet (and bump its version) in the same PR.
 - Commits use Conventional Commits. No AI attribution / `Co-Authored-By` lines.
 - Branch off `main`; never commit directly to `main`. Open a PR.
 

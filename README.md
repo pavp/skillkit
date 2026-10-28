@@ -29,24 +29,26 @@ own. To install the full cleanup family:
 npx skills add pavp/skillkit -s leave-it-cleaner -s clean-comments -s clean-names -s clean-functions -s clean-structure -a claude-code
 ```
 
-### Recommended setup: React projects
+### Recommended setup: React and TypeScript projects
 
-Agents skip skills that overlap what they already know, and React is exactly
-that: in practice the agent edits `.tsx` files without loading `react-*`, and
-spawned subagents never do. A skill's description is an offer the agent may
-decline; project instructions are always in context.
+Agents skip skills that overlap what they already know, and React and
+TypeScript are exactly that: in practice the agent edits `.ts`/`.tsx` files
+without loading `react-*` or `ts-*`, and spawned subagents almost never do. A
+skill's description is an offer the agent may decline; project instructions are
+always in context.
 
-Install the React skills, then copy the block in [`snippets/react.md`](snippets/react.md)
-into the project's `AGENTS.md`. It tells the agent which skill to load before
-each kind of edit and keeps the critical rules in context even when none loads.
+Install the skills, then copy the block from each snippet into the project's
+`AGENTS.md`. It tells the agent which skill to load before each kind of edit and
+keeps the critical rules in context even when none loads.
 
-```bash
-npx skills add pavp/skillkit -s react-component -s react-hooks -s react-component-patterns -s react-memoization -s style-in-regime
-```
+| Snippet | Install |
+|---|---|
+| [`snippets/react.md`](snippets/react.md) | `npx skills add pavp/skillkit -s react-component -s react-hooks -s react-component-patterns -s react-memoization -s style-in-regime` |
+| [`snippets/typescript.md`](snippets/typescript.md) | `npx skills add pavp/skillkit -s ts-types -s ts-function-signatures -s ts-module-organization` |
 
 Claude Code ignores `AGENTS.md` when the project also has a `CLAUDE.md`; add
-`@AGENTS.md` to that `CLAUDE.md` (or paste the snippet there instead). Re-copy
-the snippet after `npx skills update`.
+`@AGENTS.md` to that `CLAUDE.md` (or paste the snippets there instead). After
+`npx skills update`, replace each block between its start and end markers.
 
 ## Skills
 
