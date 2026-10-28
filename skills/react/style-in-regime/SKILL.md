@@ -4,7 +4,7 @@ description: "Trigger: judging styling against the project's regime. Detects the
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Style In Regime
@@ -13,7 +13,7 @@ The judgment authority on whether a piece of styling lives where its regime says
 
 ## Activation Contract
 
-Load when EXISTING React styling needs a verdict: a cleanup actor hands one over, or a human asks directly ("should this `sx` be a module?", "move this to a class?"), or reviewing styling in a diff. Not for authoring new styles or picking a library for a greenfield project — the caller supplies the code and its regime. React styling only, not language-agnostic.
+Load when React styling needs a verdict, existing or new: a cleanup actor hands one over, a human asks directly ("should this `sx` be a module?", "move this to a class?"), a diff's styling is under review, or your own edit adds or changes an inline style. Not for picking a library for a greenfield project — the caller supplies the code and its regime. React styling only, not language-agnostic.
 
 ## Hard Rules
 
