@@ -29,6 +29,25 @@ own. To install the full cleanup family:
 npx skills add pavp/skillkit -s leave-it-cleaner -s clean-comments -s clean-names -s clean-functions -s clean-structure -a claude-code
 ```
 
+### Recommended setup: React projects
+
+Agents skip skills that overlap what they already know, and React is exactly
+that: in practice the agent edits `.tsx` files without loading `react-*`, and
+spawned subagents never do. A skill's description is an offer the agent may
+decline; project instructions are always in context.
+
+Install the React skills, then paste [`snippets/react.md`](snippets/react.md)
+into the project's `AGENTS.md`. It tells the agent which skill to load before
+each kind of edit and keeps the critical rules in context even when none loads.
+
+```bash
+npx skills add pavp/skillkit -s react-component -s react-hooks -s react-component-patterns -s react-memoization -s style-in-regime
+```
+
+Claude Code ignores `AGENTS.md` when the project also has a `CLAUDE.md`; add
+`@AGENTS.md` to that `CLAUDE.md` (or paste the snippet there instead). Re-copy
+the snippet after `npx skills update`.
+
 ## Skills
 
 Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
