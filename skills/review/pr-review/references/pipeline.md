@@ -1,6 +1,6 @@
 # Pipeline Contract
 
-The two entries, the eligibility gate, and the posting step. This skill orchestrates: `review-6-lens` judges, `review-comments` writes, the human filters, this file only wires them.
+The two entries, the eligibility gate, and the posting step. This skill orchestrates: `review-6-lens` judges, `pr-comments` writes, the human filters, this file only wires them.
 
 ## Entry detection
 
@@ -10,7 +10,7 @@ The gate report IS the state — no scratch files. Route on the **latest** gate 
 |-------|-------|-------|
 | A PR reference (`#42`, URL, "the PR on this branch") with intent to publish | **A — Review** | 1 → 5, stop at gate 1 |
 | A selection, and the latest gate in context is **gate 1** (the findings table) | **B — Publish** | 6 → 8 |
-| Any answer, and the latest gate in context is **`review-comments`' draft gate** | **B, resumed** | 7 → 8 — never 6; the drafts are already confirmed |
+| Any answer, and the latest gate in context is **`pr-comments`' draft gate** | **B, resumed** | 7 → 8 — never 6; the drafts are already confirmed |
 | A PR reference but NO gate report in context | **A** | never assume a prior report |
 | A selection, gate 1 present, but its `head <sha>` line absent | neither | the pin is unrecoverable → treat as changed; say so and re-run entry A |
 | A selection but NO gate report in context | neither | say the report is gone, name the cost (a full 6-lens re-run), and ask before re-entering A |
@@ -105,7 +105,7 @@ Two advisory notices belong at the gate, each one line, neither blocking the sel
 
 ## Drafting (entry B, step 6)
 
-Hand the selected findings to `review-comments` — verbatim, each with its `file:line` locus and fix. Drop the severity tags: that skill forbids severity labels in comment text.
+Hand the selected findings to `pr-comments` — verbatim, each with its `file:line` locus and fix. Drop the severity tags: that skill forbids severity labels in comment text.
 
 - 🔴🟠🟡 carry their mechanism (`Why it matters`).
 - 🔵 have **no** mechanism by design (`finding-shape.md` compact shape) — pass locus + fix and claim no mechanism. They are self-evident nits and that skill has gate rows for exactly that; never invent a mechanism to fill the gap.

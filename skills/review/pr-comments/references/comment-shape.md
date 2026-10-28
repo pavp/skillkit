@@ -53,7 +53,7 @@ Never invent a reference. A `file:line` is cited only after reading that exact l
 
 ## Worked examples
 
-The point of these four is the range, with and without a question, not any one shape.
+The point of these five is the range, with and without a question, not any one shape.
 
 ### Resolved reply
 
@@ -84,6 +84,15 @@ If `user` arrives null here, the `.profile` access throws at runtime.
 I'd add a guard before the access, or validate it in the caller.
 Does the caller already guarantee it's never null, or should we cover it here?
 ```
+
+### Ready for another look (own PR)
+
+```
+Both threads are addressed: the null guard is in (handler.ts:12) and the retry moved into the client (client.ts:40).
+I also renamed `fetchAll` to `listOrders`, since it stopped fetching everything. That rename is the part worth a second look.
+```
+
+Same truthfulness as a reply: each cited line was read and shows the change. Naming what to re-check replaces a bare "ready for review".
 
 ## Anti-patterns (do not produce)
 
@@ -133,7 +142,7 @@ Confirm, adjust, or skip?
 
 The `---` rule before the gate prompt is mandatory. The gate addresses the user, not the codebase; without the separator a reader (human or agent) can misread it as part of the last comment and post it. Keep it on its own line, after the rule, never attached to a comment.
 
-Heading selection: a real navigable anchor renders as `file:line`; when the section is a reply, as `file:line (reply)`. A reply thread with no anchor uses the first line of the reviewer's comment (truncated to one line) as its heading, marked `(reply)`. An authored comment with no anchor uses its text locus (symbol, section, or quoted snippet). A folded nits note uses the file (or the diff) as its heading, marked `(nits)`. These are the only heading forms: no invented descriptors or separators appended to the anchor.
+Heading selection: a real navigable anchor renders as `file:line`; when the section is a reply, as `file:line (reply)`. A reply thread with no anchor uses the first line of the reviewer's comment (truncated to one line) as its heading, marked `(reply)`. An authored comment with no anchor uses its text locus (symbol, section, or quoted snippet). A folded nits note uses the file (or the diff) as its heading, marked `(nits)`. A new top-level comment on the user's own PR uses `PR conversation` as its heading. These are the only heading forms: no invented descriptors or separators appended to the anchor.
 
 **Hand-off** (after the user confirms — what actually gets posted):
 
