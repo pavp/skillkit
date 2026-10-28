@@ -88,11 +88,11 @@ Does the caller already guarantee it's never null, or should we cover it here?
 ### Ready for another look (own PR)
 
 ```
-Both threads are addressed: the null guard is in (handler.ts:12) and the retry moved into the client (client.ts:40).
-I also renamed `fetchAll` to `listOrders`, since it stopped fetching everything. That rename is the part worth a second look.
+Round two is up. The upload retries with backoff now instead of failing on the first 503 (upload.ts:58).
+Staging kept hitting the 5s timeout on large files, so I raised it to 15s (config.ts:9). Whether that is too loose for prod is your call.
 ```
 
-Same truthfulness as a reply: each cited line was read and shows the change. Naming what to re-check replaces a bare "ready for review".
+Same truthfulness as a reply: each cited line was read and shows the change. Point the reviewer at what deserves another look, in your own words; a bare "ready for review" gives them nothing.
 
 ## Anti-patterns (do not produce)
 
