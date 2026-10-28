@@ -1,4 +1,9 @@
-<!-- skillkit react snippet v1.0.0 — paste into your React project's AGENTS.md. Re-copy after `npx skills update`. -->
+# React snippet for AGENTS.md
+
+Copy the block below into your React project's `AGENTS.md`. If the project also has a `CLAUDE.md`, Claude Code reads only that file: add `@AGENTS.md` to it, or paste the block there instead. Re-copy after `npx skills update`.
+
+````markdown
+<!-- skillkit react snippet v1.0.0 -->
 ## React skills (skillkit)
 
 Before you create or edit a `.tsx`/`.jsx` file or a `use*` hook, load the matching skill by name — through your skill tool, or by reading its whole `SKILL.md` — even when the request names a feature or a bug, not a component. When you delegate such an edit, name these skills in the delegation prompt. Skip a skill that is not installed.
@@ -19,3 +24,4 @@ Rules that hold even when no skill was loaded:
 - Custom hooks own logic and never return JSX; a hook is the first choice for reusing logic.
 - No speculative memoization: memoize for semantic identity, or for a cost you can cite.
 - Static, reusable styling belongs in the project's style unit; inline only for per-render values or a one-off.
+````

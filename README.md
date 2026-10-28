@@ -36,7 +36,7 @@ that: in practice the agent edits `.tsx` files without loading `react-*`, and
 spawned subagents never do. A skill's description is an offer the agent may
 decline; project instructions are always in context.
 
-Install the React skills, then paste [`snippets/react.md`](snippets/react.md)
+Install the React skills, then copy the block in [`snippets/react.md`](snippets/react.md)
 into the project's `AGENTS.md`. It tells the agent which skill to load before
 each kind of edit and keeps the critical rules in context even when none loads.
 
