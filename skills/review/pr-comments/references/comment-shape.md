@@ -88,11 +88,11 @@ Does the caller already guarantee it's never null, or should we cover it here?
 ### Ready for another look (own PR)
 
 ```
-Round two is up. The upload retries with backoff now instead of failing on the first 503 (upload.ts:58).
-Staging kept hitting the 5s timeout on large files, so I raised it to 15s (config.ts:9). Whether that is too loose for prod is your call.
+Uploads now retry with backoff instead of failing on the first 503.
+I also raised the timeout from 5s to 15s for large files (config.ts:9); whether that is too loose for prod is your call.
 ```
 
-Same truthfulness as a reply: each cited line was read and shows the change. Point the reviewer at what deserves another look, in your own words; a bare "ready for review" gives them nothing.
+Only the line you point them to is cited, and it was read first; the diff shows the rest. Point the reviewer at what deserves another look, in your own words; a bare "ready for review" gives them nothing.
 
 ## Anti-patterns (do not produce)
 
@@ -105,6 +105,7 @@ Same truthfulness as a reply: each cited line was read and shows the change. Poi
 - One comment per trivial preference — pile-on. Consolidate to the point that matters.
 - Em-dashes inside the comment text — use commas, periods, or parentheses.
 - Padding a one-line point to match the length of the worked examples — they show the range, not the typical length.
+- Filler closings ("ready whenever you can", "easy to adjust if you prefer another value") — they say nothing; end on the last real point.
 
 ## Consolidation rule
 
