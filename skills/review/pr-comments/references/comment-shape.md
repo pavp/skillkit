@@ -53,7 +53,7 @@ Never invent a reference. A `file:line` is cited only after reading that exact l
 
 ## Worked examples
 
-The point of these four is the range, with and without a question, not any one shape.
+The point of these five is the range, with and without a question, not any one shape.
 
 ### Resolved reply
 
@@ -85,6 +85,15 @@ I'd add a guard before the access, or validate it in the caller.
 Does the caller already guarantee it's never null, or should we cover it here?
 ```
 
+### Ready for another look (own PR)
+
+```
+Uploads now retry with backoff instead of failing on the first 503.
+I also raised the timeout from 5s to 15s for large files (config.ts:9); whether that is too loose for prod is your call.
+```
+
+Only the line you point them to is cited, and it was read first; the diff shows the rest. Point the reviewer at what deserves another look, in your own words; a bare "ready for review" gives them nothing.
+
 ## Anti-patterns (do not produce)
 
 - "Great work overall! Just a small thought..." — praise warm-up, AI tell.
@@ -96,6 +105,7 @@ Does the caller already guarantee it's never null, or should we cover it here?
 - One comment per trivial preference — pile-on. Consolidate to the point that matters.
 - Em-dashes inside the comment text — use commas, periods, or parentheses.
 - Padding a one-line point to match the length of the worked examples — they show the range, not the typical length.
+- Filler closings ("ready whenever you can", "easy to adjust if you prefer another value") — they say nothing; end on the last real point.
 
 ## Consolidation rule
 
@@ -133,7 +143,7 @@ Confirm, adjust, or skip?
 
 The `---` rule before the gate prompt is mandatory. The gate addresses the user, not the codebase; without the separator a reader (human or agent) can misread it as part of the last comment and post it. Keep it on its own line, after the rule, never attached to a comment.
 
-Heading selection: a real navigable anchor renders as `file:line`; when the section is a reply, as `file:line (reply)`. A reply thread with no anchor uses the first line of the reviewer's comment (truncated to one line) as its heading, marked `(reply)`. An authored comment with no anchor uses its text locus (symbol, section, or quoted snippet). A folded nits note uses the file (or the diff) as its heading, marked `(nits)`. These are the only heading forms: no invented descriptors or separators appended to the anchor.
+Heading selection: a real navigable anchor renders as `file:line`; when the section is a reply, as `file:line (reply)`. A reply thread with no anchor uses the first line of the reviewer's comment (truncated to one line) as its heading, marked `(reply)`. An authored comment with no anchor uses its text locus (symbol, section, or quoted snippet). A folded nits note uses the file (or the diff) as its heading, marked `(nits)`. A new top-level comment on the user's own PR uses `PR conversation` as its heading. These are the only heading forms: no invented descriptors or separators appended to the anchor.
 
 **Hand-off** (after the user confirms — what actually gets posted):
 
