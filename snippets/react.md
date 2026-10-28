@@ -1,6 +1,6 @@
 # React snippet for AGENTS.md
 
-Copy the block below into your React project's `AGENTS.md`. If the project also has a `CLAUDE.md`, Claude Code reads only that file: add `@AGENTS.md` to it, or paste the block there instead. Re-copy after `npx skills update`.
+Copy the block below into your React project's `AGENTS.md`. If the project also has a `CLAUDE.md`, Claude Code reads only that file: add `@AGENTS.md` to it, or paste the block there instead. After `npx skills update`, replace everything between the two `skillkit react snippet` markers with the new block.
 
 ````markdown
 <!-- skillkit react snippet v1.0.0 -->
@@ -24,4 +24,5 @@ Rules that hold even when no skill was loaded:
 - Custom hooks own logic and never return JSX; a hook is the first choice for reusing logic.
 - No speculative memoization: memoize for semantic identity, or for a cost you can cite.
 - Static, reusable styling belongs in the project's style unit; inline only for per-render values or a one-off.
+<!-- /skillkit react snippet -->
 ````
