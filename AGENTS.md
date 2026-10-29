@@ -15,13 +15,13 @@ skills/
   typescript/  ts-types, ts-function-signatures, ts-module-organization
   review/      review-6-lens, pr-review, pr-comments
   clean/       leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure
-  workflow/    slice-plan, slice-diff, browser-automation-safety
-  qa/          qa-test-plan, qa-manual
+  workflow/    slice-plan, slice-diff, browser-automation-safety, verify-before-pr
 docs/
   skill-style-guide.md   normative style guide (author-time only; not installed)
 snippets/
   react.md       AGENTS.md block for React projects (copied by users; not installed)
   typescript.md  AGENTS.md block for TypeScript projects (copied by users; not installed)
+  workflow.md    AGENTS.md block for any project (copied by users; not installed)
 README.md
 ```
 
@@ -43,7 +43,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 ## Conventions
 
 - **Author**: `metadata.author: pedro-villarreal(pavp)` across skills.
-- **Categories** group by domain (`react`, `typescript`), process (`review`, `clean`, `workflow`), or discipline (`qa`). Add a new category folder when a skill fits none. A judge skill (the clean-* contract: classifies, never edits) lives in its DOMAIN when it is domain-specific (e.g. `react/style-in-regime`); only language-agnostic judges belong in `clean/`.
+- **Categories** group by domain (`react`, `typescript`) or process (`review`, `clean`, `workflow`). Add a new category folder when a skill fits none. A judge skill (the clean-* contract: classifies, never edits) lives in its DOMAIN when it is domain-specific (e.g. `react/style-in-regime`); only language-agnostic judges belong in `clean/`.
 - Skills are **runtime-agnostic**: do not hardcode a specific agent type (e.g. `general-purpose`), and write every step as the capability it needs, not the API that provides it. One forge's concrete commands may still appear, confined to a capability→command table so another forge is a substitution and the steps never change (`workflow/slice-diff`, `workflow/slice-plan`).
 - Keep the lens/finding naming internal to a skill consistent (see `review/review-6-lens` for the L1–L6 lens pattern).
 - **Comments in authored code**: default is NONE. Write a comment ONLY for a WHY the code cannot show; never restate WHAT the code does. When unsure, apply the `clean/clean-comments` surprise test — if deleting it loses nothing, don't write it. This governs code you author here (skill examples, references); `clean-comments` remains the authority for judging existing comments.
@@ -52,7 +52,7 @@ Use the `skill-creator` skill to scaffold a new one and `skill-improver` to audi
 
 - `SKILL.md` is the source of truth for a skill; nothing generated replaces its content.
 - After adding, moving, or renaming a skill, update `README.md`'s skill table.
-- `snippets/<category>.md` restates that category's triggers and Hard Rules (`react`, `typescript`): change either and update the snippet (and bump its version) in the same PR.
+- `snippets/<category>.md` restates that category's triggers and Hard Rules (`react`, `typescript`, `workflow`): change either and update the snippet (and bump its version) in the same PR.
 - Commits use Conventional Commits. No AI attribution / `Co-Authored-By` lines.
 - Branch off `main`; never commit directly to `main`. Open a PR.
 
