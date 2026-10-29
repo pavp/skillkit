@@ -6,7 +6,7 @@ Copy the block below into your project's `AGENTS.md`. It works in any stack. If 
 <!-- skillkit workflow snippet v1.0.0 -->
 ## Workflow skills (skillkit)
 
-Before you open a pull request for your own change, or call it done or ready for review, load `verify-before-pr` by name — through your skill tool, or by reading its whole `SKILL.md` — even when the tests are green. When you delegate that step, name the skill in the delegation prompt. Skip it if it is not installed.
+When you finish implementing a ticket, feature or bug fix — before you tell the user it is done or ready for review, and before you open a pull request for it — load `verify-before-pr` by name — through your skill tool, or by reading its whole `SKILL.md` — even when the tests are green. Skip it for changes with no observable behavior: docs, comments, formatting, or tooling config. When you delegate that step, name the skill in the delegation prompt. Skip it if it is not installed.
 
 Rules that hold even when the skill was not loaded:
 
