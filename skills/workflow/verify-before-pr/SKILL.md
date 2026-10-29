@@ -17,7 +17,7 @@ Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run e
 
 - **Never write product code.** No fix, patch, or test edit in the repo, not even a one-liner; the temporary base worktree of step 6 is outside the repo and is removed after. A FAIL goes back to whoever builds; verifying your own fix in the same pass is how a verdict stops meaning anything.
 - **Criteria come from the ask, never from the code.** Criteria read off the implementation verify what was built and hide what was omitted. Source authority is the gate below; none found → ask and STOP.
-- **The walker never reads the implementation.** It may read the requirement, README, API docs or schemas, and seed or fixture data; never source files, tests, or the diff. This context is CONTAMINATED if it wrote or read the change's code. Contaminated + able to start a fresh run → hand it the criteria, the start command and the access, never code or diff; run it in the foreground and wait for its walk before going on. No such capability → walk here and declare `NOT isolated`; the overall verdict cannot be READY. Never wrote nor read the change's code → walk here and declare `isolated`. The diff checks (step 6) read the diff, so they run after the walk and never feed it.
+- **The walker never reads the implementation.** It may read the requirement, README, API docs or schemas, and seed or fixture data; never source files, tests, or the diff. This context is CONTAMINATED if it wrote or read the change's code. Contaminated + able to start a fresh run → hand it the criteria, the start command and the access, never code or diff; run it in the foreground and wait for its walk before going on. That fresh run is a step of this skill, not an independent risk verifier: rules that reserve verifiers for high-risk changes do not apply to it. No such capability → walk here and declare `NOT isolated`; the overall verdict cannot be READY. Never wrote nor read the change's code → walk here and declare `isolated`. The diff checks (step 6) read the diff, so they run after the walk and never feed it.
 - **Observed, or it did not happen.** Before walking a criterion, name the state that must be PRESENT (text, URL, record id, status code) and the state that must be ABSENT (error, old value, login screen). "No error", "tests are green", "looked fine" are never evidence.
 - **A new test is evidence only if it fails on the base commit** for the reason the criterion names, then passes at HEAD. Passing on both proves nothing.
 - **Ask, never invent, for access.** A missing URL, token, account or seeded state → ask. Never use a credential found in the repo, `.env`, history or logs.
@@ -98,7 +98,7 @@ Not walked: <criterion: reason, or none>
 State left behind: <records this run created or changed, or none>
 ```
 
-Then reply with the overall verdict, the folder path and, unless FAIL, the attach command for the forge, run from that folder so `./` references match. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
+Then reply, opening with the overall verdict (never "done" or "ready for review" ahead of it), with the folder path and, unless FAIL, the attach command for the forge, run from that folder so `./` references match. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
 
 | Capability | GitHub (`gh`), the skill never runs it |
 |---|---|
