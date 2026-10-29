@@ -3,7 +3,7 @@
 
 Usage:
     scripts/skill-budget.py                     # every skill, sorted by size
-    scripts/skill-budget.py skills/qa/qa-manual # one skill, with a section breakdown
+    scripts/skill-budget.py skills/workflow/verify-before-pr # one skill, with a section breakdown
     scripts/skill-budget.py --check             # exit 1 if any skill exceeds the hard max
 
 Counts the body only: frontmatter is metadata, not runtime instructions.

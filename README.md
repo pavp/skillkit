@@ -50,6 +50,17 @@ Claude Code ignores `AGENTS.md` when the project also has a `CLAUDE.md`; add
 `@AGENTS.md` to that `CLAUDE.md` (or paste the snippets there instead). After
 `npx skills update`, replace each block between its start and end markers.
 
+### Recommended setup: verify before every PR
+
+Agents call work done on green tests. `verify-before-pr` makes them prove it
+first, against the running app, and package the evidence for the PR. Like the
+React and TypeScript skills, it fires reliably only when project instructions
+ask for it, so pair it with its snippet in any stack.
+
+| Snippet | Install |
+|---|---|
+| [`snippets/workflow.md`](snippets/workflow.md) | `npx skills add pavp/skillkit -s verify-before-pr -s browser-automation-safety` |
+
 ## Skills
 
 Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
@@ -104,13 +115,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`slice-plan`](skills/workflow/slice-plan/SKILL.md) | Forecast the changed lines of a planned implementation BEFORE code exists — itemized per-file estimates against the review budget (default 400, user-overridable via invocation or project context) that `slice-diff` enforces after the fact. Over budget, plans slice boundaries (files and commits per slice, dependency order), names each slice's branch and base, states whether the chain will be grouped into the forge's native stack, and gates on confirmation; under it, states the total and steps aside. Plans only; never implements, never mutates git. |
 | [`slice-diff`](skills/workflow/slice-diff/SKILL.md) | Slice an oversized git diff into a chain of reviewable PRs — pure git (no SDD), the review budget as the hard gate (default 400, user-overridable via invocation or project context), domain/layer as a soft cut signal, cut by commit boundary first. Shows the plan, gates on confirmation, then executes, grouping the chain into the forge's native stack where the client offers one. |
 | [`browser-automation-safety`](skills/workflow/browser-automation-safety/SKILL.md) | Resource-safety rules loaded before any browser automation (Playwright, Puppeteer, browser MCP) — always tear down contexts, one browser instance, never full-page screenshots, mandatory timeouts, RAM-scaled concurrency — so a run never exhausts memory or leaks browser processes. A rules authority; never drives a browser. |
-
-### qa
-
-| Skill | What it does |
-|-------|--------------|
-| [`qa-test-plan`](skills/qa/qa-test-plan/SKILL.md) | Turn a requirement into the journeys worth walking — blast-radius ranked, written as continuous narrative prose rather than decoupled steps, each labeled REQUIREMENT / REQUIREMENT GAP / EXPLORATORY. Never reads the implementation, so it catches what the code omitted; the requirement's own gaps are the headline finding. Plans; never executes. |
-| [`qa-manual`](skills/qa/qa-manual/SKILL.md) | Walk a running app by hand and report whether it holds — verifies against the requirement, pushes past it for edge cases, observes user-visible slowness. Every finding carries its authority so opinions never get filed as citable failures. Blocks and asks for missing access instead of inventing it; never reads the implementation. Reports; never fixes. |
+| [`verify-before-pr`](skills/workflow/verify-before-pr/SKILL.md) | Prove your own change works before the PR exists. Criteria come from the ticket or the ask, never from the code; each is walked on the running app by a context that never read the implementation and gets PASS, FAIL or NOT WALKABLE. Checks the diff for weakened tests and requires every new test to fail on the base commit. Packages SHA-stamped evidence under `.git/` with the command to attach it; never opens the PR, never fixes. |
 
 ## Authoring
 
