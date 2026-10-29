@@ -13,7 +13,7 @@ skills/
   meta/        skill-creator, skill-improver
   react/       react-component, react-hooks, react-component-patterns, react-memoization, style-in-regime
   typescript/  ts-types, ts-function-signatures, ts-module-organization
-  review/      review-6-lens, pr-review, pr-comments
+  review/      review-6-lens, pr-review, pr-comments, pr-map
   clean/       leave-it-cleaner, clean-comments, clean-names, clean-functions, clean-structure
   workflow/    slice-plan, slice-diff, browser-automation-safety, verify-before-pr
 docs/
