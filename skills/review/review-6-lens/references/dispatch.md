@@ -47,7 +47,7 @@ Readability and Spec never skip — prose is in scope for both.
 
 A skip needs the absence to be **checkable** — the file list settles the file-kind conditions, the added lines settle the content ones. Read the added lines before skipping ANY of the four skippable lenses; a file-list glance is not evidence for a content condition. "Probably nothing there" is never evidence. **An undefined term is a doubt, not a licence**: if you cannot check a condition, it does not hold.
 
-Report a skipped lens as `Lens — skipped (no applicable surface)` in the clean-lenses line — never silently, and never as `No findings.` The two are different claims: one was checked, the other was not.
+Report a skipped lens as `Lens — skipped (no applicable surface)` in the visible coverage line — never silently, and never as `No findings.` The two are different claims: one was checked, the other was not.
 
 ## Sweep depth (per lens, proportional)
 
@@ -67,6 +67,6 @@ Run each lens as an **isolated reviewer with the least inherited context the run
 | Isolated reviewer, minimal inherited context | one background process per lens, from the repository root, then wait for all: `claude -p "$(cat <prompt-file>)" --model <session-model> --output-format json --setting-sources "" --strict-mcp-config --no-session-persistence --tools "Read,Grep,Glob,Bash" --allowedTools "Read" "Grep" "Glob" "Bash(git:*)" > <out-file>`; the report is the JSON `result` field | the runtime's default general sub-agent | yes — the skill runs it |
 
 - Write each prompt to its own file in a `mktemp -d` directory, never inside the worktree. Pass the model the session runs on: the model stays the user's choice.
-- If the command cannot run (not installed, not permitted, not logged in, or it fails on the first lens), use the right-hand column for the whole run and say so in the clean-lenses line — never mix mechanisms per lens.
+- If the command cannot run (not installed, not permitted, not logged in, or it fails on the first lens), use the right-hand column for the whole run and say so in the visible coverage line — never mix mechanisms per lens.
 - Never pick a specialized agent type because its name matches a lens: this skill ships none, and another tool's reviewer may refuse without its own setup — each refusal costs a full startup.
 - Use the Label as the reviewer's short description (sub-agent) or output-file name (process) for traceability.
