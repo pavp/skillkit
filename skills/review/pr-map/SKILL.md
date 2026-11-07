@@ -4,7 +4,7 @@ description: "Trigger: about to review a teammate's PR. Builds a read-only map: 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 ## Activation Contract
@@ -61,7 +61,7 @@ Map size by changed lines: under 75 → decision, risk, and at most 3 files and 
 
 ## Execution Steps
 
-1. **Resolve the target.** PR → read its metadata, diff, comments, CI status, and the other open PRs through the forge (table below); fetch its head into a ref. Branch → base is `git merge-base <branch> <default-branch>`. Ambiguous (several candidate PRs) → ask which one, the only question this skill asks.
+1. **Resolve the target.** PR → read its metadata, diff, comments, CI status, and the other open PRs through the forge (table below); fetch its head and its base branch into refs. A stacked PR's base branch can be gone after its parent merged: then fetch the base commit (`baseRefOid`) instead, never another branch. Branch → base is `git merge-base <branch> <default-branch>`. Ambiguous (several candidate PRs) → ask which one, the only question this skill asks.
 2. **Since your last look.** A map for this PR at an older SHA → also show what changed between that SHA and the head.
 3. **Review now?** Apply the gate. A size hand-back skips step 8; any other hand-back stops after step 6.
 4. **Intent.** Collect claims from the description, the linked issue, and specs the PR changes (`specs/`, `PRODUCT.md`, `TECH.md`). Check each claim with its receipt; list changes the diff makes that no claim mentions.
@@ -75,10 +75,11 @@ Forge commands, read-only; the skill runs them:
 
 | Capability | GitHub (`gh`) |
 |---|---|
-| PR metadata | `gh pr view <n> --json number,title,body,url,baseRefName,headRefOid,files,additions,deletions,closingIssuesReferences,statusCheckRollup,comments,reviews` |
+| PR metadata | `gh pr view <n> --json number,title,body,url,baseRefName,baseRefOid,headRefOid,files,additions,deletions,closingIssuesReferences,statusCheckRollup,comments,reviews` |
 | Review threads | `gh api repos/{owner}/{repo}/pulls/<n>/comments --paginate` |
 | Other open PRs, their files and linked issues | `gh pr list --state open --limit 1000 --json number,title,files,closingIssuesReferences` |
-| Fetch the head without checkout | `git fetch origin pull/<n>/head:refs/pr-map/<n>` |
+| Fetch head and base without checkout | `git fetch origin +pull/<n>/head:refs/pr-map/<n> +refs/heads/<baseRefName>:refs/pr-map/<n>-base` |
+| Base branch deleted | `git fetch origin +pull/<n>/head:refs/pr-map/<n> +<baseRefOid>:refs/pr-map/<n>-base` |
 | Diff link for a line | `<pr-url>/files#diff-<sha256 of the path>R<line>` |
 
 ## Output Contract
