@@ -8,7 +8,7 @@ How the orchestrator assembles the final report after every dispatched lens retu
 
 ## 2. Findings by severity
 
-One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. These sections hold every **unrefuted blocking** finding — `introduced` and `behavior-activated`, plus all Spec findings (causality-exempt and never refuted, so they stay here unconditionally); `pre-existing` findings go to §3 and refuted ones to §3.5. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / no-dedupe / no-rerank rules live in `finding-shape.md`.
+One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `🟠 CRITICAL` → `🟡 WARNING` → `🔵 SUGGESTION`. Omit a severity with no findings. These sections hold every **unrefuted blocking** finding — `introduced` and `behavior-activated`, plus all Spec findings (causality-exempt and never refuted, so they stay here unconditionally); `pre-existing` findings go to §3 and refuted ones to §3.5. Number findings continuously across the whole report — the first is `1.` whatever its severity; numbering never resets per heading. Each finding is the lens's own text in the `finding-shape.md` shape, ordered within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec). The verbatim / merge-only-the-same-defect / no-rerank rules live in `finding-shape.md`.
 
 ## 3. Pre-existing (follow-up, optional)
 
@@ -26,7 +26,7 @@ A `## ✅ Verified OK` section: bullets of what a lens **actively checked and cl
 
 ## 5. Clean lenses note
 
-One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. List any lens skipped by the applicability gate separately as `<Lens>: skipped (no applicable surface)` — never fold it in with the clean lenses. A clean lens looked and found nothing; a skipped lens never looked, and the reader must be able to tell which coverage they actually have. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "challenged N of M blocking findings" (scale gate, or a refuter that never returned). When both challenge paths ran, keep them distinguishable — "challenged M of M: N by refuter, K verified inline" — since an inline verification confirms a citation while a refuter searches for counter-evidence; folding them blurs the coverage this line exists to expose. A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
+One line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). Keeps per-lens coverage visible even though findings are grouped by severity. List any lens skipped by the applicability gate separately as `<Lens>: skipped (no applicable surface)` — never fold it in with the clean lenses. A clean lens looked and found nothing; a skipped lens never looked, and the reader must be able to tell which coverage they actually have. A lens that ended with `Omitted: <k> suggestions over the cap.` adds `<Lens>: <k> suggestions omitted (cap 3)` here — never dropped silently. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "challenged N of M blocking findings" (scale gate, or a refuter that never returned). When both challenge paths ran, keep them distinguishable — "challenged M of M: N by refuter, K verified inline" — since an inline verification confirms a citation while a refuter searches for counter-evidence; folding them blurs the coverage this line exists to expose. A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
 
 ## 6. Verdict (optional)
 
@@ -39,6 +39,8 @@ Count per lens + worst severity within each, no cross-lens ranking. **Both are c
 ```
 Risk 3 (🔴, +1 pre-existing 🟠) | Read 4 (🟡) | Reliab 2 (🟠, +1 refuted 🔴) | Resil 3 (🔴) | Arch 1 (🟠) | Spec 2 (🟠)
 ```
+
+A merged finding counts once under each of its lenses, so per-lens coverage stays exact.
 
 A lens whose every finding is non-blocking shows `0` with no emoji: `Arch 0 (+2 pre-existing 🟡)`.
 

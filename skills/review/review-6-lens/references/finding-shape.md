@@ -54,15 +54,19 @@ Suggestions are nits; the full blockquote shape is overkill. Emit them compact �
 
 If a suggestion truly needs a mechanism or evidence to make sense, it is **not** a suggestion — raise its severity to 🟡 and use the rich shape.
 
+A lens emits at most 3 suggestions; the rest it counts in one closing line, `Omitted: <k> suggestions over the cap.` A finding raised to 🟡 must meet the 🟡 bar on its own — never raise one to escape the cap.
+
 ## Aggregation rules (when the orchestrator assembles the report)
 
 - **Verbatim** — never reword, soften, or compress a finding to fit the list.
-- **No dedupe** — if two lenses flagged the same issue, emit BOTH as separate numbered findings under the same severity; note the overlap ("also flagged by Spec, #4"). Recurrence across lenses is signal.
+- **Merge only the same defect** — two code-lens findings citing the same `path:line` whose Fixes make the same change to the same symbol or line (add, remove, or replace the same thing) are emitted as ONE finding in the merged shape below; showing one defect twice is noise for the reader. In doubt, keep two: a wrong merge hides a defect, a missed one only repeats it. Anything less is not a merge: same line with a different Fix, or the same Fix at a different line, stays two findings, and a related pair keeps a cross-reference ("see also #4"). Spec never merges — it cites intent, not a line.
+- **Merged shape** — the rich or compact shape, with: the higher severity (its heading, its title, its Fix); both lenses in the parenthetical, in lens precedence order — (`` `Reliability` + `Resilience` — `<path>:<line>` · introduced ``); the blocking causality tag when the two differ (`introduced` or `behavior-activated` over `pre-existing` — fail toward blocking); and each lens's `Why it matters` verbatim, labelled by lens, when the mechanisms differ — one when they match. Position within a severity follows the first lens in precedence. Recurrence stays visible as the two tags: it is still signal.
 - **No rerank** — order within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec), never by importance. One lens's finding is never ranked above another's.
 - **Causality partition** — only `pre-existing` findings move to the follow-up section (see `output-contract.md`); `introduced` and `behavior-activated` stay in the severity sections. Causality-based, not importance-based. The orchestrator never re-decides a lens's causality tag.
 - **Refutation partition** — a blocking finding moves to the refuted section (see `refute.md`) only on a **cited counter-example**; it carries its refuter's evidence and its own text unchanged. Applied AFTER the causality partition and only to what still blocks, so no finding is ever both `pre-existing` and refuted.
 - **Spec is exempt from both** — Spec findings carry no causality tag and are never refuted. They stay in the severity sections unconditionally; neither partition applies to them.
-- These two partitions are the ONLY permitted moves, and both are evidence-based, never importance-based. Nothing is ever dropped. What a partition may not alter is listed once in `refute.md` (Authority).
+- A merged finding is partitioned and refuted once, as one finding; it is inferential when either source finding was.
+- These two partitions, and the merge, are the ONLY permitted moves, and all are evidence-based, never importance-based. Nothing is ever dropped. What a partition may not alter is listed once in `refute.md` (Authority).
 
 ## Severity emoji (use exactly)
 
