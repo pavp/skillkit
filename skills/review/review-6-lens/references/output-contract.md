@@ -12,7 +12,7 @@ One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `�
 
 ## 3. Pre-existing (follow-up, optional)
 
-A `## 📝 Pre-existing (follow-up)` section for findings tagged `pre-existing` — defects the diff did not introduce (evidence outside every changed region). Lead line: "Not introduced by this diff — reported, does not block." List them verbatim in the `finding-shape.md` shape, each keeping its **real severity emoji inline** on the title, grouped by severity then lens precedence. Continue the report's running number. Omit the whole section if no finding is `pre-existing`. These never contribute to a blocking Verdict.
+A `## 📝 Pre-existing (follow-up)` section for findings tagged `pre-existing` — defects the diff did not introduce (evidence outside every changed region, or moved unchanged from a cited base line). Lead line: "Not introduced by this diff — reported, does not block." List them verbatim in the `finding-shape.md` shape, each keeping its **real severity emoji inline** on the title, grouped by severity then lens precedence. Continue the report's running number. Omit the whole section if no finding is `pre-existing`. These never contribute to a blocking Verdict.
 
 ## 3.5 Refuted (optional)
 
