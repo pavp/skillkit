@@ -61,7 +61,7 @@ Map size by changed lines: under 75 → decision, risk, and at most 3 files and 
 
 ## Execution Steps
 
-1. **Resolve the target.** PR → read its metadata, diff, comments, CI status, and the other open PRs through the forge (table below); fetch its head and its base branch into refs. A stacked PR's base branch can be gone after its parent merged: then fetch the base commit (`baseRefOid`) instead, never another branch. Branch → base is `git merge-base <branch> <default-branch>`. Ambiguous (several candidate PRs) → ask which one, the only question this skill asks.
+1. **Resolve the target.** PR → read its metadata, diff, comments, CI status, and the other open PRs through the forge (table below); fetch its head and its base branch into refs. A stacked PR's base branch can be gone after its parent merged: then fetch the PR's base commit from its metadata instead, never another branch. Branch → base is `git merge-base <branch> <default-branch>`. Ambiguous (several candidate PRs) → ask which one, the only question this skill asks.
 2. **Since your last look.** A map for this PR at an older SHA → also show what changed between that SHA and the head.
 3. **Review now?** Apply the gate. A size hand-back skips step 8; any other hand-back stops after step 6.
 4. **Intent.** Collect claims from the description, the linked issue, and specs the PR changes (`specs/`, `PRODUCT.md`, `TECH.md`). Check each claim with its receipt; list changes the diff makes that no claim mentions.
