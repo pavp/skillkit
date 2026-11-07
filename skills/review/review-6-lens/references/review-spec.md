@@ -12,6 +12,8 @@ Report, with the spec line quoted for each finding:
 - **Scope creep** — behavior in the diff that the intent did not ask for.
 - **Wrong implementation** — requirements that look implemented but where the implementation contradicts the intent.
 
+You may also receive a pr-map `Description vs diff` section: claims from the description, each already matched to a quoted diff line (`done`) or not (`not found`). Use a `done` receipt instead of re-deriving it; a `not found` claim is a lead for **Missing / partial**, to confirm against the diff, never a finding by itself.
+
 Do not invent requirements the intent text does not state. If the intent is silent on something, that is not a finding.
 
 ## Output contract
