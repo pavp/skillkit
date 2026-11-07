@@ -1,17 +1,17 @@
 ---
 name: pr-map
-description: "Trigger: about to review a teammate's PR. Builds a read-only map: review it now or hand it back, each description claim checked against a diff line, risk by category with no score, a reading order with the why per file, and questions for the author. Use for 'what do I look at in PR 482', 'map this PR', a PR link before reviewing. Comment on it → pr-review; own change → verify-before-pr."
+description: "Trigger: about to review a teammate's PR. Builds a read-only map: review it now or hand it back, each description claim checked against a diff line, risk by category with no score, a reading order with the why per file, and questions for the author. Use for 'what do I look at in PR 482', 'map this PR', a PR link before reviewing. Comment on it → pr-comments; own change → verify-before-pr."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.1
+  version: 1.1.2
 ---
 
 ## Activation Contract
 
 Load before a human reviews someone else's PR or branch: a PR number or link, "what should I look at", "where do I start", "is this worth reviewing now". It orients the reviewer; the human reviews.
 
-Do NOT load to judge or comment on the code (→ `pr-review`, `review-6-lens`), to draft replies (→ `pr-comments`), or to verify your own change (→ `verify-before-pr`).
+Do NOT load to judge the code (→ `review-6-lens`), to comment on it or draft replies (→ `pr-comments`), or to verify your own change (→ `verify-before-pr`).
 
 ## Hard Rules
 

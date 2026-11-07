@@ -1,6 +1,6 @@
 ---
 name: review-6-lens
-description: "Trigger: reviewing a diff. Reviews any git range — branch, PR, commits, tag, merge, WIP — across 6 isolated lenses (Risk, Readability, Reliability, Resilience, Architecture, Spec), by severity. Use whenever code needs a verdict before it ships: 'review this', 'anything wrong here?', pre-merge. Posting it onto a PR → pr-review; splitting an oversized diff → slice-diff."
+description: "Trigger: reviewing a diff. Reviews any git range — branch, PR, commits, tag, merge, WIP — across 6 isolated lenses (Risk, Readability, Reliability, Resilience, Architecture, Spec), by severity. Use whenever code needs a verdict before it ships: 'review this', 'anything wrong here?', pre-merge. Turning findings into PR comments → pr-comments; splitting an oversized diff → slice-diff."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
