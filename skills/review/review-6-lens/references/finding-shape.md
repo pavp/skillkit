@@ -30,7 +30,7 @@ Rules:
 - A blank line separates every block; never run `Why it matters`, evidence, and `Fix` together as one paragraph.
 - `Why it matters` and `Fix` are both required and stay separate: `Why it matters` is the mechanism (the *how* it breaks); `Fix` is the action (the *what to do*). Neither folds into the other.
 - Add extra `>` sub-points (e.g. `> **Dangerous case:** …`) only when they aid clarity.
-- **Spec only:** the parenthetical carries a `kind` tag — `(`Spec` — `<path>` · _missing | scope-creep | wrong_)` — and `Evidence` is the quoted intent line, not code. Spec carries **no causality tag** (it is exempt): its parenthetical ends at the `kind`, and Spec findings always stay in the severity sections, never the follow-up section.
+- **Spec only:** the parenthetical carries a `kind` tag — `(`Spec` — `<path>` · _missing | scope-creep | wrong | contradiction_)` — and `Evidence` is the quoted intent line, not code — for a `contradiction`, both sides it opposes (two intent lines, or an intent line and the diff line). Spec carries **no causality tag** (it is exempt): its parenthetical ends at the `kind`, and Spec findings always stay in the severity sections, never the follow-up section.
 
 ## Refuted-by field (refuted findings only)
 
