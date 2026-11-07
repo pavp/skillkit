@@ -4,7 +4,7 @@ description: "Trigger: reviewing a diff. Reviews any git range — branch, PR, c
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.13.1
+  version: 1.14.0
 ---
 
 Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliability, Resilience, Architecture, Spec), then aggregate by severity, merging only the same defect seen by two lenses.
@@ -13,7 +13,7 @@ Review a diff through **6 isolated read-only lenses** (Risk, Readability, Reliab
 
 - Read-only. Report findings; never edit code.
 - Validate the ref and a non-empty diff BEFORE dispatching any lens. Bad ref or empty diff fails here.
-- Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated sub-agents (one per lens); else sequential with reset context. Never let one lens bias another.
+- Run each lens in **isolation** — no lens sees another's context or findings. Prefer parallel isolated reviewers (one per lens; the lean mechanism in `references/dispatch.md`); else sequential with reset context. Never let one lens bias another.
 - **Skipping a lens** needs positive evidence its surface is absent — from the file list AND from the added lines, because a file's kind does not bound what it carries. Never skip Risk on a diff whose added lines carry a credential-shaped literal, an authz rule, or an auth/crypto term (any file kind, prose and examples included); never skip Resilience on an added line changing a timeout, retry, limit, threshold, probe, or replica value; never skip Architecture on a manifest, schema, IDL, module-resolution file, or an edit to the repo's own architecture rules; never skip Reliability on executable code, a test file, or an added line stating a testable contract (threshold, cap, default, determinism or coverage requirement). Readability and Spec never skip. Full row conditions in `references/dispatch.md`.
 - **Skips fail toward running.** Ambiguity, mixed or generated content, and executable content anywhere cancel a skip; an undefined term is a doubt, not a licence. Cost is why the gate exists, never why a lens is skipped: a wrong run costs one agent, a wrong skip ships a defect nobody looked for. **A skipped lens is not a clean lens** — report it as `skipped`, never as `No findings.`; one was checked, the other was not.
 - The aggregate orders by severity but never lets one lens alter another's: no finding dropped, reworded, softened, or absorbed because a different lens saw the same code. Each keeps its lens label and verbatim text. One exception, decided by a narrow test: two code-lens findings citing the same `path:line` whose Fixes make the same change to the same symbol or line (add, remove, or replace the same thing) are one defect — emit ONE finding carrying both lens tags, the higher severity, the blocking causality tag if they differ, and each lens's mechanism when they differ (`references/finding-shape.md`). Same line, different Fix → two findings; in doubt → two findings, since a wrong merge hides a defect and a missed one only repeats it.
@@ -71,7 +71,7 @@ The question offers exactly `stop` and `review` (run all lenses). Accept only an
 2. Validate: ref resolves (`git rev-parse`) and the diff is non-empty. Else stop.
 2.5. Apply the pre-gate (Decision Gates), rows in order: for a committed range, run `bash -c 'ls "$(git rev-parse --git-dir)"/pr-map/*/"$(git rev-parse --short HEAD)"/map.md'` and read any map's `Review now?` line BEFORE counting lines — a small diff can still carry a hand-back. `stop` → emit its `Stopped at pre-gate:` line and run no lens.
 3. Resolve the spec (Decision Gates); normalize to text.
-4. Dispatch the lenses as isolated reviews per `references/dispatch.md`. Skip Spec if no spec; skip a lens whose surface is provably absent from the diff (`dispatch.md`'s applicability gate — fail toward running, executable content cancels every skip). Wait for all dispatched lenses — the next step needs the full set. Then set each finding's severity from its harm label (Decision Gates); severity exists from here on, never before.
+4. Dispatch the lenses as isolated reviews per `references/dispatch.md` — each as the isolated reviewer with the least inherited context the runtime offers (its § Dispatch mechanism). Skip Spec if no spec; skip a lens whose surface is provably absent from the diff (`dispatch.md`'s applicability gate — fail toward running, executable content cancels every skip). Wait for all dispatched lenses — the next step needs the full set. Then set each finding's severity from its harm label (Decision Gates); severity exists from here on, never before.
 5. Challenge the blocking findings per `references/refute.md` (its triage table decides which are challenged at all). Classify each by **class**, declared here:
 
    | Class | Test | Action |
