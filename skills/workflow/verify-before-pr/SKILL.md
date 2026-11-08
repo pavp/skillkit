@@ -4,14 +4,14 @@ description: "Before you open a PR for your own change, proves it works: walks e
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.2
+  version: 1.2.0
 ---
 
 ## Activation Contract
 
 Load before a PR exists for a change the user (or this session) made: a ticket finished, a fix ready, "open the PR", a slice of a stack. It proves the change does what was asked, then packages the proof.
 
-Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change with no observable behavior (docs, comments, formatting, tooling config).
+Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change after which nothing runs differently (docs, comments, formatting, tooling config). Text an agent follows (a prompt, a skill, agent instructions) has behavior: load it.
 
 ## Hard Rules
 
