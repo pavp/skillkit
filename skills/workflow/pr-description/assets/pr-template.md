@@ -4,21 +4,6 @@ What problem this solves, for whom, and how it showed up. One paragraph.
 
 🎫 <ticket id and link, or `NO-TICKET`>
 
-## 🔄 Changes
-
-- Change 1
-- Change 2
-
-## 🏷️ Type of change
-
-Delete the options that do not apply.
-
-- ✨ New feature (`feat`)
-- 🐛 Bug fix (`fix`)
-- ♻️ Refactor or performance (`refactor` / `perf`)
-- 🧹 Maintenance (`chore` / `docs` / `test` / `ci`)
-- 💥 Breaking change
-
 ## 🔍 Evidence
 
 <!-- Required for every change: what was seen working.
@@ -34,6 +19,21 @@ Delete the options that do not apply.
 ## ⚠️ Not verified
 
 What was not checked, and what a reviewer should check themselves. `None` if everything was.
+
+## 🔄 Changes
+
+- Change 1
+- Change 2
+
+## 🏷️ Type of change
+
+Delete the options that do not apply.
+
+- ✨ New feature (`feat`)
+- 🐛 Bug fix (`fix`)
+- ♻️ Refactor or performance (`refactor` / `perf`)
+- 🧹 Maintenance (`chore` / `docs` / `test` / `ci`)
+- 💥 Breaking change
 
 ## 💡 More information
 
