@@ -3,10 +3,10 @@
 Copy the block below into your project's `AGENTS.md`. It works in any stack. If the project also has a `CLAUDE.md`, Claude Code reads only that file: add `@AGENTS.md` to it, or paste the block there instead. After `npx skills update`, replace everything between the two `skillkit workflow snippet` markers with the new block.
 
 ````markdown
-<!-- skillkit workflow snippet v1.2.1 -->
+<!-- skillkit workflow snippet v1.2.2 -->
 ## Workflow skills (skillkit)
 
-When you finish implementing a ticket, feature or bug fix — before you tell the user it is done or ready for review, and before you open a pull request for it — load `verify-before-pr` by name — through your skill tool, or by reading its whole `SKILL.md` — even when the tests are green. Skip it for changes with no observable behavior: docs, comments, formatting, or tooling config. When you delegate that step, name the skill in the delegation prompt. Skip it if it is not installed.
+When you finish implementing a ticket, feature or bug fix — before you tell the user it is done or ready for review, and before you open a pull request for it — load `verify-before-pr` by name — through your skill tool, or by reading its whole `SKILL.md` — even when the tests are green. Skip it only when nothing runs differently after the change: docs, comments, formatting, or tooling config. Text an agent follows (a prompt, a skill, agent instructions) has behavior: verify it. When you delegate that step, name the skill in the delegation prompt. Skip it if it is not installed.
 
 Before you open a pull request for your own change, or write, fill or update its description, load `pr-description` the same way. Skip it if it is not installed.
 

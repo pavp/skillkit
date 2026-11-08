@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.0.1
+  version: 1.1.0
 ---
 
 ## Activation Contract
@@ -45,6 +45,7 @@ The package lives inside the git directory, which file search tools skip: list i
 |---|---|
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Paste it between the markers |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
+| No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty; Not verified says `verify-before-pr` did not run and why |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
 | No package, not installed | Evidence from what you observed running this session, same input on both sides when there is a before; nothing observed → the section says so and Not verified names it |
 
