@@ -1,10 +1,10 @@
 ---
 name: react-hooks
-description: "Trigger: reusing React LOGIC across components. Use this whenever the user repeats stateful logic in several components, wants the SAME useEffect/state logic in more than one place, or needs a useX/custom hook — even if they don't say 'hook'. Reuses logic across components, never markup; one-off effect bugs are out of scope. Markup/parts → react-component-patterns."
+description: "Shares React LOGIC across components through a custom hook. Use this whenever the user repeats stateful logic in several components, wants the SAME useEffect/state logic in more than one place, or needs a useX/custom hook — even if they don't say 'hook'. Reuses logic across components, never markup; one-off effect bugs are out of scope. Markup/parts → react-component-patterns."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## Activation Contract

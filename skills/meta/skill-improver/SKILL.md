@@ -1,10 +1,10 @@
 ---
 name: skill-improver
-description: "Trigger: improve, audit, refactor, or normalize existing skills; skill quality; a trigger that under-fires or two skills that compete. Use this whenever an existing SKILL.md needs review — even phrased as 'why doesn't this skill fire' or 'is this description good'. Audits existing LLM-first skills and can measure trigger accuracy. New skill from scratch → skill-creator."
+description: "Improves, audits, refactors, or normalizes existing skills: skill quality, a skill that under-fires, or two skills that compete. Use this whenever an existing SKILL.md needs review — even phrased as 'why doesn't this skill fire' or 'is this description good'. Audits existing LLM-first skills and can measure trigger accuracy. New skill from scratch → skill-creator."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## Activation Contract

@@ -1,10 +1,10 @@
 ---
 name: react-memoization
-description: "Trigger: useMemo/useCallback/memo decisions — write, keep, or remove. Verdict by regime (React Compiler) and reason (pure-perf vs semantic identity). Use whenever memoization is in doubt: 'should I memoize this', re-render complaints, an effect refiring because a dep is recreated each render, 'is this useless with the compiler'. Reusing logic across components → react-hooks."
+description: "Decides useMemo/useCallback/memo — write, keep, or remove. Verdict by regime (React Compiler) and reason (pure-perf vs semantic identity). Use whenever memoization is in doubt: 'should I memoize this', re-render complaints, an effect refiring because a dep is recreated each render, 'is this useless with the compiler'. Reusing logic across components → react-hooks."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## Activation Contract

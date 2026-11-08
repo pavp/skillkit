@@ -1,10 +1,10 @@
 ---
 name: slice-plan
-description: "Trigger: sizing work BEFORE coding it. Forecasts changed lines and, over the budget (default 400), plans slice boundaries and how they ship — stacked PRs or a feature branch chain. Use whenever implementation is about to start unsized, or planned slices need a delivery call: 'plan this feature', 'will this fit one PR', 'stacked or chained?'. Diff already too big → slice-diff."
+description: "Sizes work BEFORE coding it: forecasts changed lines and, over the budget (default 400), plans slice boundaries and how they ship — stacked PRs or a feature branch chain. Use whenever implementation is about to start unsized, or planned slices need a delivery call: 'plan this feature', 'will this fit one PR', 'stacked or chained?'. Diff already too big → slice-diff."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.8"
+  version: "1.8.1"
 ---
 
 ## Activation Contract

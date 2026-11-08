@@ -1,10 +1,10 @@
 ---
 name: pr-comments
-description: "Trigger: writing any comment on a PR. Use this the moment a comment or reply needs drafting: answer the comments left on your PR (even one \"what do I say to this?\" after you fixed it), tell the reviewer it is ready again or why something changed, or turn findings into comments on someone else's PR. Organic teammate voice, gated; never posts. Reviewing the diff itself → review-6-lens."
+description: "Writes any comment on a PR. Use this the moment a comment or reply needs drafting: answer the comments left on your PR (even one \"what do I say to this?\" after you fixed it), tell the reviewer it is ready again or why something changed, or turn findings into comments on someone else's PR. Organic teammate voice, gated; never posts. Reviewing the diff itself → review-6-lens."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 4.0.0
+  version: 4.0.1
 ---
 
 ## Activation Contract

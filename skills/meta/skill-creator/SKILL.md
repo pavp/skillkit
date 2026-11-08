@@ -1,10 +1,10 @@
 ---
 name: skill-creator
-description: "Trigger: authoring a NEW skill. Scaffolds LLM-first skills — frontmatter, activation contract, hard rules, decision gates, output contract. Use whenever packaging repeatable agent instructions into a reusable skill: 'create a skill for X', 'turn this workflow into a skill', an AI usage pattern the team keeps re-explaining. Auditing an existing skill → skill-improver."
+description: "Authors a NEW skill: scaffolds LLM-first skills — frontmatter, activation contract, hard rules, decision gates, output contract. Use whenever packaging repeatable agent instructions into a reusable skill: 'create a skill for X', 'turn this workflow into a skill', an AI usage pattern the team keeps re-explaining. Auditing an existing skill → skill-improver."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.1"
+  version: "1.1.1"
 ---
 
 ## Activation Contract
@@ -51,7 +51,7 @@ skills/{skill-name}/
 ```markdown
 ---
 name: {skill-name}
-description: "Trigger: {core intent}. {What this skill does}. Use whenever {pushy use-when clause}: {concrete anchor phrases, incl. one non-obvious}. {Confusable case} → {sibling-skill}."
+description: "{What this skill does, led by its core intent}. Use whenever {pushy use-when clause}: {concrete anchor phrases, incl. one non-obvious}. {Confusable case} → {sibling-skill}."
 license: Apache-2.0
 metadata:
   author: "{your-github-username}"
@@ -62,7 +62,7 @@ metadata:
 
 ## Inline Fallback Rules
 
-- `description` MUST be one physical line, quoted, YAML-safe, shaped as: `Trigger:` label → what it does → a pushy "use whenever …" clause → concrete anchors (incl. one non-obvious) → `→ sibling` disambiguation arrow when a confusable sibling exists.
+- `description` MUST be one physical line, quoted, YAML-safe, shaped as: what it does, led by its core intent → a pushy "use whenever …" clause → concrete anchors (incl. one non-obvious) → `→ sibling` disambiguation arrow when a confusable sibling exists.
 - `description` SHOULD be <=380 chars and MUST be <=400 chars.
 - Frontmatter MUST include `name`, `description`, `license`, `metadata.author`, and `metadata.version`.
 - Use imperative instructions, not tutorials or background prose.
@@ -71,7 +71,7 @@ metadata:
 Good:
 
 ```yaml
-description: "Trigger: creating a Jira task. Creates tasks in the team format. Use whenever work needs tracking: 'file a ticket', 'add this to the sprint', a bug report that should become an issue. Writing the PR itself → branch-pr."
+description: "Creates Jira tasks in the team format. Use whenever work needs tracking: 'file a ticket', 'add this to the sprint', a bug report that should become an issue. Writing the PR itself → branch-pr."
 ```
 
 Bad:
@@ -79,7 +79,7 @@ Bad:
 ```yaml
 description: >
   Create Jira tasks in the team format.
-  Trigger: Jira task, ticket, issue, or task creation.
+  Use for Jira task, ticket, issue, or task creation.
 Keywords: jira, task
 ```
 
