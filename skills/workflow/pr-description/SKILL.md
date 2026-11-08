@@ -53,9 +53,9 @@ Evidence shape, from `pr-block.md`, between the markers, in this order:
 
 1. One line: the overall verdict in bold, then what was compared (`**READY**: 2 criteria pass, `main` vs this branch.`).
 2. A table `| Criterion | Before | After | Verdict |`, one row per criterion; Verdict is `✅ PASS`, `❌ FAIL`, `⚠️ NOT WALKABLE` or `⛔ BLOCKED`, a NOT WALKABLE reason after it. A command run on both sides goes once in a `How:` line under the table and its cells keep only the outputs. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
-3. `Diff checks:` only the items that are not clean; all clean → `Diff checks: clean`.
+3. `Diff checks:` every item that is not a bare `none`, as written; every item `none` → `Diff checks: clean`.
 4. The block's `Not verified:` line.
-5. `<details><summary>Verification record</summary>` with the branch and commit, tree, date, source per criterion, and isolation, then `</details>`.
+5. `<details><summary>Verification record</summary>` with the branch and commit, tree, date, source per criterion, isolation, and the block's full `Diff checks:` line, then `</details>`.
 
 Publish:
 
@@ -77,7 +77,7 @@ Publish:
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every number, verdict, command and media reference in `pr-block.md` found literally in the published block, checked one by one with a search, never by eye · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every number, verdict, command and media reference in `pr-block.md` found literally in the published block, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
