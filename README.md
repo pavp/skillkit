@@ -59,7 +59,7 @@ ask for it, so pair it with its snippet in any stack.
 
 | Snippet | Install |
 |---|---|
-| [`snippets/workflow.md`](snippets/workflow.md) | `npx skills add pavp/skillkit -s verify-before-pr -s browser-automation-safety` |
+| [`snippets/workflow.md`](snippets/workflow.md) | `npx skills add pavp/skillkit -s verify-before-pr -s pr-description -s browser-automation-safety` |
 
 ## Skills
 
@@ -116,6 +116,7 @@ Skills are grouped by domain under `skills/<category>/<name>/SKILL.md`.
 | [`slice-diff`](skills/workflow/slice-diff/SKILL.md) | Slice an oversized git diff into a chain of reviewable PRs — pure git (no SDD), the review budget as the hard gate (default 400, user-overridable via invocation or project context), domain/layer as a soft cut signal, cut by commit boundary first. Shows the plan, gates on confirmation, then executes, grouping the chain into the forge's native stack where the client offers one. |
 | [`browser-automation-safety`](skills/workflow/browser-automation-safety/SKILL.md) | Resource-safety rules loaded before any browser automation (Playwright, Puppeteer, browser MCP) — always tear down contexts, one browser instance, never full-page screenshots, mandatory timeouts, RAM-scaled concurrency — so a run never exhausts memory or leaks browser processes. A rules authority; never drives a browser. |
 | [`verify-before-pr`](skills/workflow/verify-before-pr/SKILL.md) | Prove your own change works before the PR exists. Criteria come from the ticket or the ask, never from the code; each is walked on the running app by a context that never read the implementation and gets PASS, FAIL or NOT WALKABLE. Checks the diff for weakened tests and requires every new test to fail on the base commit. Captures each criterion before and after (video for motion, hover or multi-step flows), against the branch the PR targets, so stacked slices verify alone. Packages SHA-stamped evidence under `.git/`: a block safe to publish in the PR description and a local record; never opens the PR, never fixes. |
+| [`pr-description`](skills/workflow/pr-description/SKILL.md) | Write the description of your own PR. Fills the repo's PR template, or its own when there is none; always carries the before/after evidence block from `verify-before-pr` and a Not verified section; invents no number, result or ticked box. Publishes only when the request says to open or update the PR, then reads it back. |
 
 ## Authoring
 
