@@ -4,7 +4,7 @@ description: "Trigger: about to open a PR for your own change. Proves it works f
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 ## Activation Contract
@@ -101,7 +101,7 @@ Once loaded, run every step and write the package, whether or not a PR was asked
 
 ```markdown
 <!-- verify-before-pr:start -->
-## Evidence — `<branch>` at `<full-sha>` or `uncommitted`, against `<target>`
+**Verified** — `<branch>` at `<full-sha>` or `uncommitted`, against `<target>`
 Tree: `<tree-hash>` (valid for any commit with this tree)
 Verdict: <READY | READY WITH GAPS | FAIL | BLOCKED | UNVERIFIED> · <date> · <ticket or "conversation">
 Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capability>)>
@@ -126,7 +126,7 @@ State left behind: <records this run created or changed, or none>
 Left out of the tree: <untracked paths not in the change, or none>
 ```
 
-Then reply, opening with the overall verdict (never "done" or "ready for review" ahead of it), with the folder path and, unless FAIL, the commands below, run from that folder so `./` references match: the block goes between the markers of the PR description, or under a `Before / After` heading when it has none, and never replaces the rest of the description. Its media go up with the forge's upload; pasted without it, the images break. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
+Then reply, opening with the overall verdict (never "done" or "ready for review" ahead of it), with the folder path and, unless FAIL, the commands below, run from that folder so `./` references match: the block goes between the markers of the PR description, or under an `Evidence` heading when it has none, and never replaces the rest of the description. Its media go up with the forge's upload; pasted without it, the images break. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
