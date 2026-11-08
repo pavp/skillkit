@@ -1,10 +1,10 @@
 ---
 name: react-component-patterns
-description: "Trigger: designing the public API of a REUSABLE React component, UI or headless. Use this whenever parts share state (<Tabs> with <Tab>, or a context provider with no markup), a parent controls the value (value+onChange, controlled/uncontrolled), a caller injects markup via slots, or state seeds from props with a reset — even if no pattern is named. Building one plain component → react-component."
+description: "Designs the public API of a REUSABLE React component, UI or headless. Use this whenever parts share state (<Tabs> with <Tab>, or a context provider with no markup), a parent controls the value (value+onChange, controlled/uncontrolled), a caller injects markup via slots, or state seeds from props with a reset — even if no pattern is named. Building one plain component → react-component."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## Activation Contract

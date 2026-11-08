@@ -1,10 +1,10 @@
 ---
 name: pr-map
-description: "Trigger: about to review a teammate's PR. Builds a read-only map: review it now or hand it back, each description claim checked against a diff line, risk by category with no score, a reading order with the why per file, and questions for the author. Use for 'what do I look at in PR 482', 'map this PR', a PR link before reviewing. Comment on it → pr-comments; own change → verify-before-pr."
+description: "Before you review a teammate's PR, builds a read-only map: review it now or hand it back, each description claim checked against a diff line, risk by category with no score, a reading order with the why per file, and questions for the author. Use for 'what do I look at in PR 482', 'map this PR', a PR link before reviewing. Comment on it → pr-comments; own change → verify-before-pr."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.2
+  version: 1.1.3
 ---
 
 ## Activation Contract

@@ -1,10 +1,10 @@
 ---
 name: leave-it-cleaner
-description: "Trigger: cleaning the zone you already touched. Applies the Boy Scout Rule — a cohesive, proportional cleanup, orchestrating the clean-* judges. Use whenever an edit to existing code just finished or extras are invited: 'while you're at it', 'any quick wins', 'leave it cleaner', a fix shipped and the surrounding code is grubby. Judging one aspect only → that clean-* skill."
+description: "Cleans the zone you already touched: applies the Boy Scout Rule — a cohesive, proportional cleanup, orchestrating the clean-* judges. Use whenever an edit to existing code just finished or extras are invited: 'while you're at it', 'any quick wins', 'leave it cleaner', a fix shipped and the surrounding code is grubby. Judging one aspect only → that clean-* skill."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.3.0
+  version: 2.3.1
 ---
 
 # Leave It Cleaner

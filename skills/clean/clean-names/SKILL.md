@@ -1,10 +1,10 @@
 ---
 name: clean-names
-description: "Trigger: judging a name. Classifies identifiers against N1–N7 and suggests a fix — a judgment authority, never renames. Use whenever a name is in question: 'better name for this', a cryptic/Hungarian/misleading identifier, a variable that no longer matches what it holds, any language. Whole-function verdicts → clean-functions; body shape → clean-structure."
+description: "Judges a name: classifies identifiers against N1–N7 and suggests a fix — a judgment authority, never renames. Use whenever a name is in question: 'better name for this', a cryptic/Hungarian/misleading identifier, a variable that no longer matches what it holds, any language. Whole-function verdicts → clean-functions; body shape → clean-structure."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # Clean Names

@@ -1,10 +1,10 @@
 ---
 name: pr-description
-description: "Trigger: writing the description of your own PR. Fills the repo's PR template (or its own), always carries evidence (before/after when one exists), says what went unverified, invents nothing. Use whenever a PR is about to be opened or its body updated: 'open the PR', 'write the PR description', 'fill the template', 'update the PR body'. Proving it works → verify-before-pr; comments → pr-comments."
+description: "Writes the description of your own PR: fills the repo's PR template (or its own), always carries evidence (before/after when one exists), says what went unverified, invents nothing. Use whenever a PR is about to be opened or its body updated: 'open the PR', 'write the PR description', 'fill the template', 'update the PR body'. Proving it works → verify-before-pr; comments → pr-comments."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 ## Activation Contract

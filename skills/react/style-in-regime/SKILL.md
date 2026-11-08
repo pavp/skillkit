@@ -1,10 +1,10 @@
 ---
 name: style-in-regime
-description: "Trigger: judging styling against the project's regime. Detects the styling regime (MUI sx, SCSS modules, styled-components, Tailwind) and classifies each inline style against it — a judgment authority, never edits. Use whenever style placement is in doubt: 'should this be a class', an inline style in a Tailwind codebase, sx vs module, arbitrary values creeping in."
+description: "Judges styling against the project's regime: detects the styling regime (MUI sx, SCSS modules, styled-components, Tailwind) and classifies each inline style against it — a judgment authority, never edits. Use whenever style placement is in doubt: 'should this be a class', an inline style in a Tailwind codebase, sx vs module, arbitrary values creeping in."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # Style In Regime

@@ -1,10 +1,10 @@
 ---
 name: react-component
-description: "Trigger: build or refactor a React component. Use this whenever the user is creating or restructuring a single component — a form, a provider, an error boundary, a .tsx/.jsx file that does too much or mixes data fetching with render — even if they don't say 'component'. Structures ONE component. Reusable multi-part API → react-component-patterns; shared logic → react-hooks."
+description: "Builds or refactors a React component. Use this whenever the user is creating or restructuring a single component — a form, a provider, an error boundary, a .tsx/.jsx file that does too much or mixes data fetching with render — even if they don't say 'component'. Structures ONE component. Reusable multi-part API → react-component-patterns; shared logic → react-hooks."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: "1.0"
+  version: "1.0.1"
 ---
 
 ## Activation Contract

@@ -1,10 +1,10 @@
 ---
 name: clean-comments
-description: "Trigger: judging comments. Classifies each as noise / load-bearing / commented-out / out-of-domain, prescribes delete-keep-trim-or-reformat — a judgment authority, never edits. Use whenever a comment's worth or shape is in doubt: 'is this comment useful', 'clean up these comments', a bloated doc block mixing a why with restatement, a comment on a function that should be JSDoc, an agent-generated file dense with comments, a stale TODO."
+description: "Judges comments: classifies each as noise / load-bearing / commented-out / out-of-domain, prescribes delete-keep-trim-or-reformat — a judgment authority, never edits. Use whenever a comment's worth or shape is in doubt: 'is this comment useful', 'clean up these comments', a bloated doc block mixing a why with restatement, a comment on a function that should be JSDoc, an agent-generated file dense with comments, a stale TODO."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 3.0.0
+  version: 3.0.1
 ---
 
 # Clean Comments

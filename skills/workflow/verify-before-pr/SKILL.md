@@ -1,10 +1,10 @@
 ---
 name: verify-before-pr
-description: "Trigger: about to open a PR for your own change. Proves it works first: walks each acceptance criterion on the running app (PASS / FAIL / NOT WALKABLE), captures before and after, checks the diff for weakened tests, and packages SHA-stamped evidence. Use whenever a ticket or fix is called done: 'open the PR', 'ready for review', 'push this', even with tests green. Others' PR → review-6-lens."
+description: "Before you open a PR for your own change, proves it works: walks each acceptance criterion on the running app (PASS / FAIL / NOT WALKABLE), captures before and after, checks the diff for weakened tests, and packages SHA-stamped evidence. Use whenever a ticket or fix is called done: 'open the PR', 'ready for review', 'push this', even with tests green. Others' PR → review-6-lens."
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.1
+  version: 1.1.2
 ---
 
 ## Activation Contract
