@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.4.1
+  version: 1.5.0
 ---
 
 ## Activation Contract
@@ -17,14 +17,14 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 
 - **Never invent.** A number, a result, "tested", or a ticked checkbox appears only when you observed it or the evidence package states it. Anything else goes under Not verified, never into a claim.
 - **Evidence is always there**, in any template: before and after for a change to existing behavior, after alone for something new. Its source is verify-before-pr's `pr-block.md`, presented per Evidence shape between its markers: built only from that block, never from `evidence.md` or the session; every number, command, output and media reference it posts copied literally; verdicts become the plain results of Evidence shape; only order, layout and that wording change. No usable block → the evidence gate decides; never write a "before" you did not observe, nor one for something that did not exist.
-- **Not verified is always there.** Collect it from the block's `Not verified` line plus every check this session skipped or could not run. Nothing → `None`.
+- **Not verified is always there**, holding only what a reviewer can act on: a check that did not run and where it would. Collect it from the block's `Not verified` line plus every check this session skipped or could not run; drop notes about the checking process itself (a new test that cannot load on the base). Nothing → `None`.
 - **Lead with the problem.** The first paragraph says what was wrong or missing, for whom, and how it showed up. Changes are grouped by area, never a list of commits.
 - **A repo template wins.** Keep its sections, order, and wording, and never move, merge or reorder a section: the evidence goes inside the template's own evidence section wherever it stands, even last, with its markers; do what its comments ask (delete options that do not apply, ask for a ticket) and remove the comments once done. Add only what it lacks of Evidence and Not verified: into its evidence section (screenshots, demo, evidence, testing), else a `## 🔍 Evidence` section right after its summary, before its changes. A missing Not verified goes right after the evidence. Never add sections it did not ask for beyond these.
 - **Ask, never guess, a ticket** the template has a slot for and nothing you read names (the ask, the branch, commits, the evidence block); the user says there is none → the template's convention, else `NO-TICKET`. Never leave a placeholder in the draft.
 - **Name the check, never the tooling.** Nothing published names a skill, agent, model, prompt or workflow, nor its private terms (walk, package, round, pr-block): say what was checked (`the before/after check did not run: nothing runs differently`). Only a change to that tooling itself names it.
 - **A security fix states impact only**: no reproduction, payload, input, or path that triggers it.
 - **No attribution footer** ("Generated with…", AI co-author lines) unless the template asks for one.
-- **Updating an open PR**: read its current description first; keep what a person wrote that still holds, replace what the new commits made stale, and swap only the content between the evidence markers; an old `<!-- verify-before-pr:start -->`…`end` pair counts as them and is replaced by the current pair. Never wipe it.
+- **Updating an open PR**: read its current description first; keep what a person wrote that still holds, replace what the new commits made stale, and swap only the content between the evidence markers, rebuilt from the package every time, never kept from the published text; an old `<!-- verify-before-pr:start -->`…`end` pair counts as them and is replaced by the current pair. Never wipe it.
 - **Publish only the description.** Never push, rebase, or merge; a branch missing on the remote → ask before anything else.
 - **Language**: the one the repo's template and recent PRs use; none → English.
 
@@ -52,13 +52,14 @@ The package lives inside the git directory, which file search tools skip: list i
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
 | No package, not installed | Evidence from what you observed running this session, same input on both sides when there is a before; nothing observed → the section says so and Not verified names it |
 
-Evidence shape, from `pr-block.md`, between the markers, in this order; nothing else from the block is posted:
+Evidence shape, from `pr-block.md`, between exactly one pair of `<!-- evidence:start -->` and `<!-- evidence:end -->`, in this order; nothing else from the block is posted, its own marker lines (old or new) included:
 
-1. One line of facts, never a verdict word (READY, READY WITH GAPS, UNVERIFIED): where it was checked, what was compared with the short commit, and the counts, leaving out a zero (`Checked on the running app, `main` vs `2d8cc56`: 2 of 3 criteria behave as asked; 1 could not be checked locally.`).
-2. A table `| Criterion | Before | After | Result |`, one row per criterion; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
+1. One line of facts, never a verdict word (READY, READY WITH GAPS, UNVERIFIED): where it was checked, what was compared with the short commit, and the counts, leaving out a zero, never who did the checking (`Checked on the running app, `main` vs `2d8cc56`: 2 of 3 criteria behave as asked; 1 could not be checked locally.`).
+2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
 3. The block's `Since the last review` line, when it has one, copied literally.
-4. `How:` on one line, only when the cells cannot be read without it: each command run on both sides, written once, and what a count like `2/2` counts, as short clauses joined by `;`.
-5. `Diff checks:` only the items that are not a bare `none`, as written; every item `none` → no line.
+4. `How:` on one line, only when the same command repeats across rows: each command written once, as short clauses joined by `;`; never to explain what a cell already says.
+
+Diff checks are never posted: Changes names a replaced test or a new dependency under its area, read from the diff.
 
 The block's `Not verified` line goes to the Not verified section. The record (branch, full SHA, base SHA, tree, date, source, isolation, overall verdict) stays in the package for the tree check, never in the PR. An UNVERIFIED verdict becomes a Not verified item saying in plain words why the check was not independent (criteria from the author's own plan, or checked by the session that wrote the code).
 
@@ -82,7 +83,7 @@ Publish:
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, every command and media reference, and every diff-check item that is not `none` in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, and every command and media reference in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
