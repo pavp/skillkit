@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.4.0
+  version: 1.5.0
 ---
 
 ## Activation Contract
@@ -29,7 +29,7 @@ Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run e
 - **Redact before saving.** Tokens, cookies, passwords and personal data in a screenshot, video, log or output become `‹redacted›` before anything lands in the evidence folder; a video frame you cannot redact is not saved.
 - **Before the first browser call, load `browser-automation-safety`.** Not installed → still hold its minimum: one browser instance, viewport screenshots only, and the browser and the app server closed when the walk ends. A CLI/API-only walk skips it.
 - **Evidence is bound to exact content, never to a promise.** Record the tree hash of what you verify. Uncommitted changes never stop the run and never make you commit: verify the working tree and mark the package `uncommitted`. Hash what the commit will hold: an untracked path enters only when it belongs to the change (new source, tests, assets the criteria use); tool or harness output (caches, skill registries, editor files, logs) stays out, or the hash never matches the commit. Cannot tell → ask. It counts for a commit only when that commit's tree (`git rev-parse <sha>^{tree}`) equals the recorded one; otherwise verify again.
-- **`pr-block.md` must be safe to publish as is.** Anyone may post it after this skill ends, so it holds nothing internal: no exploratory findings, no state left behind, no path outside the package, and no tooling vocabulary: no skill, agent, model or workflow name, nor its terms (walk, package, round). Write `2/2 runs`, `reused from the last review`.
+- **`pr-block.md` must be safe to publish as is.** Anyone may post it after this skill ends, so it holds nothing internal: no exploratory findings, no state left behind, no path outside the package, and no tooling vocabulary: no skill, agent, model or workflow name, nor its terms (walk, package, round): a count is `2/2 runs`, and a reused "before" carries no note.
 - **A security fix publishes impact only.** When a criterion closes a vulnerability (auth, permissions, injection, data exposure), `pr-block.md` states the impact at a high level; the reproduction, the payload and the exploit's "before" stay in `evidence.md`, which never leaves the machine, and their media get no upload entry in the commands. The input that triggers it is the payload too, even refused: no line of `pr-block.md` quotes a command, input, path or file name for that criterion; its Before and After cells say the outcome in words (`a file outside the folder was readable` → `refused, exit 2`).
 - **Never open, push or post.** Deliver the package and the commands; the user, or whoever writes the PR description, runs them.
 
@@ -124,7 +124,7 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 
 <per video, outside the table, where it does not play: a `Before — #<n>` line, its `./<file>.mp4` alone on the next line, then the same for `After — #<n>`>
 
-Since the last review (`<that package's short commit, or its short tree when it was uncommitted>`): added: <#n (source)> · changed: <#n, was: <old wording> (source)> · removed: <criterion (source)>; each part `none` when empty; the line only in a review round
+Since the last review (`<that package's short commit, or its short tree when it was uncommitted>`): added <what, in a few words> ([review](<link>) or the ticket) · changed <what>, was <old wording> (<source>) · removed <what> (<source>); a part with nothing is left out, never `none` or `#n`; the line only in a review round
 
 Diff checks: <tests modified, assertions removed or none> · <new deps or none> · <out of scope or none> · <new tests failing on base for the criterion's reason: n/n>
 Not verified: <criterion or "before": reason, or none>
