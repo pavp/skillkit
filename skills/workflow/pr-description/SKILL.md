@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.3.0
+  version: 1.3.1
 ---
 
 ## Activation Contract
@@ -19,7 +19,7 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 - **Evidence is always there**, in any template: before and after for a change to existing behavior, after alone for something new. Its source is verify-before-pr's `pr-block.md`, presented per Evidence shape between its markers: built only from that block, never from `evidence.md` or the session; every number, verdict, command, output and media reference it posts copied literally; only order and layout change. No usable block → the evidence gate decides; never write a "before" you did not observe, nor one for something that did not exist.
 - **Not verified is always there.** Collect it from the block's `Not verified` line plus every check this session skipped or could not run. Nothing → `None`.
 - **Lead with the problem.** The first paragraph says what was wrong or missing, for whom, and how it showed up. Changes are grouped by area, never a list of commits.
-- **A repo template wins.** Keep its sections, order, and wording; do what its comments ask (delete options that do not apply, ask for a ticket) and remove the comments once done. Add only what it lacks of Evidence and Not verified: into its evidence section (screenshots, demo, evidence, testing), else a `## 🔍 Evidence` section right after its summary, before its changes. Never add sections it did not ask for beyond these.
+- **A repo template wins.** Keep its sections, order, and wording, and never move, merge or reorder a section: the evidence goes inside the template's own evidence section wherever it stands, even last, with its markers; do what its comments ask (delete options that do not apply, ask for a ticket) and remove the comments once done. Add only what it lacks of Evidence and Not verified: into its evidence section (screenshots, demo, evidence, testing), else a `## 🔍 Evidence` section right after its summary, before its changes. A missing Not verified goes right after the evidence. Never add sections it did not ask for beyond these.
 - **Ask, never guess, a ticket** the template has a slot for and nothing you read names (the ask, the branch, commits, the evidence block); the user says there is none → the template's convention, else `NO-TICKET`. Never leave a placeholder in the draft.
 - **Name the check, never the tooling.** Nothing published names a skill, agent, model, prompt or workflow, nor its private terms (walk, package, round, pr-block): say what was checked (`the before/after check did not run: nothing runs differently`). Only a change to that tooling itself names it.
 - **A security fix states impact only**: no reproduction, payload, input, or path that triggers it.
@@ -73,7 +73,7 @@ Publish:
 1. Find the template per the gate; read the title convention (template comments, CONTRIBUTING, recent merged PR titles); none → a Conventional Commit title.
 2. Resolve the evidence per the gate; read the PR's target branch from the block (`against <target>`), else the user, else the default branch.
 3. Gather facts from the user's ask, the ticket, the diff (`git diff <target>...HEAD --stat`, then the diff), and the evidence package: problem, changes by area, type, what is left out.
-4. Fill the template in its order: problem, evidence, Not verified, changes, checklist ticked only where true. Details (trade-offs, migrations, what did not work, what is left) only when a reviewer needs them; nothing to say → delete that section, never fill it with `None`. ELI5 goes in when the template has a slot for it, or with the own template: two or three plain sentences someone outside the project would follow.
+4. Fill each template section where it stands, top to bottom, never reordering: the problem in its summary, the evidence block with its markers in its evidence section, Not verified after it, the changes, the checklist ticked only where true. Details (trade-offs, migrations, what did not work, what is left) only when a reviewer needs them; nothing to say → delete that section, never fill it with `None`. ELI5 goes in when the template has a slot for it, or with the own template: two or three plain sentences someone outside the project would follow.
 5. A slice of a stack: the summary names the PR it builds on (`Builds on #<n>`) when that PR exists, and the PR targets that slice's branch.
 6. Publish or show per the gate. Publishing: run from the evidence folder so `./` media resolve, upload every medium the block references, then read the description back.
 
