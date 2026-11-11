@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.7.0
+  version: 1.7.1
 ---
 
 ## Activation Contract
@@ -56,7 +56,7 @@ The package lives inside the git directory, which file search tools skip: list i
 Evidence shape, from `pr-block.md`, between exactly one pair of `<!-- evidence:start -->` and `<!-- evidence:end -->`, in this order; nothing else from the block is posted, its own marker lines (old or new) included:
 
 1. One line of facts, never a verdict word (READY, READY WITH GAPS, UNVERIFIED): where it was checked, what was compared with the short commit, and the counts, leaving out a zero, never who did the checking (`Checked on the running app, `main` vs `2d8cc56`: 2 of 3 criteria behave as asked; 1 could not be checked locally.`).
-2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. A cell with media holds one medium and nothing else, no comparison metric beside it (`pixel diff ≤ 0.1%` stays in the package); the block's `↳` rows (one per screen, one `↳ video`) stay under their criterion. After upload each image in the table is `<img src="<url>" alt="<alt>" width="320">`, so all share one size; a video stays the `[<what it shows>](<url>)` link the upload wrote, alone in its cell, where GitHub plays it (its size cannot be set). Never a video line under the table, nor a `#<n>` label.
+2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. A cell with media holds one medium and nothing else, no comparison metric beside it (`pixel diff ≤ 0.1%` stays in the package); the block's `↳` rows (one per screen, one `↳ video`) stay under their criterion, whose own row then holds only its result: a medium on it moves to a `↳ <screen>` row of its own. An alt text that does not name its side gets ` before` or ` after`, and a bare count gets the unit its criterion names (`data-testid` → `61 ids`), the number itself unchanged. After upload each image in the table is `<img src="<url>" alt="<alt>" width="320">`, so all share one size; a video stays the `[<what it shows>](<url>)` link the upload wrote, alone in its cell, where GitHub plays it (its size cannot be set). Never a video line under the table, nor a `#<n>` label.
 3. The block's `Since the last review` line, when it has one, copied literally.
 4. `How:` on one line, only when the same command repeats across rows: each command written once, as short clauses joined by `;`; never to explain what a cell already says.
 
