@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.4.0
+  version: 1.4.1
 ---
 
 ## Activation Contract
@@ -44,6 +44,7 @@ The package lives inside the git directory, which file search tools skip: list i
 
 | Found | Action |
 |---|---|
+| A `pr-block.md` for this tree whose verdict is FAIL | No description: name each failing criterion and what it showed, say the change goes back to whoever builds, and STOP |
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
 | A package for an earlier tree of this branch, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it; Not verified names those commits and that they change no behavior |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
