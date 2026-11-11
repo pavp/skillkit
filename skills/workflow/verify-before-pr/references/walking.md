@@ -42,6 +42,7 @@ Past the criteria, at most 3 per criterion. Pick the ones the criterion's surfac
 
 - "It's a one-line fix" → you are about to write code. Hand it back.
 - "Let me check the code to see what it should do" → you are about to verify the implementation against itself.
+- "The fix only touched what the reviewer flagged, so I'll walk just that" → you read the diff to pick, and the criterion you skipped is the one the fix broke. Walk them all.
 - "The tests are green, so it works" → that is a claim. Walk it.
 - "I'll use the token in `.env`" → invented access. Ask.
 - "It's just staging" → every environment is production unless the user says otherwise.

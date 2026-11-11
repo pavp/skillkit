@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 ## Activation Contract
@@ -44,6 +44,7 @@ The package lives inside the git directory, which file search tools skip: list i
 | Found | Action |
 |---|---|
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
+| A package for an earlier tree of this branch, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it; Not verified names those commits and that they change no behavior |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
 | No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty; Not verified says `verify-before-pr` did not run and why |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
@@ -53,10 +54,11 @@ Evidence shape, from `pr-block.md`, between the markers, in this order; nothing 
 
 1. One line: the overall verdict in bold, then what was compared, with the short commit (`**READY**: 2 criteria pass, `main` vs `2d8cc56`.`).
 2. A table `| Criterion | Before | After | Verdict |`, one row per criterion; Verdict is `✅ PASS`, `❌ FAIL`, `⚠️ NOT WALKABLE` or `⛔ BLOCKED`, a NOT WALKABLE reason after it. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
-3. `How:` on one line, only when the cells cannot be read without it: each command run on both sides, written once, and what a count like `2/2` counts, as short clauses joined by `;`.
-4. `Diff checks:` only the items that are not a bare `none`, as written; every item `none` → no line.
+3. The block's `Round:` line, when it has one, copied literally.
+4. `How:` on one line, only when the cells cannot be read without it: each command run on both sides, written once, and what a count like `2/2` counts, as short clauses joined by `;`.
+5. `Diff checks:` only the items that are not a bare `none`, as written; every item `none` → no line.
 
-The block's `Not verified` line goes to the Not verified section. The record (branch, full SHA, tree, date, source, isolation) stays in the package for the tree check, never in the PR.
+The block's `Not verified` line goes to the Not verified section. The record (branch, full SHA, base SHA, tree, date, source, isolation) stays in the package for the tree check, never in the PR.
 
 Publish:
 
@@ -78,7 +80,7 @@ Publish:
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and verdict, every command and media reference, and every diff-check item that is not `none` in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and verdict, the `Round:` line, every command and media reference, and every diff-check item that is not `none` in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
