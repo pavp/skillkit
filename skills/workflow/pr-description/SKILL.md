@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.5.0
+  version: 1.6.0
 ---
 
 ## Activation Contract
@@ -26,6 +26,7 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 - **No attribution footer** ("Generated with…", AI co-author lines) unless the template asks for one.
 - **Updating an open PR**: read its current description first; keep what a person wrote that still holds, replace what the new commits made stale, and swap only the content between the evidence markers, rebuilt from the package every time, never kept from the published text; an old `<!-- verify-before-pr:start -->`…`end` pair counts as them and is replaced by the current pair. Never wipe it.
 - **Publish only the description.** Never push, rebase, or merge; a branch missing on the remote → ask before anything else.
+- **Media are never replaced by words.** Before publishing a block with media, check the forge can upload them (Commands); it cannot → do not publish: name the media, the blocker and the command to run where upload works, and STOP. Never drop a medium or write `screenshots` in its place.
 - **Language**: the one the repo's template and recent PRs use; none → English.
 
 ## Decision Gates
@@ -55,7 +56,7 @@ The package lives inside the git directory, which file search tools skip: list i
 Evidence shape, from `pr-block.md`, between exactly one pair of `<!-- evidence:start -->` and `<!-- evidence:end -->`, in this order; nothing else from the block is posted, its own marker lines (old or new) included:
 
 1. One line of facts, never a verdict word (READY, READY WITH GAPS, UNVERIFIED): where it was checked, what was compared with the short commit, and the counts, leaving out a zero, never who did the checking (`Checked on the running app, `main` vs `2d8cc56`: 2 of 3 criteria behave as asked; 1 could not be checked locally.`).
-2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
+2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; a video is a bare reference, never `![…](…)` (that renders a broken image), and the only thing in its Before or After cell, where it plays in place; when that criterion also has screenshots, its video goes in a row right below it, `| ↳ video | <before> | <after> | |`. Never a video line under the table, nor a `#<n>` label: the player shows the file name, so the name says what it shows (`failed-delete-before.webm`).
 3. The block's `Since the last review` line, when it has one, copied literally.
 4. `How:` on one line, only when the same command repeats across rows: each command written once, as short clauses joined by `;`; never to explain what a cell already says.
 
@@ -83,7 +84,7 @@ Publish:
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, and every command and media reference in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, and every command and media reference in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads, and every video renders as a player, never a bare link (the rendered body holds one `<video>` per video) · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
@@ -91,7 +92,8 @@ After publishing, reply with the PR URL and the read-back, each observed: eviden
 | Recent title convention | `gh pr list --state merged --limit 10 --json title` | yes, read-only |
 | Open the PR | `gh pr create --base <target> --title <title> --body-file <description.md> --attach './<file>#<alt>' …` | only per the publish gate |
 | Update an open PR | `gh pr view <n> --json body`, then `gh pr edit <n> --body-file <description.md> --attach './<file>#<alt>' …` | only per the publish gate |
-| Read back | `gh pr view <n> --json body,url` | yes, after publishing |
+| Check upload support | `gh pr edit --help` lists `--attach` | yes, read-only |
+| Read back | `gh pr view <n> --json body,url`; rendered: `gh api -H "Accept: application/vnd.github.html+json" repos/{owner}/{repo}/pulls/<n> -q .body_html` | yes, after publishing |
 
 ## References
 

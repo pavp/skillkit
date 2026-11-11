@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.6.0
+  version: 1.7.0
 ---
 
 ## Activation Contract
@@ -81,7 +81,7 @@ Evidence kind — every row is captured on both sides, base and verified tree, w
 | Change | Evidence |
 |---|---|
 | Visible UI, one state | A viewport screenshot per side of the same element, same viewport and crop, each looked at and captioned with what it proves; plus a phone-width pair when layout changes |
-| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow) | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. No recorder available → one numbered screenshot per step and say so; never install one |
+| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow) | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. No recorder available → one numbered screenshot per step and say so; never install one. Name each video by what it shows and its side (`failed-delete-before.webm`) |
 | A transient state or timing | A measured timeline per side (when each state appears and disappears), or per-frame sampling for pixels the DOM does not hold, plus captioned key frames |
 | API, CLI, job | The exact same command per side, its output and exit code, never retyped or tidied |
 | Bug fix | The same input per side and what came out each time |
@@ -122,7 +122,7 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 |---|---|---|---|---|---|
 | 1 | <criterion> | <ticket/ask/plan/comment link> | PASS | ![<what it shows>](./<file>.png) or `<command>` → `<output>`, or `new` | same shape |
 
-<per video, outside the table, where it does not play: a `Before — #<n>` line, its `./<file>.mp4` alone on the next line, then the same for `After — #<n>`>
+<a video sits alone in its Before or After cell, `./<file>.webm` bare (never `![…](…)`, which renders a broken image) with nothing else, so it plays in place; when the criterion also has screenshots, the video takes a row right below it: `| | ↳ video | | | ./<name>-before.webm | ./<name>-after.webm |`>
 
 <a criterion with nothing to run (code structure, naming, file layout) is no row: it goes to Not verified>
 
@@ -142,7 +142,7 @@ State left behind: <records this run created or changed, or none>
 Left out of the tree: <untracked paths not in the change, or none>
 ```
 
-Then reply, opening with the overall verdict (never "done" or "ready for review" ahead of it), with the folder path and, unless FAIL, the commands below, run from that folder so `./` references match: the block goes between the markers of the PR description, or under an `Evidence` heading when it has none, and never replaces the rest of the description. Its media go up with the forge's upload; pasted without it, the images break. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
+Then reply, opening with the overall verdict (never "done" or "ready for review" ahead of it), with the folder path and, unless FAIL, the commands below, run from that folder so `./` references match: the block goes between the markers of the PR description, or under an `Evidence` heading when it has none, and never replaces the rest of the description. Its media go up with the forge's upload (a `gh` whose `pr edit --help` lists `--attach`); pasted without it, the images break. When `uncommitted`, add the check to run after committing: `git rev-parse HEAD^{tree}` must print the recorded tree, or the evidence no longer applies.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|
