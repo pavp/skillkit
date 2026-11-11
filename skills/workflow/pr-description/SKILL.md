@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.2.0
+  version: 1.3.0
 ---
 
 ## Activation Contract
@@ -21,9 +21,10 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 - **Lead with the problem.** The first paragraph says what was wrong or missing, for whom, and how it showed up. Changes are grouped by area, never a list of commits.
 - **A repo template wins.** Keep its sections, order, and wording; do what its comments ask (delete options that do not apply, ask for a ticket) and remove the comments once done. Add only what it lacks of Evidence and Not verified: into its evidence section (screenshots, demo, evidence, testing), else a `## 🔍 Evidence` section right after its summary, before its changes. Never add sections it did not ask for beyond these.
 - **Ask, never guess, a ticket** the template has a slot for and nothing you read names (the ask, the branch, commits, the evidence block); the user says there is none → the template's convention, else `NO-TICKET`. Never leave a placeholder in the draft.
+- **Name the check, never the tooling.** Nothing published names a skill, agent, model, prompt or workflow, nor its private terms (walk, package, round, pr-block): say what was checked (`the before/after check did not run: nothing runs differently`). Only a change to that tooling itself names it.
 - **A security fix states impact only**: no reproduction, payload, input, or path that triggers it.
 - **No attribution footer** ("Generated with…", AI co-author lines) unless the template asks for one.
-- **Updating an open PR**: read its current description first; keep what a person wrote that still holds, replace what the new commits made stale, and swap only the content between the evidence markers. Never wipe it.
+- **Updating an open PR**: read its current description first; keep what a person wrote that still holds, replace what the new commits made stale, and swap only the content between the evidence markers; an old `<!-- verify-before-pr:start -->`…`end` pair counts as them and is replaced by the current pair. Never wipe it.
 - **Publish only the description.** Never push, rebase, or merge; a branch missing on the remote → ask before anything else.
 - **Language**: the one the repo's template and recent PRs use; none → English.
 
@@ -46,7 +47,7 @@ The package lives inside the git directory, which file search tools skip: list i
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
 | A package for an earlier tree of this branch, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it; Not verified names those commits and that they change no behavior |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
-| No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty; Not verified says `verify-before-pr` did not run and why |
+| No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty; Not verified says the before/after check did not run and why |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
 | No package, not installed | Evidence from what you observed running this session, same input on both sides when there is a before; nothing observed → the section says so and Not verified names it |
 
@@ -54,7 +55,7 @@ Evidence shape, from `pr-block.md`, between the markers, in this order; nothing 
 
 1. One line: the overall verdict in bold, then what was compared, with the short commit (`**READY**: 2 criteria pass, `main` vs `2d8cc56`.`).
 2. A table `| Criterion | Before | After | Verdict |`, one row per criterion; Verdict is `✅ PASS`, `❌ FAIL`, `⚠️ NOT WALKABLE` or `⛔ BLOCKED`, a NOT WALKABLE reason after it. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; each video goes under the table on its own line, after a `Before — #<n>` or `After — #<n>` label.
-3. The block's `Round:` line, when it has one, copied literally.
+3. The block's `Since the last review` line, when it has one, copied literally.
 4. `How:` on one line, only when the cells cannot be read without it: each command run on both sides, written once, and what a count like `2/2` counts, as short clauses joined by `;`.
 5. `Diff checks:` only the items that are not a bare `none`, as written; every item `none` → no line.
 
@@ -80,7 +81,7 @@ Publish:
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and verdict, the `Round:` line, every command and media reference, and every diff-check item that is not `none` in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and verdict, the `Since the last review` line, every command and media reference, and every diff-check item that is not `none` in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|

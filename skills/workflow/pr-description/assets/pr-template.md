@@ -13,8 +13,8 @@ What problem this solves, for whom, and how it showed up. One paragraph.
      Bug: the same input and its result on both sides.
      Performance: the same workload measured on both sides, more than once.
      Something new has no "before": show it working, and for a new API the code someone would write to use it. -->
-<!-- verify-before-pr:start -->
-<!-- verify-before-pr:end -->
+<!-- evidence:start -->
+<!-- evidence:end -->
 
 ## ⚠️ Not verified
 

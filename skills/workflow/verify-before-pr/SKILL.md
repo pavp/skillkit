@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.3.0
+  version: 1.4.0
 ---
 
 ## Activation Contract
@@ -29,7 +29,7 @@ Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run e
 - **Redact before saving.** Tokens, cookies, passwords and personal data in a screenshot, video, log or output become `‹redacted›` before anything lands in the evidence folder; a video frame you cannot redact is not saved.
 - **Before the first browser call, load `browser-automation-safety`.** Not installed → still hold its minimum: one browser instance, viewport screenshots only, and the browser and the app server closed when the walk ends. A CLI/API-only walk skips it.
 - **Evidence is bound to exact content, never to a promise.** Record the tree hash of what you verify. Uncommitted changes never stop the run and never make you commit: verify the working tree and mark the package `uncommitted`. Hash what the commit will hold: an untracked path enters only when it belongs to the change (new source, tests, assets the criteria use); tool or harness output (caches, skill registries, editor files, logs) stays out, or the hash never matches the commit. Cannot tell → ask. It counts for a commit only when that commit's tree (`git rev-parse <sha>^{tree}`) equals the recorded one; otherwise verify again.
-- **`pr-block.md` must be safe to publish as is.** Anyone may post it after this skill ends, so it holds nothing internal: no exploratory findings, no state left behind, no path outside the package.
+- **`pr-block.md` must be safe to publish as is.** Anyone may post it after this skill ends, so it holds nothing internal: no exploratory findings, no state left behind, no path outside the package, and no tooling vocabulary: no skill, agent, model or workflow name, nor its terms (walk, package, round). Write `2/2 runs`, `reused from the last review`.
 - **A security fix publishes impact only.** When a criterion closes a vulnerability (auth, permissions, injection, data exposure), `pr-block.md` states the impact at a high level; the reproduction, the payload and the exploit's "before" stay in `evidence.md`, which never leaves the machine, and their media get no upload entry in the commands. The input that triggers it is the payload too, even refused: no line of `pr-block.md` quotes a command, input, path or file name for that criterion; its Before and After cells say the outcome in words (`a file outside the folder was readable` → `refused, exit 2`).
 - **Never open, push or post.** Deliver the package and the commands; the user, or whoever writes the PR description, runs them.
 
@@ -94,7 +94,7 @@ Evidence kind — every row is captured on both sides, base and verified tree, w
 
 Once loaded, run every step and write the package, whether or not a PR was asked for, and even after a FAIL: the package reports all of them.
 
-1. **Bind.** Resolve the target per the base gate; record branch, target, base (`git merge-base HEAD <target>`) and the tree you verify. Sort each untracked path (`git status --porcelain`, `??` rows) into the change or left out, per the binding rule. No tracked change and no untracked path of the change → `git rev-parse HEAD^{tree}` and the full SHA. Otherwise → the hash of what the commit will hold, through a temporary index that leaves the real one untouched: `GIT_INDEX_FILE=<tmp> git read-tree HEAD`, `GIT_INDEX_FILE=<tmp> git add -u`, `GIT_INDEX_FILE=<tmp> git add -- <untracked paths of the change>`, then `GIT_INDEX_FILE=<tmp> git write-tree`, with `<tmp>` a fresh path outside the repo. Then list earlier packages, which file search skips inside the git directory: `ls "$(git rev-parse --git-dir)/evidence/<branch>"`. One at another tree → a review round: read the latest one's criteria, base and SHA. The Round line compares against the latest package that is not FAIL, the last one a reviewer could have seen; none → no Round line.
+1. **Bind.** Resolve the target per the base gate; record branch, target, base (`git merge-base HEAD <target>`) and the tree you verify. Sort each untracked path (`git status --porcelain`, `??` rows) into the change or left out, per the binding rule. No tracked change and no untracked path of the change → `git rev-parse HEAD^{tree}` and the full SHA. Otherwise → the hash of what the commit will hold, through a temporary index that leaves the real one untouched: `GIT_INDEX_FILE=<tmp> git read-tree HEAD`, `GIT_INDEX_FILE=<tmp> git add -u`, `GIT_INDEX_FILE=<tmp> git add -- <untracked paths of the change>`, then `GIT_INDEX_FILE=<tmp> git write-tree`, with `<tmp>` a fresh path outside the repo. Then list earlier packages, which file search skips inside the git directory: `ls "$(git rev-parse --git-dir)/evidence/<branch>"`. One at another tree → a review round: read the latest one's criteria, base and SHA. The "Since the last review" line compares against the latest package that is not FAIL, the last one a reviewer could have seen; none → no such line.
 2. **Collect criteria** per the source gate; number them, each with its source. In a round, start from the earlier package's criteria: one added or changed by a source is marked `added` or `changed`, keeping the old wording; one a source removes leaves the walk and goes to `removed` with that source; one no source removes is walked again.
 3. **Settle isolation** per the walker rule, before reading any code; delegate the walk now when you can.
 4. **Start the app** per the access and mutation rules, and create the base worktree outside the repo (`git worktree add <tmp> <base>`), plus one per other "before" commit the round gate names. Verified tree unreachable → BLOCKED. For a UI, find a browser driver before deciding there is none, searching all three and saying where you looked: the project's own (its dependencies and config); your environment's (a browser skill or MCP server, a globally installed or package-runner-cached driver such as `npx --no-install playwright --version`); a browser binary a driver already downloaded (for Playwright, its browser cache) or an installed browser driven headless. Never install one. None after all three → BLOCKED, never a walk without the UI.
@@ -112,7 +112,7 @@ Once loaded, run every step and write the package, whether or not a PR was asked
 `pr-block.md`, the part meant for the PR, in this order:
 
 ```markdown
-<!-- verify-before-pr:start -->
+<!-- evidence:start -->
 **Verified** — `<branch>` at `<full-sha>` or `uncommitted`, against `<target>` at `<base-sha>`
 Tree: `<tree-hash>` (valid for any commit with this tree)
 Verdict: <READY | READY WITH GAPS | FAIL | BLOCKED | UNVERIFIED> · <date> · <ticket or "conversation">
@@ -124,11 +124,11 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 
 <per video, outside the table, where it does not play: a `Before — #<n>` line, its `./<file>.mp4` alone on the next line, then the same for `After — #<n>`>
 
-Round: since `<that package's short commit, or its short tree when it was uncommitted>` · added: <#n (source)> · changed: <#n, was: <old wording> (source)> · removed: <criterion (source)>; each part `none` when empty; the line only in a review round
+Since the last review (`<that package's short commit, or its short tree when it was uncommitted>`): added: <#n (source)> · changed: <#n, was: <old wording> (source)> · removed: <criterion (source)>; each part `none` when empty; the line only in a review round
 
 Diff checks: <tests modified, assertions removed or none> · <new deps or none> · <out of scope or none> · <new tests failing on base for the criterion's reason: n/n>
 Not verified: <criterion or "before": reason, or none>
-<!-- verify-before-pr:end -->
+<!-- evidence:end -->
 ```
 
 `evidence.md`, the local record: the same content, then:

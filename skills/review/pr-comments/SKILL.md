@@ -4,7 +4,7 @@ description: "Writes any comment on a PR. Use this the moment a comment or reply
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 4.0.1
+  version: 4.1.0
 ---
 
 ## Activation Contract
@@ -24,6 +24,7 @@ Load when the user wants comments written from review findings, replies drafted 
 - **Content over template.** Mandatory content, free form: any claim carries its mechanism (what breaks and why, or why you disagree). No fixed skeleton, no default length; keep it the shortest that carries the point. See `references/comment-shape.md`.
 - **Question only for a nameable decision.** Close with a question ONLY when you can name a decision that belongs to the other person (the trigger cases live in `references/comment-shape.md`). Cannot name it → no question.
 - **Reply truthfulness.** In replies and in comments on the user's own PR, claim a fix or change only when it exists. Never invent a reference; when the exact reference is unclear, verify or ask. Which reference for which fix-state: `references/comment-shape.md`.
+- **Name the change, never the tooling.** A comment never names a skill, agent, model or workflow (`verified with …`, `the review skill found`): say what was checked or changed.
 - **No severity tags.** Never label a comment with a severity; the content carries the weight.
 - **Consolidate.** One authored comment per locus, highest-value point only; no pile-ons. Reply threads never merge — one reply per thread, even at the same locus.
 - **No AI tells.** No hedging, em-dashes inside comments, robotic checklists, praise warm-up, filler closings ("whenever you can", "easy to change"), or repeated skeletons across drafts. See `references/comment-shape.md` anti-patterns.
