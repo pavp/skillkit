@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.5.0
+  version: 1.6.0
 ---
 
 ## Activation Contract
@@ -124,9 +124,10 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 
 <per video, outside the table, where it does not play: a `Before — #<n>` line, its `./<file>.mp4` alone on the next line, then the same for `After — #<n>`>
 
+<a criterion with nothing to run (code structure, naming, file layout) is no row: it goes to Not verified>
+
 Since the last review (`<that package's short commit, or its short tree when it was uncommitted>`): added <what, in a few words> ([review](<link>) or the ticket) · changed <what>, was <old wording> (<source>) · removed <what> (<source>); a part with nothing is left out, never `none` or `#n`; the line only in a review round
 
-Diff checks: <tests modified, assertions removed or none> · <new deps or none> · <out of scope or none> · <new tests failing on base for the criterion's reason: n/n>
 Not verified: <criterion or "before": reason, or none>
 <!-- evidence:end -->
 ```
@@ -134,6 +135,7 @@ Not verified: <criterion or "before": reason, or none>
 `evidence.md`, the local record: the same content, then:
 
 ```markdown
+Diff checks: <tests modified, assertions removed or none> · <new deps or none> · <out of scope or none> · <new tests failing on base for the criterion's reason: n/n>
 Exploratory: <finding, or none>
 Security detail: <reproduction and payload kept out of pr-block.md, or none>
 State left behind: <records this run created or changed, or none>
