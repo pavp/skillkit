@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.6.0
+  version: 1.7.0
 ---
 
 ## Activation Contract
@@ -56,7 +56,7 @@ The package lives inside the git directory, which file search tools skip: list i
 Evidence shape, from `pr-block.md`, between exactly one pair of `<!-- evidence:start -->` and `<!-- evidence:end -->`, in this order; nothing else from the block is posted, its own marker lines (old or new) included:
 
 1. One line of facts, never a verdict word (READY, READY WITH GAPS, UNVERIFIED): where it was checked, what was compared with the short commit, and the counts, leaving out a zero, never who did the checking (`Checked on the running app, `main` vs `2d8cc56`: 2 of 3 criteria behave as asked; 1 could not be checked locally.`).
-2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. Images stay in their cells; a video is a bare reference, never `![…](…)` (that renders a broken image), and the only thing in its Before or After cell, where it plays in place; when that criterion also has screenshots, its video goes in a row right below it, `| ↳ video | <before> | <after> | |`. Never a video line under the table, nor a `#<n>` label: the player shows the file name, so the name says what it shows (`failed-delete-before.webm`).
+2. A table `| Criterion | Before | After | Result |`, one row per criterion with something to run; a criterion with nothing to run (code structure, naming, file layout) is no row but a Not verified item; Result in words: PASS → `✅ as asked`, plus `, same result twice` when it was run twice; FAIL → `❌ not as asked`; NOT WALKABLE → `⚠️ not checked: <reason>`; BLOCKED → `⛔ not checked: <what was missing>`. A criterion from a review comment carries the comment's link in its cell. A cell keeps all its text, qualifiers included (`no flaky query`), except a command moved to `How:`. A cell with media holds one medium and nothing else, no comparison metric beside it (`pixel diff ≤ 0.1%` stays in the package); the block's `↳` rows (one per screen, one `↳ video`) stay under their criterion. After upload each image in the table is `<img src="<url>" alt="<alt>" width="320">`, so all share one size; a video stays the `[<what it shows>](<url>)` link the upload wrote, alone in its cell, where GitHub plays it (its size cannot be set). Never a video line under the table, nor a `#<n>` label.
 3. The block's `Since the last review` line, when it has one, copied literally.
 4. `How:` on one line, only when the same command repeats across rows: each command written once, as short clauses joined by `;`; never to explain what a cell already says.
 
@@ -78,13 +78,13 @@ Publish:
 3. Gather facts from the user's ask, the ticket, the diff (`git diff <target>...HEAD --stat`, then the diff), and the evidence package: problem, changes by area, type, what is left out.
 4. Fill each template section where it stands, top to bottom, never reordering: the problem in its summary, the evidence block with its markers in its evidence section, Not verified after it, the changes, the checklist ticked only where true. Details (trade-offs, migrations, what did not work, what is left) only when a reviewer needs them; nothing to say → delete that section, never fill it with `None`. ELI5 goes in when the template has a slot for it, or with the own template: two or three plain sentences someone outside the project would follow.
 5. A slice of a stack: the summary names the PR it builds on (`Builds on #<n>`) when that PR exists, and the PR targets that slice's branch.
-6. Publish or show per the gate. Publishing: run from the evidence folder so `./` media resolve, upload every medium the block references, then read the description back.
+6. Publish or show per the gate. Publishing, in two passes: from the evidence folder, publish with every medium attached and written `![<alt>](./<file>)`, never `<img src="./…">`, which the upload does not rewrite, so each `./` reference becomes its URL; then read the body back, turn each image of the evidence table into its `<img … width="320">`, and update the body once more with nothing attached. Then read the description back.
 
 ## Output Contract
 
 The draft: a title line, then the description, then the command that publishes it.
 
-After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, and every command and media reference in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads, and every video renders as a player, never a bare link (the rendered body holds one `<video>` per video) · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
+After publishing, reply with the PR URL and the read-back, each observed: evidence markers present · every criterion's before, after and result, the `Since the last review` line, and every command and media reference in `pr-block.md` found literally in the published description, checked one by one with a search, never by eye (a `\|` escaped for a table matches `|` outside it) · no `./` reference left · every image or video URL loads, every table image has `width="320"`, and every video renders as a player, never a bare link (the rendered body holds one `<video>` per video) · placeholders and template comments gone. A failed check → say which and fix it with one update, never claim it done.
 
 | Capability | GitHub (`gh`) | Run |
 |---|---|---|

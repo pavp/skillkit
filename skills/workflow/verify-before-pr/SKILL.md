@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.7.0
+  version: 1.8.0
 ---
 
 ## Activation Contract
@@ -81,7 +81,7 @@ Evidence kind — every row is captured on both sides, base and verified tree, w
 | Change | Evidence |
 |---|---|
 | Visible UI, one state | A viewport screenshot per side of the same element, same viewport and crop, each looked at and captioned with what it proves; plus a phone-width pair when layout changes |
-| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow) | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. No recorder available → one numbered screenshot per step and say so; never install one. Name each video by what it shows and its side (`failed-delete-before.webm`) |
+| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow) | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. No recorder available → one numbered screenshot per step and say so; never install one. Name each video by what it shows and its side (`failed-delete-before.webm`); start recording on the state that matters and hold it a second, since the first frame is the player's preview |
 | A transient state or timing | A measured timeline per side (when each state appears and disappears), or per-frame sampling for pixels the DOM does not hold, plus captioned key frames |
 | API, CLI, job | The exact same command per side, its output and exit code, never retyped or tidied |
 | Bug fix | The same input per side and what came out each time |
@@ -122,7 +122,7 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 |---|---|---|---|---|---|
 | 1 | <criterion> | <ticket/ask/plan/comment link> | PASS | ![<what it shows>](./<file>.png) or `<command>` → `<output>`, or `new` | same shape |
 
-<a video sits alone in its Before or After cell, `./<file>.webm` bare (never `![…](…)`, which renders a broken image) with nothing else, so it plays in place; when the criterion also has screenshots, the video takes a row right below it: `| | ↳ video | | | ./<name>-before.webm | ./<name>-after.webm |`>
+<a cell with media holds one medium and nothing else: no comparison metric beside it (pixel diff, threshold), which stays in `evidence.md`. A criterion covering several screens keeps its verdict on its own row and gets one row per screen below it: `| | ↳ <screen> | | | ![<screen> before](./<file>.png) | ![<screen> after](./<file>.png) |`. A video takes its own row below its criterion, written `![<what it shows>](./<name>-before.webm)` so the upload turns it into a link GitHub plays: `| | ↳ video | | | ![<what> before](./<name>-before.webm) | ![<what> after](./<name>-after.webm) |`>
 
 <a criterion with nothing to run (code structure, naming, file layout) is no row: it goes to Not verified>
 
