@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.8.0
+  version: 1.8.1
 ---
 
 ## Activation Contract
@@ -122,7 +122,7 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 |---|---|---|---|---|---|
 | 1 | <criterion> | <ticket/ask/plan/comment link> | PASS | ![<what it shows>](./<file>.png) or `<command>` → `<output>`, or `new` | same shape |
 
-<a cell with media holds one medium and nothing else: no comparison metric beside it (pixel diff, threshold), which stays in `evidence.md`. A criterion covering several screens keeps its verdict on its own row and gets one row per screen below it: `| | ↳ <screen> | | | ![<screen> before](./<file>.png) | ![<screen> after](./<file>.png) |`. A video takes its own row below its criterion, written `![<what it shows>](./<name>-before.webm)` so the upload turns it into a link GitHub plays: `| | ↳ video | | | ![<what> before](./<name>-before.webm) | ![<what> after](./<name>-after.webm) |`>
+<a cell with media holds one medium and nothing else: no comparison metric beside it (pixel diff, threshold), which stays in `evidence.md`. A criterion covering several screens keeps only its verdict on its own row, no media, and gets one row per screen below it, the first screen included: `| | ↳ <screen> | | | ![<screen> before](./<file>.png) | ![<screen> after](./<file>.png) |`. A video takes its own row below its criterion, written `![<what it shows>](./<name>-before.webm)` so the upload turns it into a link GitHub plays: `| | ↳ video | | | ![<what> before](./<name>-before.webm) | ![<what> after](./<name>-after.webm) |`. Every alt text names its side (`teams list before`, `teams list after`), and every count carries its unit (`61 ids`, never `61`).>
 
 <a criterion with nothing to run (code structure, naming, file layout) is no row: it goes to Not verified>
 
