@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.7.1
+  version: 1.8.0
 ---
 
 ## Activation Contract
@@ -47,11 +47,31 @@ The package lives inside the git directory, which file search tools skip: list i
 |---|---|
 | A `pr-block.md` for this tree whose verdict is FAIL | No description: name each failing criterion and what it showed, say the change goes back to whoever builds, and STOP |
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
-| A package for an earlier tree of this branch, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it; Not verified names those commits and that they change no behavior |
+| A package for an earlier tree of this branch whose commit is an ancestor of `HEAD`, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it; Not verified names those commits and that they change no behavior |
+| A package for an earlier tree of this branch whose commit is no longer an ancestor of `HEAD` (a rebase) | Decide per Rebase below, never by asking |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
 | No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty; Not verified says the before/after check did not run and why |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
 | No package, not installed | Evidence from what you observed running this session, same input on both sides when there is a before; nothing observed → the section says so and Not verified names it |
+
+Rebase — take the old commit and old base from the package's record, the new base as `git merge-base HEAD <the branch the PR targets now>`; either old one missing locally → stale. Read two deltas, sort each changed file, then take the first row that matches:
+- Patch: `git range-diff <old base>..<old commit> <new base>..HEAD`, the PR's own changes before and after.
+- Trunk: `git diff <old base> <new base>`, what the rebase brought in; files it shares with the PR are those also in `git diff --name-only <new base> HEAD`.
+
+| Kind of file | In Trunk | In Patch |
+|---|---|---|
+| Docs, comments, formatting; lint, format, editor or CI config | Passive | Passive |
+| Tests and their fixtures or snapshots | Passive | Runs: the diff checks read them |
+| Dependency manifests and lockfiles, build or compiler config, runtime config or env, migrations, schema, seeds | Global: reaches the whole app, whatever file the PR changes | Runs |
+| Anything else: source, styles, assets, translations, templates, text an agent follows | Runs | Runs |
+
+| Patch | Trunk | Action |
+|---|---|---|
+| Changes something that runs | any | Stale |
+| any | Global | Stale |
+| any | Runs, in a file the PR also changes | Stale |
+| Unchanged or passive | Passive | Present it; Not verified: the criteria were not checked again after the rebase onto `<target>` (`<new base short>`); nothing that runs changed |
+| Unchanged or passive | Runs, in no file the PR changes | Present it; Not verified: the criteria were not checked again after the rebase onto `<target>` (`<new base short>`), which brought changes in `<areas, in a few words>` not covered by this evidence |
 
 Evidence shape, from `pr-block.md`, between exactly one pair of `<!-- evidence:start -->` and `<!-- evidence:end -->`, in this order; nothing else from the block is posted, its own marker lines (old or new) included:
 
