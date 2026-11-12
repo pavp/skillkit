@@ -3,7 +3,7 @@
 Copy the block below into your project's `AGENTS.md`. It works in any stack. If the project also has a `CLAUDE.md`, Claude Code reads only that file: add `@AGENTS.md` to it, or paste the block there instead. After `npx skills update`, replace everything between the two `skillkit workflow snippet` markers with the new block.
 
 ````markdown
-<!-- skillkit workflow snippet v1.7.0 -->
+<!-- skillkit workflow snippet v2.0.0 -->
 ## Workflow skills (skillkit)
 
 When you finish implementing a ticket, feature or bug fix, or the changes a review asked for on your PR — before you tell the user it is done or ready for review, and before you open a pull request for it — load `verify-before-pr` by name — through your skill tool, or by reading its whole `SKILL.md` — even when the tests are green. Skip it only when nothing runs differently after the change: docs, comments, formatting, or tooling config. Text an agent follows (a prompt, a skill, agent instructions) has behavior: verify it. When you delegate that step, name the skill in the delegation prompt. Skip it if it is not installed.
@@ -20,9 +20,9 @@ Rules that hold even when the skills were not loaded:
 - Show the change on both sides — base and branch, same input — and capture the "before" without stashing, reverting or switching the user's checkout.
 - In a stacked PR, the base is the branch the PR targets, never the default branch.
 - Put verify-before-pr evidence in a PR only from its `pr-block.md`, between its markers, every number and command copied literally, results in plain words and never an overall verdict, with its media uploaded by the forge; never publish `evidence.md`, and never replace the rest of the description.
-- Evidence applies only to the tree it recorded: before publishing it, `git rev-parse HEAD^{tree}` must print that tree, or verify again; when the commits since change nothing that runs, keep it and name those commits under Not verified. After a rebase, decide without asking: keep it only when `git range-diff` shows the PR's own changes alter nothing that runs and the commits the rebase brought in change no dependency, build, runtime config or migration, and no runnable code, tests aside, in a file the PR changes; Not verified then says the criteria were not checked again on the new base and names what runs differently there, else verify again.
+- Evidence applies only to the tree it recorded: before publishing it, `git rev-parse HEAD^{tree}` must print that tree, or verify again; when the commits since change nothing that runs, keep it. After a rebase, decide without asking: keep it only when `git range-diff` shows the PR's own changes alter nothing that runs and the commits the rebase brought in change no dependency, build, runtime config or migration, and no runnable code, tests aside, that the PR's files or the criteria's screens use; else verify again.
 - A security fix publishes impact only: no reproduction, payload or exploit steps in the PR.
 - A PR description or comment names what was checked, never a skill, agent, model or workflow.
-- A PR description claims only what was observed: no invented number, result or ticked checkbox; what was not checked goes under Not verified.
+- A PR description claims only what was observed: no invented number, result or ticked checkbox; a criterion not checked shows as such in its evidence row, with where to check it; no Not verified section, no confirmations, branch history, or disclaimers the change cannot affect.
 <!-- /skillkit workflow snippet -->
 ````

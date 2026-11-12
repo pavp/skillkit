@@ -4,14 +4,14 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.8.1
+  version: 1.8.2
 ---
 
 ## Activation Contract
 
 Load before a PR exists for a change the user (or this session) made: a ticket finished, a fix ready, "open the PR", a slice of a stack; and again before pushing a review round on that PR, the changes a reviewer asked for. It proves the change does what was asked, then packages the proof.
 
-Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change after which nothing runs differently (docs, comments, formatting, tooling config), a review round included: the earlier package stays and the PR description names the commits it does not cover. Text an agent follows (a prompt, a skill, agent instructions) has behavior: load it.
+Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change after which nothing runs differently (docs, comments, formatting, tooling config), a review round included: the earlier package stays and still holds for the PR description. Text an agent follows (a prompt, a skill, agent instructions) has behavior: load it.
 
 ## Hard Rules
 
@@ -128,7 +128,7 @@ Isolation: <isolated | walked by a fresh run | NOT isolated (missing: <capabilit
 
 Since the last review (`<that package's short commit, or its short tree when it was uncommitted>`): added <what, in a few words> ([review](<link>) or the ticket) · changed <what>, was <old wording> (<source>) · removed <what> (<source>); a part with nothing is left out, never `none` or `#n`; the line only in a review round
 
-Not verified: <criterion or "before": reason, or none>
+Not verified: <what this change can affect that was not checked: criterion or "before", the reason, and where to check it; never a confirmation, the branch's history or how it was checked; or none>
 <!-- evidence:end -->
 ```
 

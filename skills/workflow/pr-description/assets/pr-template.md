@@ -16,10 +16,6 @@ What problem this solves, for whom, and how it showed up. One paragraph.
 <!-- evidence:start -->
 <!-- evidence:end -->
 
-## ⚠️ Not verified
-
-What was not checked, and what a reviewer should check themselves. `None` if everything was.
-
 ## 🔄 Changes
 
 - Change 1
