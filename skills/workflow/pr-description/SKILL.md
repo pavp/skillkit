@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.0.0
+  version: 2.1.0
 ---
 
 ## Activation Contract
@@ -17,6 +17,7 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 
 - **Never invent.** A number, a result, "tested", or a ticked checkbox appears only when you observed it or the evidence package states it. What was not observed is never claimed; a criterion not checked shows as such in its evidence row.
 - **Evidence is always there**, in any template: before and after for a change to existing behavior, after alone for something new. Its source is verify-before-pr's `pr-block.md`, presented per Evidence shape between its markers: built only from that block, never from `evidence.md` or the session; every number, command, output and media reference it posts copied literally; verdicts become the plain results of Evidence shape; only order, layout and that wording change. No usable block → the evidence gate decides; never write a "before" you did not observe, nor one for something that did not exist.
+- **The markers hold a `pr-block.md` or nothing.** Evidence from anywhere else (this session, a QA run, the user's notes) goes in the evidence section outside them, its media included, never between them. Its first line names the tree it was observed on; another tree than this PR's (a stack tip, another branch) → it says this PR's changes were not checked alone. A later block replaces it.
 - **No Not verified section.** What a reviewer must still check lives in the evidence: a criterion not checked keeps its row, whose result carries the reason and where or how to check it, taken from the block's `Not verified` line; a check that was not independent goes in the facts line. Everything else in that line goes nowhere: confirmations (the evidence still holds, nothing that runs changed), why a check was not needed, the branch's history (commits, rebases, SHAs), how it was checked, the checking process, a criterion with nothing to run (the reviewer reads the code), and disclaimers this PR cannot affect (other browsers, load, edge cases).
 - **Lead with the problem.** The first paragraph says what was wrong or missing, for whom, and how it showed up. Changes are grouped by area, never a list of commits.
 - **A repo template wins.** Keep its sections, order, and wording, and never move, merge or reorder a section: the evidence goes inside the template's own evidence section wherever it stands, even last, with its markers; do what its comments ask (delete options that do not apply, ask for a ticket) and remove the comments once done. Add only what it lacks of Evidence: into its evidence section (screenshots, demo, evidence, testing), else a `## 🔍 Evidence` section right after its summary, before its changes. A section of its own for what was not tested or known limitations holds only the criteria not checked, each with where to check it, else its convention for none. Never add sections it did not ask for.
@@ -39,7 +40,7 @@ Template — first that answers (Commands lists where to look):
 | Several | Ask which one; never merge them |
 | None | `assets/pr-template.md` |
 
-Evidence for this tree:
+Evidence for this tree, first row that matches:
 
 The package lives inside the git directory, which file search tools skip: list it with `ls "$(git rev-parse --git-dir)/evidence/<branch>"`, branch slashes turned into `-`, one folder per short tree hash.
 
@@ -51,8 +52,9 @@ The package lives inside the git directory, which file search tools skip: list i
 | A package for an earlier tree of this branch whose commit is no longer an ancestor of `HEAD` (a rebase) | Decide per Rebase below, never by asking |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
 | No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty |
+| No package, and the user asked to skip or limit checking | Do not run `verify-before-pr`: evidence outside the markers, which stay empty, from what was observed; nothing observed → the section says what was not checked and where to check it |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
-| No package, not installed | Evidence from what you observed running this session, same input on both sides when there is a before; nothing observed → the section says so |
+| No package, not installed | Evidence from what you observed running this session, outside the markers, same input on both sides when there is a before; nothing observed → the section says so |
 
 Rebase — take the old commit and old base from the package's record, the new base as `git merge-base HEAD <the branch the PR targets now>`; either old one missing locally (`git cat-file -e <sha>^{commit}` fails; a commit no branch reaches still counts as present) → stale. Read two deltas, sort each changed file, then take the first row that matches:
 - Patch: `git range-diff <old base>..<old commit> <new base>..HEAD`, the PR's own changes before and after.
