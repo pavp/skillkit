@@ -4,7 +4,7 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.8.2
+  version: 1.9.0
 ---
 
 ## Activation Contract
@@ -81,7 +81,7 @@ Evidence kind — every row is captured on both sides, base and verified tree, w
 | Change | Evidence |
 |---|---|
 | Visible UI, one state | A viewport screenshot per side of the same element, same viewport and crop, each looked at and captioned with what it proves; plus a phone-width pair when layout changes |
-| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow) | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. No recorder available → one numbered screenshot per step and say so; never install one. Name each video by what it shows and its side (`failed-delete-before.webm`); start recording on the state that matters and hold it a second, since the first frame is the player's preview |
+| Visible UI with motion, hover, or several steps (a reload, Back, a multi-step flow: open, type, save; a toast that shows then hides), a refactor that keeps it included | A short video per side, plus 2–3 captioned key-frame screenshots you looked at: the video is for the reviewer, the frames are your proof. The browser driver you walk with is the recorder (Playwright: `recordVideo` on the context); only a driver that cannot record → one numbered screenshot per step and say so; never install one. A count (steps, snapshots, tests) goes beside the video, never in its place. Name each video by what it shows and its side (`failed-delete-before.webm`); start recording on the state that matters and hold it a second, since the first frame is the player's preview |
 | A transient state or timing | A measured timeline per side (when each state appears and disappears), or per-frame sampling for pixels the DOM does not hold, plus captioned key frames |
 | API, CLI, job | The exact same command per side, its output and exit code, never retyped or tidied |
 | Bug fix | The same input per side and what came out each time |
