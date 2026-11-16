@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.3.0
+  version: 2.3.1
 ---
 
 ## Activation Contract
@@ -15,7 +15,7 @@ Do NOT load to prove the change works (→ `verify-before-pr`), to comment on a 
 
 ## Hard Rules
 
-- **Never invent.** A number, a result, "tested", or a ticked checkbox appears only when you observed it or the evidence package states it. What was not observed is never claimed; a criterion not checked shows as such in its evidence row.
+- **Never invent.** A number, a result, "tested", or a ticked checkbox appears only when you observed it or the evidence package states it. What was not observed is never claimed; a criterion not checked shows as such in its evidence.
 - **Evidence is always there**, in any template: before and after for a change to existing behavior, after alone for something new. Its source is verify-before-pr's `pr-block.md`, presented per Evidence shape between its markers: built only from that block, never from `evidence.md` or the session; every number, command, output and media reference it posts copied literally; verdicts become the plain results of Evidence shape; only order, layout and that wording change. No usable block → the evidence gate decides; never write a "before" you did not observe, nor one for something that did not exist.
 - **The markers hold a `pr-block.md` or nothing.** Evidence from anywhere else (this session, a QA run, the user's notes) goes in the evidence section outside them, its media included, never between them. Its first line names the tree it was observed on; another tree than this PR's (a stack tip, another branch) → it says this PR's changes were not checked alone. The evidence holds only what proves a criterion: never a result a CI check of this PR reports (the tests, lint, typecheck or build its workflow runs). A check that breaks something on purpose (a test removed to see the gate fail) stays; undoing it afterwards (the test put back) is never mentioned. A before, when the rule above calls for one, is the same input run on the target branch; not run there → that cell says `not run on <target>`, never the result you expect. A later block replaces it.
 - **No Not verified section.** What a reviewer must still check lives in the evidence: a criterion not checked keeps its line, whose result carries the reason and where or how to check it, taken from the block's `Not verified` line; a check that was not independent goes in the facts line. Everything else in that line goes nowhere: confirmations (the evidence still holds, nothing that runs changed), why a check was not needed, the branch's history (commits, rebases, SHAs), how it was checked, the checking process, a criterion with nothing to run (the reviewer reads the code), and disclaimers this PR cannot affect (other browsers, load, edge cases).
