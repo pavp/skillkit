@@ -4,14 +4,14 @@ description: "Before you open a PR for your own change, or push what its review 
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 1.9.0
+  version: 1.10.0
 ---
 
 ## Activation Contract
 
 Load before a PR exists for a change the user (or this session) made: a ticket finished, a fix ready, "open the PR", a slice of a stack; and again before pushing a review round on that PR, the changes a reviewer asked for. It proves the change does what was asked, then packages the proof.
 
-Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change after which nothing runs differently (docs, comments, formatting, tooling config), a review round included: the earlier package stays and still holds for the PR description. Text an agent follows (a prompt, a skill, agent instructions) has behavior: load it.
+Do NOT load to review someone else's PR (→ `review-6-lens`), to write or run end-to-end suites, to fix what it finds, or for a change after which nothing runs differently (docs, comments, formatting, tooling config; a file moved whole, `R100` in `git diff -M` since the earlier package's commit, with only the import paths to it changed and a CI check that builds or typechecks it), a review round included: the earlier package stays and still holds for the PR description. Text an agent follows (a prompt, a skill, agent instructions) has behavior: load it.
 
 ## Hard Rules
 
