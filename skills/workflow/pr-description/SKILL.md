@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.3.1
+  version: 2.4.0
 ---
 
 ## Activation Contract
@@ -48,7 +48,7 @@ The package lives inside the git directory, which file search tools skip: list i
 |---|---|
 | A `pr-block.md` for this tree whose verdict is FAIL | No description: name each failing criterion and what it showed, say the change goes back to whoever builds, and STOP |
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
-| A package for an earlier tree of this branch whose commit is an ancestor of `HEAD`, and nothing runs differently in the commits since (docs, comments, formatting, tooling config) | Present it |
+| A package for an earlier tree of this branch whose commit is an ancestor of `HEAD`, and nothing runs differently in the commits since (docs, comments, formatting, tooling config; a file moved whole, per the kind table under Rebase) | Present it |
 | A package for an earlier tree of this branch whose commit is no longer an ancestor of `HEAD` (a rebase) | Decide per Rebase below, never by asking |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
 | No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty |
@@ -62,6 +62,7 @@ Rebase — take the old commit and old base from the package's record, the new b
 
 | Kind of file | In Trunk | In Patch |
 |---|---|---|
+| A file moved or renamed whole (`R100` in `git diff -M`), plus the import or path lines changed only to point at its new place, when a CI check of the PR builds or typechecks them | Passive | Passive |
 | Docs, comments, formatting; lint, format, editor or CI config | Passive | Passive |
 | Tests and their fixtures or snapshots | Passive | Runs: the diff checks read them |
 | Dependency manifests and lockfiles, build or compiler config, runtime config or env, migrations, schema, seeds | Global: reaches the whole app, whatever file the PR changes | Runs |
