@@ -37,7 +37,7 @@ Uncertain which class a finding is → **inferential**. Dispatch the refuter. Th
 
 **Scale gate**: refutation costs roughly what the lenses did — one agent per *inferential* blocking finding — so the fan-out is bounded by severity, not by appetite. Both named thresholds count **blocking 🔴/🟠/🟡 code-lens findings**, after the same-defect merge, deterministic ones included — Spec findings never count, since they are never refuted and the gates bound refutation: the gates measure how much the diff blocks, not how many agents it happens to cost. A 🔵 never counts — it is never refuted (triage row 3), so counting it would push 🟡 out of refutation on the strength of nits. `SKILL.md` step 5 declares the two thresholds and is their single authority. Above the **subset gate**, refute the 🔴 and 🟠 subset only (the severities that gate the merge) and leave the *inferential* 🟡 unrefuted. The gates bound refuter dispatch, not the inline check: a deterministic 🟡 is still verified inline above the gate, since the cost the gate exists to bound is the agent it does not spend. Above the **split gate**, keep that same subset and add the `slice-diff` pointer: a diff that blocks in that many places is asking to be split. If you cannot resolve a threshold's value, apply the narrower band (🔴/🟠 only) — never fan out over every blocking finding.
 
-The full report ships unchanged either way. Unrefuted findings stay in the severity sections at their original severity — they are **not** downgraded, moved, or dropped, and §5 records both counts, keeping the two kinds of challenge distinguishable ("challenged M of M: N by refuter, K verified inline"). An inline-verified finding was challenged — but the two are not equal in strength, and a reader must be able to tell a refuter's adversarial search from a citation confirmed. The `slice-diff` pointer is an addition to the report, never a replacement for it: the reader still needs every finding.
+The full report ships unchanged either way. Unrefuted findings stay in the severity sections at their original severity — they are **not** downgraded, moved, or dropped, and §5 records both counts, keeping the two kinds of challenge distinguishable ("challenged M of M: N by refuter, K inline"), and names by number each finding never challenged. An inline-verified finding was challenged — but the two are not equal in strength, and a reader must be able to tell a refuter's adversarial search from a citation confirmed. The `slice-diff` pointer is an addition to the report, never a replacement for it: the reader still needs every finding.
 
 The gate cuts by **severity, never by importance**: it takes whole severity bands, top-down, so no judgment about which findings "matter" ever enters. Ranking findings within a band, or dropping the tail of a long list, would make refutation the importance filter it must never become.
 
@@ -64,7 +64,8 @@ Prompt each refuter with exactly these steps:
 4. Look for positive evidence the finding is wrong: the guard already exists elsewhere on the path, the input is validated upstream, the case is unreachable, the API contract forbids it, a test already covers it. For a `behavior-activated` finding, "the cited line is unchanged" is **not** a refutation — that tag already accounts for it; you must disprove that the trigger makes the defect reachable.
 5. **Refute only with a citation.** A refutation names a `file:line` and quotes the code that disproves the finding. "Seems unlikely", "probably handled", or an absent counter-example is **not** a refutation.
 6. **Never reproduce a secret value.** If your evidence would quote a credential (API key, token, password, connection string), cite the location and quote the surrounding code with the literal replaced by `‹redacted›`. Your evidence is published in the report — reproducing it verbatim makes the review a second exfiltration channel.
-7. If you cannot disprove it, the verdict is `Not refuted.` Uncertainty is not refutation — when in doubt, the finding stands.
+7. If you cannot disprove it, check its size: for a `security`, `data-loss`, `crash`, or `wrong-result` finding, return a downgrade when you can cite that whoever triggers it already gets the same effect another way (another input, permission, or path), or that the trigger needs a misuse no caller performs. Same citation bar as step 5.
+8. Otherwise the verdict is `Not refuted.` Uncertainty is not refutation — when in doubt, the finding stands.
 
 ## Output
 
@@ -77,6 +78,13 @@ Verdict when refuted — the `> **Refuted by:**` block defined in `finding-shape
 > <one sentence: what the finding assumed that is not true>
 ```
 
+Verdict when downgraded — the `> **Downgraded by:**` block defined in `finding-shape.md`, which the orchestrator appends verbatim and which lowers the finding one severity (🔴→🟠, 🟠→🟡):
+
+```
+> **Downgraded by:** `<file>:<line>` — <the code or fact showing the actor already holds this, or the misuse no caller performs, quoted>
+> <one sentence: why the harm is one step smaller than labelled>
+```
+
 Verdict otherwise — this line alone:
 
 ```
@@ -85,13 +93,13 @@ Not refuted.
 
 Emit exactly ONE verdict, last. A result whose last line is neither shape is malformed.
 
-**Malformed** means the verdict is missing, or a refutation lacks a `file:line` citation or a quoted counter-example — never that the prose above it is imperfect. A refuter that fails, times out, returns nothing, or returns something malformed counts as `Not refuted.` **for that finding only**; never block the report on the batch, and never omit a finding whose refuter did not return.
+**Malformed** means the verdict is missing, a downgrade on a 🟡-harm finding, or a refutation or downgrade lacks a `file:line` citation or a quoted counter-example — never that the prose above it is imperfect. A refuter that fails, times out, returns nothing, or returns something malformed counts as `Not refuted.` **for that finding only**; never block the report on the batch, and never omit a finding whose refuter did not return.
 
 ## Authority — what a refuter may never do
 
-A refuter's only **effect** is that the orchestrator moves the finding to `output-contract.md` §3.5 (`🤔 Refuted`) with its evidence attached. The refuter itself returns only the Output shape above and never edits the report. It may not:
+A refuter's only **effects** are that the orchestrator moves the finding to `output-contract.md` §3.5 (`🤔 Refuted`) with its evidence attached, or lowers it one severity with its downgrade attached. The refuter itself returns only the Output shape above and never edits the report. It may not:
 
-- change a finding's severity, wording, lens, or `file:line`;
+- change a finding's wording, lens, or `file:line`, or its severity by more than one cited step;
 - re-decide causality (`dispatch.md`'s causality contract owns that tag; the orchestrator never re-decides it either);
 - refute a finding it was not given, or comment on another finding;
 - drop a finding — nothing is ever removed from the report.

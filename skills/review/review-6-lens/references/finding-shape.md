@@ -4,7 +4,7 @@ The exact shape every lens emits each finding in. Same for all 6 lenses — only
 
 Output is plain Markdown (rendered in a terminal AND in GitHub PR comments) — there is **no text color**. Build visual hierarchy only with **bold**, blank lines, blockquotes (`>`), emoji, and `code spans`. Never claim or rely on color.
 
-## Rich shape — 🔴 BLOCKER · 🟠 CRITICAL · 🟡 WARNING
+## Rich shape — harms `security`, `data-loss`, `crash`, `wrong-result`
 
 Findings separated by a blank line, then `---`, then a blank line.
 
@@ -27,12 +27,25 @@ Rules:
 - The **bold title leads** — it answers "what is wrong", which is what a human scans for. The lens name, `file:line`, and causality tag go in parentheses on the next line; they are supporting metadata, not the headline.
 - **Causality tag** (`introduced` / `behavior-activated` / `pre-existing`) is set by the emitting lens via changed-region membership (see `dispatch.md`'s causality contract). Only `pre-existing` is non-blocking; `introduced` and `behavior-activated` both block and stay in the severity sections. Spec findings carry NO causality tag — Spec is exempt. Whether a finding blocks depends on this tag, not on its severity alone. Code the diff moved or copied carries the long form `pre-existing (moved from <path>:<line>)`, the base line it cites (`dispatch.md`).
 - **Harm label** — the last item of the parenthetical, exactly one of `security`, `data-loss`, `crash`, `wrong-result`, `degraded`, `untested`, `unclear`, `style`, meaning what the dispatch prompt defines. Name the worst harm the mechanism in `Why it matters` actually shows, on a realistic path. The lens never writes a severity: the orchestrator derives it from this label (`SKILL.md`'s harm table).
+- **PR context tags** — `still present in #<m>`, `deferred to <PR>: "<quoted line>"`, `already raised: <link>` — the orchestrator appends them as one trailing line, `> **Context:** <tags>`, after the Fix; in the short and compact shapes too. They change no severity.
 - **No severity emoji on the finding** — the `##` severity heading above it already states the severity; repeating it per finding is noise.
 - A blank line separates every block; never run `Why it matters`, evidence, and `Fix` together as one paragraph.
 - `Why it matters` and `Fix` are both required and stay separate: `Why it matters` is the mechanism (the *how* it breaks); `Fix` is the action (the *what to do*). Neither folds into the other.
-- **Short by contract.** `Why it matters`: at most 3 sentences — the input or condition that triggers it, what breaks, what the user or caller sees; no list of every variant. `Fix`: one action; an alternative only when the first may be impossible, saying why.
+- **Short by contract.** `Why it matters`: at most 3 sentences — the input or condition that triggers it, what breaks, what the user or caller sees; no list of every variant. For `security`, name who can trigger it and what they gain that they cannot already do another way — a refuter may lower the severity when they gain nothing new (`refute.md`). `Fix`: one action; an alternative only when the first may be impossible, saying why.
 - Add extra `>` sub-points (e.g. `> **Dangerous case:** …`) only when they aid clarity.
 - **Spec only:** the parenthetical carries a `kind` tag before the harm — `(`Spec` — `<path>` · _missing | scope-creep | wrong | contradiction_ · <harm>)`; a `contradiction` is `unclear` — and `Evidence` is the quoted intent line, not code — for a `contradiction`, both sides it opposes (two intent lines, or an intent line and the diff line). Spec carries **no causality tag** (it is exempt), and Spec findings always stay in the severity sections, never the follow-up section.
+
+## Short shape — harms `degraded`, `untested`, `unclear`
+
+These block, but the reader decides on them from one look. Title line, one blockquote line holding the mechanism and the quoted evidence, one Fix:
+
+```
+**<n>. <one-line problem statement>** (`<Lens>` — `<path>:<line>` · <introduced|behavior-activated|pre-existing> · <harm>)
+> <Why it matters, at most 2 sentences> Evidence: `<the offending line, quoted>`
+**→ Fix:** <one concrete action>
+```
+
+A finding whose mechanism does not fit two sentences names a harm the rich shape carries, or it is two findings.
 
 ## Refuted-by field (refuted findings only)
 
@@ -44,6 +57,15 @@ A refuted finding (`refute.md`) keeps its whole shape unchanged and gains ONE tr
 ```
 
 A credential inside that quote is masked to `‹redacted›`, same as in a finding's own evidence.
+
+## Downgraded-by field (downgraded findings only)
+
+A refuter's cited downgrade (`refute.md`) lowers the finding one severity: it moves to that heading and keeps its shape, gaining ONE trailing blockquote the orchestrator appends verbatim:
+
+```
+> **Downgraded by:** `<path>:<line>` — <the code or fact showing the actor already holds this, or the misuse no caller performs, quoted>
+> <one sentence: why the harm is one step smaller than labelled>
+```
 
 ## Compact shape — harm `style` (🔵 SUGGESTION)
 
@@ -60,15 +82,16 @@ A lens emits at most 3 `style` findings; the rest it counts in one closing line,
 
 ## Aggregation rules (when the orchestrator assembles the report)
 
-- **Verbatim** — never reword, soften, or compress a finding to fit the list. Three exceptions, all stated here: a cited line number is corrected to where the finding's quoted evidence actually sits in that file at the reviewed revision (search it once per finding before emitting — lenses misnumber lines, and a wrong line sends the reader to the wrong code; the claim and wording stay); a credential literal a lens quoted anyway is masked to `‹redacted›` before the finding goes anywhere, a refuter prompt included; and a finding absorbed by a merge contributes only its tag, harm, and (Spec) intent line — its other blocks are omitted, never reworded.
+- **Verbatim** — never reword, soften, or compress a finding to fit the list. Four exceptions, all stated here: a cited line number is corrected to where the finding's quoted evidence actually sits in that file at the reviewed revision (search it once per finding before emitting — lenses misnumber lines, and a wrong line sends the reader to the wrong code; the claim and wording stay); a credential literal a lens quoted anyway is masked to `‹redacted›` before the finding goes anywhere, a refuter prompt included; a finding absorbed by a merge contributes only its tag, harm, and (Spec) intent line — its other blocks are omitted, never reworded; and a finding in Addressed elsewhere shows only its title line and its receipt (`output-contract.md` §3.2).
 - **Merge only the same defect** — two code-lens findings on the same path whose quoted evidence shares a code line, and whose Fixes make the same change to the same symbol or line (add, remove, or replace the same thing), are emitted as ONE finding in the merged shape below; showing one defect twice is noise for the reader. In doubt, keep two: a wrong merge hides a defect, a missed one only repeats it. Match on the quoted code, never on the cited line number: lenses misnumber lines by a few, the quoted code does not drift. A compact `style` finding quotes no code: match it on its corrected `path:line`. Anything less is not a merge: the same code with a different Fix, or the same Fix on different code, stays two findings, and a related pair keeps a cross-reference ("see also #4"). The same test absorbs a **Spec** finding into the code-lens finding whose code it quotes: `Spec` joins the lens tags and its intent line is added as `> **Intent:** "<quoted line>"`; causality comes from the code lens. Spec with a different change stays a full finding of its own — never a pointer to another number.
-- **Merged shape** — the rich or compact shape, with: the higher severity (its heading, its title, and its Fix — exactly one Fix; on a tie, the first lens in precedence); both lenses in the parenthetical, in lens precedence order — (`` `Reliability` + `Resilience` — `<path>:<line>` · introduced ``); the stronger causality tag when the two differ (`introduced` over `behavior-activated` over `pre-existing` — fail toward blocking); one harm label — the one that sets the highest severity (on a tie, the first lens in precedence); and one `Why it matters` — a second lens's, verbatim and labelled, only when it names a different failure, never a restatement of the same one. Position within a severity follows the first lens in precedence. Recurrence stays visible as the two tags: it is still signal.
+- **Merged shape** — the shape of its harm, with: the higher severity (its heading, its title, and its Fix — exactly one Fix; on a tie, the first lens in precedence); both lenses in the parenthetical, in lens precedence order — (`` `Reliability` + `Resilience` — `<path>:<line>` · introduced ``); the stronger causality tag when the two differ (`introduced` over `behavior-activated` over `pre-existing` — fail toward blocking); one harm label — the one that sets the highest severity (on a tie, the first lens in precedence); and one `Why it matters` — a second lens's, verbatim and labelled, only when it names a different failure, never a restatement of the same one. Position within a severity follows the first lens in precedence. Recurrence stays visible as the two tags: it is still signal.
 - **No rerank** — order within a severity by lens precedence (Risk → Readability → Reliability → Resilience → Architecture → Spec), never by importance. One lens's finding is never ranked above another's.
 - **Causality partition** — only `pre-existing` findings move to the follow-up section (see `output-contract.md`); `introduced` and `behavior-activated` stay in the severity sections. Causality-based, not importance-based. The orchestrator never re-decides a lens's causality tag, with one check: a `moved from` base line is read at the base revision, and a citation that is missing or shows different behavior turns the finding back to `introduced` (fail toward blocking).
-- **Refutation partition** — a blocking finding moves to the refuted section (see `refute.md`) only on a **cited counter-example**; it carries its refuter's evidence and its own text unchanged. Applied AFTER the causality partition and only to what still blocks, so no finding is ever both `pre-existing` and refuted.
-- **Spec is exempt from both** — Spec findings carry no causality tag and are never refuted. They stay in the severity sections unconditionally; neither partition applies to them. A merged finding carrying the `Spec` tag stays there too: if its code part is refuted or `pre-existing`, append that as a note and keep it — the intent violation still stands.
+- **PR context partition** — a blocking finding moves to Addressed elsewhere only on a receipt read from a stacked PR's head (`SKILL.md` PR context); a deferral or an existing thread only tags it. Applied after the causality partition and before refutation, so no refuter is spent on it.
+- **Refutation partition** — a blocking finding moves to the refuted section (see `refute.md`) only on a **cited counter-example**; it carries its refuter's evidence and its own text unchanged. Applied AFTER the causality and PR context partitions and only to what still blocks, so no finding is ever in two of those sections.
+- **Spec is exempt from causality and refutation** — Spec findings carry no causality tag and are never refuted; the PR context partition does apply, on the same receipts. They stay in the severity sections unconditionally; neither partition applies to them. A merged finding carrying the `Spec` tag stays there too: if its code part is refuted or `pre-existing`, append that as a note and keep it — the intent violation still stands.
 - A merged finding is partitioned and refuted once, as one finding; it is inferential when either source finding was.
-- These two partitions, and the merge, are the ONLY permitted moves, and all are evidence-based, never importance-based. Nothing is ever dropped. What a partition may not alter is listed once in `refute.md` (Authority).
+- These three partitions, a cited downgrade, and the merge are the ONLY permitted moves, and all are evidence-based, never importance-based. Nothing is ever dropped. What a partition may not alter is listed once in `refute.md` (Authority).
 
 ## Severity emoji (use exactly)
 

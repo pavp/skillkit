@@ -1,6 +1,6 @@
 # Output Contract
 
-How the orchestrator assembles the final report after every dispatched lens returns. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order: the decision first, the audit trail last and collapsed.
+How the orchestrator assembles the final report after every dispatched lens returns. Findings are grouped by **severity**, not lens; each finding still carries its originating lens. Emit these parts in order: the decision first, coverage last, in one line.
 
 ## 1. Lead, verdict, fix first
 
@@ -18,6 +18,17 @@ One `##` heading per severity **present**, highest first: `🔴 BLOCKERS` → `�
 
 A `## 📝 Pre-existing (follow-up)` section for findings tagged `pre-existing` — defects the diff did not introduce (evidence outside every changed region, or moved unchanged from a cited base line). Lead line: "Not introduced by this diff — reported, does not block." List them verbatim in the `finding-shape.md` shape, each keeping its **real severity emoji inline** on the title, grouped by severity then lens precedence. Continue the report's running number. Omit the whole section if no finding is `pre-existing`. These never contribute to a blocking Verdict.
 
+## 3.2 Addressed elsewhere (optional)
+
+A `## 🔗 Addressed elsewhere` section for blocking findings a PR stacked on this one already fixes (`SKILL.md` PR context). Lead line: "Answered later in this stack — does not block unless this PR merges without it." Each finding is its title line only, with its **real severity emoji inline** and its parenthetical, then its receipt — its mechanism and Fix are already answered:
+
+```
+**<n>. 🟠 <title>** (`<Lens>` — `<path>:<line>` · introduced · <harm>)
+> **Addressed:** fixed in #<m> — `<path>:<line>` `<quoted code at #m's head>`
+```
+
+A deferral in the description is not a fix and never lands here: that finding stays blocking, tagged. Group by severity then lens precedence; continue the report's running number. Omit the whole section when nothing moved.
+
 ## 3.5 Refuted (optional)
 
 A `## 🤔 Refuted (needs a second look)` section for blocking findings disproved with a citation (`refute.md`) — by a refuter, or by the orchestrator's own inline verification of a deterministic finding. Lead line: "Evidence was found against these — reported, does not block." List them verbatim in the `finding-shape.md` shape, each keeping its **real severity emoji inline** on the title, grouped by severity then lens precedence, continuing the report's running number. Append the **Refuted-by** blockquote — verbatim from the refuter, or authored by the orchestrator from its inline read; that field's shape is defined in `finding-shape.md` and is the same either way.
@@ -30,28 +41,18 @@ A `## ✅ Verified OK` section: bullets of what a lens **actively checked and cl
 
 ## 5. Coverage
 
-One **visible** line, literally one: `**Coverage:** <n> lenses ran · <k> skipped (<Lens>: <reason>) · refutation <complete | challenged N of M>` — the skipped part only when a lens was skipped, the refutation part `complete` or the counts. Any explanation goes in the collapsed block. A skipped lens or an incomplete refutation is a coverage caveat: it never lives only inside the collapsed block. Everything else in this section goes in one collapsed block after that line, `<details><summary>Review process</summary> … </details>`: the detail below, the merge notes, and the §7 summary line. It serves whoever audits the review, not whoever fixes the code.
+One line, literally one — never a heading, a list, or an explanation — and nothing after it:
 
-The collapsed detail: one line listing which lenses returned `No findings.` (and `Spec: no spec available — lens skipped` if applicable). List any lens skipped by the applicability gate separately as `<Lens>: skipped (no applicable surface)` — never fold it in with the clean lenses. A clean lens looked and found nothing; a skipped lens never looked, and the reader must be able to tell which coverage they actually have. A lens that ended with `Omitted: <k> suggestions over the cap.` adds `<Lens>: <k> suggestions omitted (cap 3)` here — never dropped silently. State the refutation outcome here whenever it was not complete: "refutation skipped — N blocking findings unrefuted" (no capable runtime), or "challenged N of M blocking findings" (scale gate, or a refuter that never returned). When both challenge paths ran, keep them distinguishable — "challenged M of M: N by refuter, K verified inline" — since an inline verification confirms a citation while a refuter searches for counter-evidence; folding them blurs the coverage this line exists to expose. A silently incomplete refutation pass is not permitted — the reader must be able to tell which findings were never challenged.
+`**Coverage:** <n> lenses ran · clean: <Lens>, … · skipped: <Lens> (<reason>) · refutation <challenged M of M: N by refuter, K inline | challenged N of M: … — unrefuted: #a, #b> · <k> suggestions omitted (<Lens>) · PR context: <checked #m, #p | not checked (<reason>)> · <B> blocking findings: consider slice-diff`
+
+`<n> lenses ran` and the refutation part always appear; every other part only when it applies — `clean` when a lens returned `No findings.`, `skipped` when the applicability gate skipped a lens or there was no spec (`Spec (no spec)`), `suggestions omitted` when a lens hit the 🔵 cap, `PR context` when the range is a PR, the slice-diff part above the split gate (`SKILL.md` step 5). Keep clean and skipped apart: a clean lens looked and found nothing, a skipped lens never looked. The refutation part keeps the two kinds of challenge apart — a refuter searched for counter-evidence, an inline check only confirmed the cited lines say what the finding claims — and names by number each blocking finding never challenged, since those are the findings to trust less. Refutation that never ran reads `refutation skipped — unrefuted: #a, …`.
+
+Merges and line corrections are not reported: a merged finding shows its lens tags, and a corrected line is just the line.
 
 ## 6. Verdict rules
 
-The verdict is emitted in §1, not at the end: a plain-language merge call referencing findings by number (e.g. "Don't merge until #1 and #3 are resolved"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. It counts every **unrefuted blocking** finding — `introduced` and `behavior-activated`, plus Spec: a report whose sole 🔴/🟠/🟡 are `pre-existing` or refuted has no blocking verdict — say so ("nothing this diff introduced blocks; N pre-existing and M refuted item(s) noted for follow-up"). Omit if nothing blocks.
-
-## 7. Summary line
-
-Inside §5's collapsed block. Count per lens + worst severity within each, no cross-lens ranking. **Both are computed over that lens's blocking findings only** — a `pre-existing` or refuted finding never sets the headline count or the emoji, so §7 can never show a 🔴 on a report whose Verdict says nothing blocks. Non-blocking findings appear as parenthetical excursions carrying their own severity:
-
-```
-Risk 3 (🔴, +1 pre-existing 🟠) | Read 4 (🟡) | Reliab 2 (🟠, +1 refuted 🔴) | Resil 3 (🔴) | Arch 1 (🟠) | Spec 2 (🟠)
-```
-
-A merged finding counts once under each of its lenses, so per-lens coverage stays exact.
-
-A lens whose every finding is non-blocking shows `0` with no emoji: `Arch 0 (+2 pre-existing 🟡)`.
-
-A lens the applicability gate skipped shows `— (skipped)`, never `0`: `Resil — (skipped)`. `0` claims the lens ran and found nothing; a skipped lens never ran, and the most-scanned line of the report must not blur the two.
+The verdict is emitted in §1, not at the end: a plain-language merge call that points at `Fix first` when that list shows the blocking findings ("Don't merge until the Fix first items are resolved"), and names by number only the blocking findings `Fix first` does not show ("…and #9"). **Derived, not editorial** — it may only point at findings already listed, in their real severities, and may not silence or downgrade any lens. It counts every **unrefuted blocking** finding — `introduced` and `behavior-activated`, plus Spec: a report whose sole 🔴/🟠/🟡 are `pre-existing` or refuted has no blocking verdict — say so ("nothing this diff introduced blocks; N pre-existing and M refuted item(s) noted for follow-up"). Findings in §3.2 never block; when one or more moved there, name the PRs they wait on ("2 more are fixed in #285 — merge this PR with it"). Omit if nothing blocks.
 
 ## All clean
 
-If every **dispatched** lens is clean: emit the human lead, skip the severity headings, state `All <n> dispatched lenses clean — no findings.` with `<n>` the count that actually ran, and still emit the coverage line and its collapsed block. A skipped lens NEVER satisfies "clean" — when any lens was skipped, this branch must also carry §5's skipped-lens list, and the literal "All 6" is forbidden. Never collapse to a bare "all good".
+If every **dispatched** lens is clean: emit the human lead, skip the severity headings, state `All <n> dispatched lenses clean — no findings.` with `<n>` the count that actually ran, and still emit the coverage line. A skipped lens NEVER satisfies "clean" — when any lens was skipped, this branch's coverage line must carry its `skipped` part, and the literal "All 6" is forbidden. Never collapse to a bare "all good".
