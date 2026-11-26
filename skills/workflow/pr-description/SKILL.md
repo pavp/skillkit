@@ -4,7 +4,7 @@ description: "Writes the description of your own PR: fills the repo's PR templat
 license: Apache-2.0
 metadata:
   author: pedro-villarreal(pavp)
-  version: 2.4.0
+  version: 2.4.1
 ---
 
 ## Activation Contract
@@ -48,10 +48,10 @@ The package lives inside the git directory, which file search tools skip: list i
 |---|---|
 | A `pr-block.md` for this tree whose verdict is FAIL | No description: name each failing criterion and what it showed, say the change goes back to whoever builds, and STOP |
 | A `pr-block.md` whose recorded tree equals `git rev-parse HEAD^{tree}` | Present it between the markers per Evidence shape |
-| A package for an earlier tree of this branch whose commit is an ancestor of `HEAD`, and nothing runs differently in the commits since (docs, comments, formatting, tooling config; a file moved whole, per the kind table under Rebase) | Present it |
+| A package for an earlier tree of this branch whose commit is an ancestor of `HEAD`, and the commits since touch no code that runs, a closed list (docs, comments, formatting, tooling config; a file moved whole, per the kind table under Rebase; never a refactor) | Present it |
 | A package for an earlier tree of this branch whose commit is no longer an ancestor of `HEAD` (a rebase) | Decide per Rebase below, never by asking |
 | A package for another tree | Stale: never publish it; load `verify-before-pr` and run it again |
-| No package, and nothing runs differently after the change (docs, comments, formatting, tooling config; never text an agent follows) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty |
+| No package, and the change touches no code that runs, a closed list (docs, comments, formatting, tooling config; never text an agent follows or a refactor) | Evidence from what you observed this session, in the evidence section outside the markers, which stay empty |
 | No package, and the user asked to skip or limit checking | Do not run `verify-before-pr`: evidence outside the markers, which stay empty, from what was observed; nothing observed → the section says what was not checked and where to check it |
 | No package, `verify-before-pr` installed | Load it and run it first, then come back |
 | No package, not installed | Evidence from what you observed running this session, outside the markers; nothing observed → the section says so |
